@@ -6,7 +6,14 @@ from .models import Visual, get_challenge_model_class
 from .forms import get_challenge_form_class, VisualForm
 from userinteraction.models import ChallengeLike
 from submissions.models import Submission
-import os
+import json
+from pathlib import Path
+
+
+home = Path.home()
+with open(home / ".django_envs.json", "r") as f:
+    django_envs = json.load(f)[0]
+
 
 def create_challenge(request, event_id=None, errors=None):
     """
@@ -40,7 +47,10 @@ def create_challenge(request, event_id=None, errors=None):
                                             'challenge_type': instance.challenge_type}))
     else:
         form = form_class()
-    context = {"form": form, "event_id": event_id, "errors": errors, "mapbox_api_key": os.getenv('MAPBOX_API_KEY')}
+    context = {"form": form, 
+               "event_id": event_id, 
+               "errors": errors, 
+               "mapbox_api_key": django_envs['MAPBOX_API_KEY']}
     return render(request, "challenges/create_challenge.html", context)
 
 

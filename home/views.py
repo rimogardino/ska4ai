@@ -6,7 +6,13 @@ from events.models import Event
 from challenges.models import Challenge, Spot, get_challenge_model_class
 from challenges.serializers import geojson_serialize
 from submissions.models import Submission
-import os
+import json
+from pathlib import Path
+
+
+home = Path.home()
+with open(home / ".django_envs.json", "r") as f:
+    django_envs = json.load(f)[0]
 
 
 # Create your views here.
@@ -17,7 +23,10 @@ def index(request):
     [print(f"Challenge {challenge.description} has date {challenge.date}") for challenge in all_challenges]
     event_list = Event.objects.all()
     json_data = {"challenge_list": geojson_serialize(all_challenges)}
-    context = {"all_challenges": all_challenges, "event_list": event_list, "json_data": json_data, "mapbox_api_key": os.getenv('MAPBOX_API_KEY')}
+    context = {"all_challenges": all_challenges, 
+               "event_list": event_list, 
+               "json_data": json_data, 
+               "mapbox_api_key": django_envs['MAPBOX_API_KEY']}
     return render(request, "home/index.html", context)
 
 def leaderboard(request, event_id):
