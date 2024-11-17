@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}My profile{% endblock %}
+
+{% block content %}
+<div class="center-container">
+    <h1>My challenges:</h1>
+
+    <div class="challenges-container" id="ev-chs-{{event.id}}" >
+        {% if all_challenges %}
+            <h3>Approved challenges:</h3>
+            {% for challenge in all_challenges %}
+                {% if challenge.approved %}
+                    <div class="list-view-wrapper">
+                        <div class="list-view-challenge-container" id="list-view-challenge-{{challenge.id}}"
+                        hx-trigger="intersect once click delay:0.1s"
+                        hx-get="{% url 'challenges:challenge_simple_info' challenge_type=challenge.challenge_type challenge_id=challenge.id  %}"
+                        hx-swap="innerHTML"
+                        >
+                            Loading...                           
+                        </div>
+
+                        <button class="blue-button" type="submit" 
+                        onclick="location.href='{% url 'challenges:challenge_detail' challenge_type='CH' challenge_id=challenge.id %}'">
+                            {% translate "More info." %}
+                        </button>
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+
+            <h3>Waiting challenges:</h3>
+            {% for challenge in all_challenges %}
+                {% if not challenge.approved %}
+                    <div class="list-view-wrapper bordered-rounded-container">
+                        <div class="list-view-challenge-container" id="list-view-challenge-{{challenge.id}}"
+                        hx-trigger="intersect once click delay:0.1s"
+                        hx-get="{% url 'challenges:challenge_simple_info' challenge_type=challenge.challenge_type challenge_id=challenge.id  %}"
+                        hx-swap="innerHTML"
+                        >
+                            Loading...                           
+                        </div>
+
+                        <button class="blue-button" type="submit" 
+                            onclick="location.href='{% url 'challenges:challenge_detail' challenge_type='CH' challenge_id=challenge.id %}'">
+                            {% translate "More info." %}
+                        </button>
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+
+        {% else %}
+            <p>No challenges are available.</p>
+        {% endif %}
+    </div>
+
+    <div class="submissions-container">
+        {% if submissions %}
+            <h3>Submissions:</h3>
+            <ul>
+            {% for submission in submissions %}
+                {% if submission.approved %}
+                    {% include 'submissions/submission_simple_info.html' with submission=submission %}
+                    <button class="blue-button" type="submit" 
+                        onclick="location.href='{% url 'submissions:submission_detail' submission.id %}}'">
+                            {% translate "More info." %}
+                        </button>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            </ul>
+
+            <h3>Waiting submissions:</h3>
+            {% for submission in submissions %}
+                {% if not submission.approved %}
+                    {% include 'submissions/submission_simple_info.html' with submission=submission %}
+                    <button class="blue-button" type="submit" 
+                        onclick="location.href='{% url 'submissions:submission_detail' submission.id %}}'">
+                            {% translate "More info." %}
+                        </button>
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+
+        {% else %}
+            <p>No submissions are available.</p>
+        {% endif %}
+    </div>
+</div>
+
+ {% comment %} {% include '../submission/submissions_list.html' with submissions=submissions %} {% endcomment %}
+
+{% endblock %}

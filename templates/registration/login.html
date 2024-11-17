@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <div>
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                Sign in to your account
+            </h2>
+        </div>
+        
+        {% if messages %}
+        <div class="rounded-md bg-green-50 p-4">
+            {% for message in messages %}
+            <div class="text-sm text-green-700">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form class="mt-8 space-y-6" method="POST">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+            <div class="rounded-md bg-red-50 p-4">
+                <div class="text-sm text-red-700">
+                    Your username and password didn't match. Please try again.
+                </div>
+            </div>
+            {% endif %}
+
+            {% for field in form %}
+            <div>
+                <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-700">
+                    {{ field.label }}
+                </label>
+                {{ field }}
+            </div>
+            {% endfor %}
+
+            <div class="flex items-center justify-between">
+                <div class="text-sm">
+                    <a href="{% url 'accounts:signup' %}" class="font-medium text-indigo-600 hover:text-indigo-500">
+                        Don't have an account?
+                    </a>
+                </div>
+            </div>
+
+            <div>
+                <button type="submit" class="btn btn-outline-success my-2 my-sm-0">
+                    Sign in
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

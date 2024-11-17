@@ -1,0 +1,272 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Ska4ai{% endblock %}
+
+{% block sidePanelItems %}
+    {% if event_list %}
+        <div class="sidepanel-events" >
+            <h3>Events:</h3>
+            {% for event in event_list  %}
+                <a class="event-item" id="event-{{ event.id }}" data-event-id="{{ event.id }}">{{ event.name }}</a>
+            {% endfor%}
+        </div>
+
+        <div class="sidepanel-events" >
+            <h3>Leaderboards:</h3>
+            {% for event in event_list  %}
+                {% if event.challenge_type == "CH" %}
+                    <a class="event-leaderboard-item" id="event-leaderboard-{{ event.id }}"  onclick="location.href='{% url 'leaderboard' event_id=event.id %}'">Leaderboard for {{ event.name }}</a>
+                {% endif %}
+            {% endfor%}
+        </div>
+
+        {% endif %}
+{% endblock %}
+
+
+{% block content %}
+<div id="top-popup" >
+    <button class="close-button stylish-button" onclick="closePopup()">X</button>
+    <div id="top-popup-content">Big Popup</div>
+</div>
+<div class="main"  data-json='{{ json_data.challenge_list|safe }}'>
+  
+
+
+    <div class="map_container" id="map-container" style="">
+        <div id="map"  hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'></div>
+        <button class="floating-button" id="new-challenge" onclick="newChallenge(this)">+</button>
+    </div>
+
+    <div class="list-view-container" id="list-view-container">
+        {% include './list_view.html' with event_list=event_list all_challenges=all_challenges %}
+    </div>
+</div>
+
+<div id="view-switcher"  onclick="switchView()">
+    Switch view
+</div>
+{% endblock %}
+
+{% block css %}
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.5.1/mapbox-gl.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static "ska4ai/css/mapbox.css" %}" />
+
+    <style >
+        #view-switcher {
+            display: none;
+
+        }
+
+        .list-view-container {
+            display: flex;
+            flex-direction: column;
+
+            transition: all 0.3s ease;
+        }
+        .list-view-container > div {
+            text-align: center;
+            margin: 2px;
+        } 
+
+
+        @media (max-width: 800px) {
+            #view-switcher {
+                display: block;
+                position: absolute;
+                bottom: 0;
+                background-color: #007bff;
+                color: #fff;
+                border: none;
+                padding: 8px 16px;
+                text-align: center;
+                text-decoration: none;
+                font-size: 1rem;
+                margin: 2px;
+                cursor: pointer;
+                border-radius: 4px;
+                width: -moz-available;
+                z-index: 5;
+            }
+
+            #list-view-container {
+                display: none;
+                width: 100% !important;
+                transition: all 0.3s ease;
+            }
+        }
+    </style>
+{% endblock %}
+
+
+{% block extra_js %}
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.5.1/mapbox-gl.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+<script>
+    
+   
+{% comment %} function playPause(videoPlayer) { 
+    if (videoPlayer.paused) 
+      videoPlayer.play(); 
+    else 
+      videoPlayer.pause(); 
+  }; {% endcomment %}
+
+  function switchView() {
+        var map_view = document.getElementById('map-container');
+        var list_view = document.getElementById('list-view-container');
+
+        if (map_view.style.display == 'none') {
+            map_view.style.display = 'flex';
+            //map_view.resize();
+            list_view.style.display = 'none';
+        }
+        else {
+            map_view.style.display = 'none';
+            list_view.style.display = 'flex';
+        }
+    };
+
+
+
+  function newChallenge(button) { 
+    var event = button.getAttribute("data-event");
+    const base_link = "{% url 'challenges:create_challenge' 12345 %}".replace(/12345/, event.toString());
+    window.location.href = base_link; 
+  };
+
+
+// Function to fetch content using HTMX manually
+function fetchPopupContent(challenge_type, challengeId) {
+    htmx.ajax('GET', `{% url 'challenges:challenge_simple_info' challenge_type='ska4ai' challenge_id=12345 %}`.replace(/ska4ai/, challenge_type.toString()).replace(/12345/, challengeId.toString()), {
+        //target: `#popup-details-${challengeId}`,
+        target: `#top-popup-content`,
+        swap: 'innerHTML'
+    });
+    const topPopup = document.getElementById('top-popup');
+    topPopup.style.display = 'block';
+
+}
+
+
+// Function to close popup
+function closePopup() {
+    document.getElementById('top-popup').style.display = 'none';
+    document.getElementById('top-popup-content').innerHTML = "Loading...";;
+}
+
+
+$ (document).ready(function(){
+    console.log("Doc is ready, loading map...")
+
+    $ (".event-item").on("click", function() {
+        var selected_event = $ (this).attr("data-event-id");
+        // add data-event to new challenge button
+        const new_challenge_button = document.getElementById('new-challenge');
+        new_challenge_button.setAttribute("data-event", selected_event);
+        // list view logic
+        $ (".challenges-container").hide();
+        $ ('#ev-chs-' + selected_event).show();
+        //$ ("#event-description-" + selected_event).show();
+        $ ('#new-challenge-link').attr('href', `{% url 'challenges:create_challenge' 12345 %}`.replace(/12345/, selected_event.toString()))
+        //map view markers
+        $ (".mapboxgl-marker").hide();
+        $ (".marker-event-" + selected_event).show();
+        document.getElementById("mySidepanel").style.width = "0";
+    });
+    $ (".event-item").eq(0).click();
+
+    mapboxgl.accessToken = '{{ mapbox_api_key }}';
+    const map = new mapboxgl.Map({
+        container: 'map', // container ID
+        //style: 'mapbox://styles/mapbox/dark-v11',
+        center: [23.321869, 42.997085], // starting position [lng, lat]. Note that lat must be set between -90 and 90
+        //an array of numbers in [west, south, east, north] order.
+        maxBounds: [23.2, 42.6, 23.45, 42.75],
+        zoom: 10, // starting zoom
+        antialias: false, // Disable antialiasing for performance
+    });
+
+    map.on('load', () => {
+        //Remove exess landmark and icons
+        map.on('style.load', () => {
+            map.setConfigProperty('basemap', 'showPointOfInterestLabels', false);
+        });
+
+        // Show user location on map button
+        const gps_button = map.addControl(new mapboxgl.GeolocateControl({
+            positionOptions: {
+                enableHighAccuracy: true
+            },
+            trackUserLocation: true,
+            showUserHeading: true
+        }));
+
+        // Show ruler with scale on bottom left
+        {% comment %} const scale = new mapboxgl.ScaleControl({
+            maxWidth: 100,
+            unit: 'metric'
+        });
+        map.addControl(scale); {% endcomment %}
+
+        // var json_data = document.getElementById('main-div').getAttribute('data-json');
+        // const geojson = JSON.parse(json_data);
+        // console.log(geojson);
+        const geojson = JSON.parse('{{ json_data.challenge_list|safe }}');
+
+
+        for (const feature of geojson) {
+            const popupContent = `
+                <div class="popup-content">
+                    <div id="popup-details-${feature.properties.challenge_id}">
+                        Loading...
+                    </div>
+                </div>
+            `;
+
+
+
+            const ch_popup = new mapboxgl.Popup({ 
+                offset: 25,
+                closeOnClick: true
+            }).setHTML(popupContent);
+        
+            // make a marker for each feature and add to the map
+            console.log("creating marker with coords: ", feature.geometry.coordinates)
+            const marker = new mapboxgl.Marker({
+                className: `marker-event-${feature.properties.event}`,
+                //color: "#FFFFFF",
+                draggable: false,
+            }).setLngLat(feature.geometry.coordinates)
+            //.setPopup(
+            //    ch_popup
+            //) // sets a popup on this marker
+            .addTo(map);
+            console.log("Setting challenge_type", feature.properties.challenge_type)
+            marker.getElement().addEventListener('click', () => {
+                // Small delay to ensure popup is rendered
+                setTimeout(() => {
+                    fetchPopupContent(feature.properties.challenge_type, feature.properties.challenge_id);
+                }, 50);
+            });
+
+
+            //marker.on('dragend', onDragEnd);
+        }
+
+
+    //const staticContainer = document.getElementById('static');
+    //staticContainer.style.visibility = 'hidden';
+    const mapContainerEl = document.getElementById('map');
+    mapContainerEl.style.visibility = 'visible';
+
+    $ (".event-item").eq(0).click();
+});
+
+//map.resize();
+}); 
+</script>
+{% endblock %}
+

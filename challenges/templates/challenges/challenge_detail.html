@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}Ska4ai{% endblock %}
+
+{% block content %}
+<div class="container" >
+    {% include './challenge_simple_info.html' with challenge=challenge visuals=visuals likes_count=likes_count %}
+
+
+    {% if user.id == challenge.user.id %}
+    <button class="blue-button" type="submit" 
+        onclick="location.href='{% url 'challenges:edit_challenge' challenge_type=challenge.challenge_type challenge_id=challenge.id %}'">
+        {% translate "Edit Challenge." %}
+    </button>
+
+    <button class="blue-button" type="submit" 
+        onclick="location.href='{% url 'challenges:delete_challenge' challenge_type=challenge.challenge_type challenge_id=challenge.id %}'">
+        {% translate "Delete challenge." %}
+    </button>
+    {% endif %}
+
+    -----------------------------------
+
+    <div class="submissions-container" >
+        {% if submissions %}
+            <h3>Submissions:</h3>
+            {% for submission in submissions %}
+                <div class="media-container">
+                    {% include 'submissions/submission_simple_info.html' with submission=submission %}
+                    <a href="{% url 'submissions:submission_detail' submission.id %}">Detailed view</a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No submissions are available.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

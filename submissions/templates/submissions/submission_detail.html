@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}Ska4ai{% endblock %}
+
+{% block content %}
+<div class="container" >
+    <div class="popup-container">
+        <h1>Submission</h1>
+        {% include './submission_simple_info.html' with submission=submission %}
+
+        <div class="challenge_info_container"  style="width: 90%; max-width: 500px;">
+            <h3>Main Challange</h3>
+            {% include 'challenges/challenge_simple_info.html' with challenge=submission.challenge visuals=challenge_visuals likes_count=likes_count %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

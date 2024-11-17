@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block title %}Ska4ai{% endblock %}
+
+{% block content %}
+<head>
+  <style>
+    .center-container {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #1a2b4b;
+      margin-bottom: 32px;
+      font-weight: 600;
+    }
+
+    form {
+      background: white;
+      padding: 32px;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    p {
+      margin-bottom: 24px;
+    }
+
+    label {
+      display: block;
+      font-weight: 500;
+      color: #374151;
+      margin-bottom: 8px;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    input[type="file"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    input[type="email"]:focus,
+    textarea:focus,
+    select:focus {
+      outline: none;
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    input[type="file"] {
+      padding: 8px;
+      background: #f9fafb;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    button[type="submit"] {
+      background: #2563eb;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button[type="submit"]:hover {
+      background: #1d4ed8;
+    }
+
+    /* Help text styling */
+    .helptext {
+      display: block;
+      font-size: 14px;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+
+    /* Error styling */
+    .errorlist {
+      list-style: none;
+      color: #dc2626;
+      font-size: 14px;
+      margin: 4px 0;
+      padding: 0;
+    }
+
+    /* Formset styling */
+    .formset-container {
+      border-top: 2px solid #e5e7eb;
+      margin-top: 32px;
+      padding-top: 24px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .center-container {
+        margin: 10px;
+        padding: 10px;
+      }
+
+      form {
+        padding: 12px;
+      }
+
+      button[type="submit"] {
+        width: 100%;
+      }
+    }
+
+    /* Optional: Add visual separation between formset forms */
+    #visual_formset p {
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    #visual_formset p:last-child {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="center-container">
+    <h1>Edit Challenge</h1>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ main_form.as_p }}
+      <div class="formset-container">
+        {{ visual_formset.management_form }}
+        {% for file_form in visual_formset %}
+          {{ file_form.as_p }}
+        {% endfor %}
+      </div>
+      <button type="submit">Save Changes</button>
+    </form>
+  </div>
+</body>
+{% endblock %}

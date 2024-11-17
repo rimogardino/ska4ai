@@ -1,0 +1,78 @@
+{% load i18n %}
+
+
+<div class="popup-container">
+
+    <div class="media-scroll-container">
+        {% if visuals|length > 1 %}
+          <button class="scroll-button scroll-left" onclick="scrollMedia('left')">←</button>
+          <button class="scroll-button scroll-right" onclick="scrollMedia('right')">→</button>
+        {% endif %}
+        <div class="media-container">
+            {% for visual in visuals %}
+            <div class="media-wrapper">
+                    {% if visual.file.url.lower|slice:"-3:" == "mp4" %}
+                        <div class="video-wrapper">
+                        <video class="video-player" name='challenge_video' muted loop onclick="playPause(this)">
+                            <source src="{{ visual.file.url }}" type="video/mp4">
+                        </video>
+                        <div class="play-overlay"></div>
+                        </div>
+                    {% else %}
+                        <img class="submission-image" src="{{ visual.file.url }}" alt="{{ visual.file.url }}">
+                    {% endif %}
+                
+            </div>
+            {% endfor %}
+        </div>
+      </div>
+
+    <div class="user-info">
+        <div class="avatar">{{ challenge.user.username|slice:":1"|upper }}</div>
+        <div>
+            <div>{{ challenge.user }}</div>
+            <div style="color: #666; font-size: 0.9em;">{{ challenge.event.name }}</div>
+        </div>
+    </div>
+
+    <div class="description">{{ challenge.description }}</div>
+
+    <div class="info-grid">
+        <div class="info-item">
+            <div class="info-label">Status</div>
+            <div class="info-value {% if challenge.approved %}approved{% else %}pending{% endif %}">
+                {{ challenge.approved|yesno:"Approved,Pending" }}
+            </div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Points</div>
+            <div class="info-value">{{ challenge.points }}</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Likes</div>
+            <div class="info-value" id="likes-{{challenge.id}}">{{ likes_count }}</div>
+        </div>
+    </div>
+
+    {% if not form %}
+        {% if user.id != challenge.user.id %}
+            <button 
+                class="button like-button"
+                hx-post="{% url 'userinteraction:like_challenge' challenge_id=challenge.id challenge_type=challenge.challenge_type %}"
+                hx-target="#likes-{{challenge.id}}"
+                hx-swap="textContent"
+            >
+                Like Challenge
+            </button>
+        {% endif %}
+
+        {% if user.id != challenge.user.id and challenge.points %} 
+        <button 
+                class="button like-button"
+                onclick="location.href='{% url 'submissions:create_submission' challenge_type=challenge.challenge_type challenge_id=challenge.id %}'"
+            >
+            {% translate "Submit completion." %}
+        </button>
+        {% endif %}
+    {% endif %}
+</div>

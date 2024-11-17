@@ -1,0 +1,421 @@
+/* generic */
+.bordered-rounded-container {
+  border: 2px solid #0153ac86;
+  background: white;
+  border-radius: 5px;
+  margin-bottom: 8px;
+
+}
+
+/* sidepanel */
+.sidepanel  {
+  width: 0;
+  position: fixed;
+  z-index: 5;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  transition: 0.1s;
+  padding-top: 60px;
+  font-size: 25px;
+  color: #cccccc;
+}
+
+.sidepanel a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #cccccc;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidepanel a:hover {
+  color: #f1f1f1;
+}
+
+
+.sidepanel-events { 
+  padding: 8px;
+  margin: 8px;
+  background: #06192b;
+  border: #003975af 1px solid;
+}
+
+.sidepanel-events a { 
+  font-size: 1rem !important;
+  background-color: #003975af;
+}
+
+.sidepanel-events a:hover { 
+  font-size: 1.1rem !important;
+  background-color: #012144d0;
+}
+
+
+/* .event-leaderboard-item {
+  font-size: 1rem !important;
+} */
+
+.sidepanel .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+}
+
+.openbtn {
+  font-size: 20px;
+  cursor: pointer;
+  background-color: #111;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  position: absolute;
+  top: 55px;
+  z-index: 3;
+}
+
+.openbtn:hover {
+  background-color:#444;
+}
+
+
+/* event-leaderboard button in home/index.html */
+/* .event-item {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1.3rem;
+  margin: 0px 4px;
+  cursor: pointer;
+  border-radius: 4px;
+  width: -moz-available;
+} */
+
+/* , .event-leaderboard */
+.blue-button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1rem;
+  margin: 2px;
+  cursor: pointer;
+  border-radius: 4px;
+  width: -moz-available;
+}
+
+
+/* map popup */
+#top-popup {
+  display: None;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 4px 4px 10px rgba(0,0,0,0.1);
+  z-index: 1000;
+  max-width: 90%;
+  width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.close-button {
+  position: absolute;
+  top: 0px;
+  right: 8px;
+  padding-bottom: 37px;
+  background: #007bff;
+  border: none;
+  font-size: 24px;
+  text-align: center;
+  cursor: pointer;
+  /* Ensure the close button is above popup content */
+  z-index: 100000000;
+
+  /* Size */
+  width: 30px;
+  height: 30px;
+
+
+  /* Make it circular */
+  border-radius: 30%;
+
+  /* Shadow for depth */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+  /* Smooth hover effect */
+  transition: all 0.3s ease;
+}
+
+
+/* challenges-list-view */
+.list-view-challenge-container {
+  border: 2px solid lightgrey;
+  background: white;
+  margin-bottom: 10px;
+  border-radius: 8px;
+}
+
+.challenges-container {
+  overflow-y: auto;
+  background-color: lightgrey;
+  padding: 5px;
+  margin: 10px;
+  width: 100%;
+  max-height: 90vh;
+  min-width: 30vw
+}
+
+/* challange_detail */
+.submissions-container {
+  background-color: #7ab0f74d;
+  width: 100%;
+  padding: 5px;
+  margin-bottom: 20px;
+  /* Make it circular */
+  border-radius: 3%;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* home/templates/home/index.html */
+.center-container {
+    font-family: system-ui, -apple-system, sans-serif;
+    max-width: 800px;
+    margin: 10px auto;
+    padding: 20px;
+  }
+
+
+
+
+/* challenge_simple_info */
+    .media-container {
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; /* Firefox */
+        -ms-overflow-style: none; /* IE and Edge */
+        margin: 20px 0;
+        padding: 10px 0;
+        text-align: center;
+      }
+  
+      /* Hide scrollbar for Chrome, Safari and Opera */
+      .media-container::-webkit-scrollbar {
+        display: none;
+      }
+  
+      .media-wrapper {
+        display: inline-block;
+        margin-right: 15px;
+        position: relative;
+        vertical-align: top;
+        max-width: 80wv;
+      }
+  
+      .media-wrapper:last-child {
+        margin-right: 0;
+      }
+  
+
+      .submission-image,
+      .video-player {
+        height: auto;
+        max-height: 300px;
+        width: 100%;
+        object-fit: contain;
+        border-radius: 8px;
+        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      }
+  
+      .video-player {
+        cursor: pointer;
+      }
+  
+      /* Optional: Add scroll buttons */
+      .media-scroll-container {
+        position: relative;
+      }
+  
+      .scroll-button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+      }
+  
+      .scroll-left {
+        left: 10px;
+      }
+  
+      .scroll-right {
+        right: 10px;
+      }
+  
+      /* Optional: Add play button overlay for videos */
+      .video-wrapper {
+        position: relative;
+      }
+  
+      .play-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 50px;
+        height: 50px;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+      }
+  
+      .play-overlay::after {
+        content: '';
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 10px 0 10px 20px;
+        border-color: transparent transparent transparent #ffffff;
+        margin-left: 5px;
+      }
+
+
+
+    .popup-container {
+        padding: 5px;
+        max-height: 80vh;
+        max-width: 900px;
+        overflow-y: auto;
+    }
+
+    .media-container {
+        margin-bottom: 5px;
+    }
+
+
+
+    .challenge-image {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        border-radius: 4px;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 5px;
+        padding: 5px 0;
+        margin: 5px 0;
+        border-top: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+    }
+
+    .info-item {
+        text-align: center;
+    }
+
+    .info-label {
+        color: #666;
+        font-size: 0.9em;
+        margin-bottom: 4px;
+    }
+
+    .info-value {
+        font-weight: bold;
+    }
+
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 5px;
+    }
+
+    .avatar {
+        width: 32px;
+        height: 32px;
+        background: #eee;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: #666;
+    }
+
+    .description {
+        margin: 5px 0;
+        line-height: 1.4;
+    }
+
+    .button {
+        display: block;
+        width: 100%;
+        padding: 8px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+        color: white;
+    }
+
+    .like-button {
+        background-color: #4a90e2;
+    }
+
+    .like-button:hover {
+        background-color: #357abd;
+    }
+
+    .submit-button {
+        background-color: #2ecc71;
+    }
+
+    .submit-button:hover {
+        background-color: #27ae60;
+    }
+
+    .approved {
+        color: #2ecc71;
+    }
+
+    .pending {
+        color: #f1c40f;
+    }
+
+
+
+
+
