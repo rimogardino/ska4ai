@@ -2,7 +2,7 @@ from django.db.models import Sum, F
 from django.db.models.functions import Coalesce
 from django.contrib.auth.models import User
 from django.shortcuts import render, get_object_or_404
-from events.models import Event
+from events.models import Event, States
 from challenges.models import Challenge, Spot, get_challenge_model_class
 from challenges.serializers import geojson_serialize
 from submissions.models import Submission
@@ -17,11 +17,11 @@ with open(home / ".django_envs.json", "r") as f:
 
 # Create your views here.
 def index(request):
-    spots = Spot.objects.all().order_by('date')
-    challenges = Challenge.objects.all().order_by('-date')
+    spots = Spot.objects.filter(approved=True).order_by('date')
+    challenges = Challenge.objects.filter(approved=True).order_by('-date')
     all_challenges = [*spots, *challenges]
     [print(f"Challenge {challenge.description} has date {challenge.date}") for challenge in all_challenges]
-    event_list = Event.objects.all()
+    event_list = Event.objects.filter(state=States.ACTIVE).order_by('-priority')
     json_data = {"challenge_list": geojson_serialize(all_challenges)}
     context = {"all_challenges": all_challenges, 
                "event_list": event_list, 

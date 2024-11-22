@@ -4,7 +4,6 @@
 {% if event_list %}
     {% for event in event_list  %}
     <div class="challenges-container" id="ev-chs-{{event.id}}">
-        <h>{{ event.name }}:</h>
         {% if all_challenges %}
             {% for challenge in all_challenges %}
                 {% if challenge.event == event %}

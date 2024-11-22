@@ -10,7 +10,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="{% static "ska4ai/css/base.css" %}" />
-
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Bootstrap JS and dependencies -->
     <script src="https://unpkg.com/htmx.org@2.0.3" integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq" crossorigin="anonymous"></script>
    
@@ -26,9 +26,31 @@
       </script>
 
 </head>
-<body>
+
+<body  hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+    <!-- Navigation bar -->
+    <header class="header">
+        <nav>
+            <a href="{% url 'index' %}" class="text-logo"><span class="">ska</span><span class="four-logo">4</span><span class="">ai</span></a>
+            <ul class="list">
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'accounts:myprofile' %}">Hi {{ user.username }}!</a></li>
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    <li><a href="{% url 'accounts:signup' %}">Signup</a></li>
+                {% endif %}
+                <button type="button" class="icon-button" type="submit" onclick="location.href='{% url 'accounts:myprofile' %}'">
+                    <span class="material-icons">notifications</span>
+                    <span class="icon-button__badge">0</span>
+                  </button>
+                <li><a href="{% url 'accounts:myprofile' %}">About</a></li>
+            </ul>
+          </nav> 
+    </header>
 
 
+      
    {% comment %}  <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="{% url 'index' %}">Ska4ai</a>
@@ -64,9 +86,9 @@
             </div>
         </nav>
     </header>{% endcomment %}
-    <div id="mySidepanel" class="sidepanel">
+   {% comment %} <div id="mySidepanel" class="sidepanel">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-        <a href="{% url 'index' %}">Ska4ai</a>
+        <a href="{% url 'index' %}" class="text-logo"><span class="text-logo">Ska</span><span class="four-logo">4</span><span class="text-logo">ai</span></a>
         {% if user.is_authenticated %}
         <a href="#">Hi {{ user.username }}!</a>
         <button class="blue-button" type="submit" onclick="location.href='{% url 'accounts:myprofile' %}'">My profile</button>
@@ -83,11 +105,20 @@
         <a href="#">Contact</a>
       </div>
       
-      <button class="openbtn" onclick="openNav()">☰</button>  
-    <main role="main" class=""   hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+      <button class="openbtn" onclick="openNav()">☰</button>   {% endcomment %}
+
+
+
+
+    <main role="main" class=""  >
         {% block content %}
         <!-- Default content can go here -->
         {% endblock %}
+
+
+
+
+
     </main>
 
     {% comment %} <footer class="text-center mt-4">

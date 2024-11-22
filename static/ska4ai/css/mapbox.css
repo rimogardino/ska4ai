@@ -2,6 +2,7 @@
 body {
     margin: 0;
     padding: 0;
+    height: 100svh;
     max-width: 99.5vw;
     display: flex;
     flex-direction: column;
@@ -11,7 +12,7 @@ body {
 .main {
     display: flex;
     flex: 1;
-    height: 96vh;
+    height: 95svh;
 }
 
 .container {
@@ -35,7 +36,7 @@ body {
 
 #map {
     width: 100%; 
-    height: 100%;
+    height: 90svh;
     border-radius: 2%;
 }
 
@@ -53,12 +54,12 @@ body {
         display: flex;
         flex: 1;
         flex-direction: column;
-        height: 85.5vh;
+        height: 85svh;
     }
 
     .map_container {
         /* position: relative; */
-        height: 100%;
+        height: 90svh;
     }
 
     /* .mapboxgl-canvas {
@@ -67,8 +68,8 @@ body {
     }*/
 
     #map {
-        width: 100%; 
-        height: 100%;
+        width: 100svw; 
+        height: 85svh;
         border-radius: 2%;
     } 
 
@@ -82,8 +83,8 @@ body {
         background-color: white;
 
         /* Size constraints */
-        max-width: 90vw;  /* Take up 90% of viewport width */
-        max-height: 90vh; /* Take up 90% of viewport height */
+        max-width: 90svw;  /* Take up 90% of viewport width */
+        max-height: 90svh; /* Take up 90% of viewport height */
         width: 100%;      /* Full width up to max-width */
         
         /* Handle overflow */
@@ -112,11 +113,66 @@ body {
 
 
 .popup-content {
-    max-height: 80vh;
+    max-height: 80svh;
     padding: 10px;
     min-width: 200px;
 
 }
+
+
+/* event-leaderboard button in home/index.html */
+.event-item {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 0.5rem;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  border-radius: 4px;
+  width: -moz-available;
+}
+
+
+#active-event {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+}
+
+#active-event > div {
+    padding: 0.1rem 0.5rem 0.3rem 0.5rem;
+    box-shadow:
+    -7px -7px 20px 0px #fff9,
+    -4px -4px 5px 0px #fff9,
+    7px 7px 20px 0px #0002,
+    4px 4px 5px 0px #0001,
+    inset 0px 0px 0px 0px #fff9,
+    inset 0px 0px 0px 0px #0001,
+    inset 0px 0px 0px 0px #fff9,        inset 0px 0px 0px 0px #0001;
+  transition:box-shadow 0.6s cubic-bezier(.79,.21,.06,.81);
+    border-radius: 10px;
+}
+
+#active-event > button {
+    padding: 0.1rem 0.5rem 0.3rem 0.5rem;
+    box-shadow:
+    -7px -7px 20px 0px #fff9,
+    -4px -4px 5px 0px #fff9,
+    7px 7px 20px 0px #0002,
+    4px 4px 5px 0px #0001,
+    inset 0px 0px 0px 0px #fff9,
+    inset 0px 0px 0px 0px #0001,
+    inset 0px 0px 0px 0px #fff9,        inset 0px 0px 0px 0px #0001;
+  transition:box-shadow 0.6s cubic-bezier(.79,.21,.06,.81);
+    border-radius: 10px;
+ }
+
 
 /* .event-description {
     text-align: center;
@@ -126,10 +182,89 @@ body {
     width: 100%;
 } */
 
+/* leaderboard */
+
+.scores-container {
+    font-family: system-ui, -apple-system, sans-serif;
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+  }
+
+  .title {
+      text-align: center;
+      font-size: 2.5em;
+      padding: 10px;
+  }
+
+
+  .scores-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .scores-table th {
+    background: #007bff;;
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    color: #333;
+    border-bottom: 2px solid #e9ecef;
+  }
+
+  .scores-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid #e9ecef;
+  }
+
+  .scores-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .scores-table tr:hover {
+    background: #f8f9fa;
+  }
+
+  .points {
+    font-weight: 600;
+    color: #2563eb;
+  }
+
+  .username {
+    color: #1f2937;
+  }
+
+  .no-results {
+    text-align: center;
+    padding: 32px;
+    color: #6b7280;
+  }
+
+  @media (max-width: 480px) {
+    .scores-container {
+      margin: 10px;
+      padding: 10px;
+    }
+    
+    .scores-table td,
+    .scores-table th {
+      padding: 8px;
+    }
+  }
+
+
+
+
+
+/* floating button */
 .floating-button {
     /* Position */
     position: absolute;
-    bottom: 20px;
+    bottom: 8svh;
     right: 20px;
     z-index: 9999;
   

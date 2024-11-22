@@ -3,7 +3,7 @@
 
 {% block title %}Ska4ai{% endblock %}
 
-{% block sidePanelItems %}
+{% comment %} {% block sidePanelItems %}
     {% if event_list %}
         <div class="sidepanel-events" >
             <h3>Events:</h3>
@@ -22,17 +22,38 @@
         </div>
 
         {% endif %}
-{% endblock %}
+{% endblock %} {% endcomment %}
 
 
 {% block content %}
-<div id="top-popup" >
+<div id="top-popup" class="popup">
     <button class="close-button stylish-button" onclick="closePopup()">X</button>
     <div id="top-popup-content">Big Popup</div>
 </div>
-<div class="main"  data-json='{{ json_data.challenge_list|safe }}'>
-  
+<div id="event-popup"  class="popup">
+    <button class="close-button stylish-button" onclick="closePopup()">X</button>
+    {% for event in event_list  %}
+            <div class="event-item" id="event-{{ event.id }}" data-event-id="{{ event.id }}">
+            {{ event.name }}
+            </div>
+        {% endfor%}
+</div>
+<div id="leaderboard-popup" class="popup">
+    <button class="close-button stylish-button" onclick="closePopup()">X</button>
+    <div id="leaderboard-popup-content">Leaderboard</div>
+</div>
 
+
+
+<div class="main"  data-json='{{ json_data.challenge_list|safe }}'>
+    <div id="active-event">
+        {% for event in event_list  %}
+            <div class="active-event-item" id="active-event-{{ event.id }}" onClick="fetchLeaderboard({{ event.id }})">
+            {{ event.name }}
+            </div>
+        {% endfor%}
+        <button class="" onclick="showEvents()">#!</button>
+    </div>
 
     <div class="map_container" id="map-container" style="">
         <div id="map"  hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'></div>
@@ -56,13 +77,13 @@
     <style >
         #view-switcher {
             display: none;
-
+            
         }
 
         .list-view-container {
             display: flex;
             flex-direction: column;
-
+            {% comment %} padding-top: 5svh; {% endcomment %}
             transition: all 0.3s ease;
         }
         .list-view-container > div {
@@ -73,9 +94,13 @@
 
         @media (max-width: 800px) {
             #view-switcher {
-                display: block;
+                display: flex;
                 position: absolute;
                 bottom: 0;
+                &--bottom {
+                    position: fixed;
+                    bottom: 0;
+                }
                 background-color: #007bff;
                 color: #fff;
                 border: none;
@@ -83,10 +108,10 @@
                 text-align: center;
                 text-decoration: none;
                 font-size: 1rem;
-                margin: 2px;
+                margin: 0.5rem 0px;
                 cursor: pointer;
                 border-radius: 4px;
-                width: -moz-available;
+                width: 100svw;
                 z-index: 5;
             }
 
@@ -153,8 +178,28 @@ function fetchPopupContent(challenge_type, challengeId) {
 
 // Function to close popup
 function closePopup() {
+    // There has to be a better way :D
     document.getElementById('top-popup').style.display = 'none';
+    document.getElementById('event-popup').style.display = 'none';
+    document.getElementById('leaderboard-popup').style.display = 'none';
     document.getElementById('top-popup-content').innerHTML = "Loading...";;
+}
+
+
+function showEvents() {
+    document.getElementById('event-popup').style.display = 'block';
+
+}
+
+// Function to fetch leaderboard using HTMX manually
+function fetchLeaderboard(event_id) {
+    htmx.ajax('GET', `{% url 'leaderboard' event_id=12345 %}`.replace(/12345/, event_id.toString()), {
+        //target: `#popup-details-${challengeId}`,
+        target: `#leaderboard-popup-content`,
+        swap: 'innerHTML'
+    });
+    const leaderboardPopup = document.getElementById('leaderboard-popup');
+    leaderboardPopup.style.display = 'block';
 }
 
 
@@ -168,13 +213,15 @@ $ (document).ready(function(){
         new_challenge_button.setAttribute("data-event", selected_event);
         // list view logic
         $ (".challenges-container").hide();
-        $ ('#ev-chs-' + selected_event).show();
-        //$ ("#event-description-" + selected_event).show();
+        $ (".active-event-item").hide();
+        $ ("#active-event-" + selected_event).show();
+        $ ('#ev-chs-' + selected_event).show()
         $ ('#new-challenge-link').attr('href', `{% url 'challenges:create_challenge' 12345 %}`.replace(/12345/, selected_event.toString()))
         //map view markers
         $ (".mapboxgl-marker").hide();
         $ (".marker-event-" + selected_event).show();
-        document.getElementById("mySidepanel").style.width = "0";
+        closePopup();
+        //document.getElementById("mySidepanel").style.width = "0";
     });
     $ (".event-item").eq(0).click();
 
