@@ -564,7 +564,8 @@ a {
     .popup-container {
         padding: 5px;
         max-height: 90svh;
-        max-width: 900px;
+        max-width: 96svw;
+        width: 500px;
         overflow-y: auto;
     }
 
