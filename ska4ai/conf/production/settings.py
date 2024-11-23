@@ -33,6 +33,16 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['172.232.209.160', 'ska4ai', 'ska4ai.com', 'www.ska4ai.com']
 
+# Security settings
+SECURE_SSL_REDIRECT = True  # Redirect HTTP to HTTPS
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SESSION_COOKIE_SECURE = True  # Only send cookies over HTTPS
+CSRF_COOKIE_SECURE = True    # Only send CSRF cookies over HTTPS
+
+# Optional but recommended
+SECURE_HSTS_SECONDS = 31536000  # 1 year
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
 
 # Application definition
 

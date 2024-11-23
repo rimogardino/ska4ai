@@ -26,6 +26,7 @@
 
 
 {% block content %}
+<div id="overlay" class="overlay"></div>
 <div id="top-popup" class="popup">
     <button class="close-button stylish-button" onclick="closePopup()">X</button>
     <div id="top-popup-content">Big Popup</div>
@@ -52,12 +53,15 @@
             {{ event.name }}
             </div>
         {% endfor%}
-        <button class="" onclick="showEvents()">#!</button>
+        <button id="choose-event" class="" onclick="showEvents()">#!</button>
+        <div id="leaderboard-popup-content-bigscreen">Leaderboard</div>
     </div>
 
     <div class="map_container" id="map-container" style="">
         <div id="map"  hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'></div>
-        <button class="floating-button" id="new-challenge" onclick="newChallenge(this)">+</button>
+        {% if user.is_authenticated %}
+            <button class="floating-button" id="new-challenge" onclick="newChallenge(this)">+</button>
+        {% endif %}
     </div>
 
     <div class="list-view-container" id="list-view-container">
@@ -85,17 +89,18 @@
             flex-direction: column;
             {% comment %} padding-top: 5svh; {% endcomment %}
             transition: all 0.3s ease;
+            
         }
-        .list-view-container > div {
+        {% comment %} .list-view-container > div {
             text-align: center;
             margin: 2px;
-        } 
+        }  {% endcomment %}
 
 
         @media (max-width: 800px) {
             #view-switcher {
                 display: flex;
-                position: absolute;
+                position: fixed;
                 bottom: 0;
                 &--bottom {
                     position: fixed;
@@ -119,6 +124,8 @@
                 display: none;
                 width: 100% !important;
                 transition: all 0.3s ease;
+                margin-bottom: 25svh;
+                max-height: 80svh;
             }
         }
     </style>
@@ -130,7 +137,7 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 
 <script>
-    
+const bigScreen = window.matchMedia('(min-width: 768px)');
    
 {% comment %} function playPause(videoPlayer) { 
     if (videoPlayer.paused) 
@@ -170,9 +177,8 @@ function fetchPopupContent(challenge_type, challengeId) {
         target: `#top-popup-content`,
         swap: 'innerHTML'
     });
-    const topPopup = document.getElementById('top-popup');
-    topPopup.style.display = 'block';
-
+    document.getElementById('top-popup').style.display = 'flex';
+    document.getElementById('overlay').style.display = 'block';
 }
 
 
@@ -182,48 +188,64 @@ function closePopup() {
     document.getElementById('top-popup').style.display = 'none';
     document.getElementById('event-popup').style.display = 'none';
     document.getElementById('leaderboard-popup').style.display = 'none';
-    document.getElementById('top-popup-content').innerHTML = "Loading...";;
+    document.getElementById('overlay').style.display = 'none';
+    document.getElementById('top-popup-content').innerHTML = "Loading...";
 }
 
 
 function showEvents() {
-    document.getElementById('event-popup').style.display = 'block';
+    document.getElementById('event-popup').style.display = 'flex';
+    document.getElementById('overlay').style.display = 'block';
 
 }
 
 // Function to fetch leaderboard using HTMX manually
 function fetchLeaderboard(event_id) {
     htmx.ajax('GET', `{% url 'leaderboard' event_id=12345 %}`.replace(/12345/, event_id.toString()), {
-        //target: `#popup-details-${challengeId}`,
-        target: `#leaderboard-popup-content`,
+        target: (bigScreen.matches) ? `#leaderboard-popup-content-bigscreen` : `#leaderboard-popup-content`,
         swap: 'innerHTML'
     });
-    const leaderboardPopup = document.getElementById('leaderboard-popup');
-    leaderboardPopup.style.display = 'block';
+    if (bigScreen.matches) {
+        $ ("#event-" + event_id).click();
+    }
+    else {
+        document.getElementById('leaderboard-popup').style.display = 'flex';
+        document.getElementById('overlay').style.display = 'block';
+    };
+
 }
 
 
 $ (document).ready(function(){
+    // Create a media condition that targets viewports at least 768px wide
+    
     console.log("Doc is ready, loading map...")
 
     $ (".event-item").on("click", function() {
         var selected_event = $ (this).attr("data-event-id");
         // add data-event to new challenge button
         const new_challenge_button = document.getElementById('new-challenge');
-        new_challenge_button.setAttribute("data-event", selected_event);
+        if (new_challenge_button) {
+            new_challenge_button.setAttribute("data-event", selected_event);
+        };
         // list view logic
         $ (".challenges-container").hide();
-        $ (".active-event-item").hide();
+        if (!bigScreen.matches) {
+            $ (".active-event-item").hide();
+        };
         $ ("#active-event-" + selected_event).show();
         $ ('#ev-chs-' + selected_event).show()
         $ ('#new-challenge-link').attr('href', `{% url 'challenges:create_challenge' 12345 %}`.replace(/12345/, selected_event.toString()))
         //map view markers
         $ (".mapboxgl-marker").hide();
         $ (".marker-event-" + selected_event).show();
-        closePopup();
-        //document.getElementById("mySidepanel").style.width = "0";
+        if (!bigScreen.matches) {
+            closePopup();
+        };
     });
     $ (".event-item").eq(0).click();
+    $ (".active-event-item").eq(0).click();
+    closePopup();
 
     mapboxgl.accessToken = '{{ mapbox_api_key }}';
     const map = new mapboxgl.Map({

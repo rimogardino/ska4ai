@@ -21,6 +21,22 @@
 }
 
 
+@media (max-width: 800px) {
+  #active-event {
+      flex-direction: row;
+      flex-wrap: wrap;
+  }
+
+  #active-event > div {
+      margin: 0rem;
+  }
+
+  #choose-event {
+      display: flex;
+  }
+}
+
+
 
 /*glow for webkit*/
 @-webkit-keyframes neon1 {
@@ -244,7 +260,7 @@ nav {
   left: 0;
   width: 100%;
   padding: 16px 20px 15px 20px;
-  margin-bottom: -20px;
+  margin-bottom: 0px;
   display: flex;
   align-items: center;
   transition: 0.3s ease-out;
@@ -252,7 +268,7 @@ nav {
   -webkit-backdrop-filter: blur(1px) brightness(.8);
   text-shadow: 0 0 5px rgba(0,0,0,0.5);
   color: rgba(0, 0, 0, 0.568);
-  font-size: 16px;
+  font-size: 1rem;
   z-index: 5;
   @media (min-width: 640px) {
     padding: 16px 50px 0px 50px;
@@ -260,6 +276,22 @@ nav {
   mask-image: linear-gradient(black 80%, transparent);
   -webkit-mask-image: linear-gradient(black 40%, transparent);
 }
+
+
+
+@media (max-width: 800px) {
+  nav {
+    margin-bottom: -20px;
+  }
+}
+
+@media (max-width: 400px) {
+  nav {
+    font-size: 0.75rem;
+  }
+}
+
+
 nav.is-hidden {
   transform: translateY(-100%);
 }
@@ -279,7 +311,7 @@ a {
     display: flex;
   }
   li {
-    margin-left: 20px;
+    margin-left: 10px;
   }
 }
 
@@ -304,12 +336,13 @@ a {
 /* map popup */
 #top-popup, .popup {
   display: None;
+  flex-direction: column;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: white;
   padding: 20px;
+  border: 1px solid #979696;
   border-radius: 8px;
   box-shadow: 4px 4px 10px rgba(0,0,0,0.1);
   z-index: 1000;
@@ -318,6 +351,26 @@ a {
   max-height: 90svh;
   overflow-y: auto;
 }
+
+
+/* Gradient border */
+.popup {
+  background: linear-gradient(90deg, #ffffff, #e1f8ff);
+}
+
+.overlay {
+  position: fixed;
+  display: none;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  z-index: 999;
+}
+
+
 
 .close-button {
   position: absolute;
@@ -357,14 +410,27 @@ a {
 }
 
 .challenges-container {
+  display: flex;
+  flex-direction: column;
   overflow-y: auto;
   background-color: lightgrey;
   padding: 5px;
-  margin: 10px;
   width: 100%;
-  max-height: 90svh;
+  height: 100%;
   min-width: 30vw
 }
+
+.list-view-wrapper {
+  display: flex;
+}
+
+/* @media (max-width: 800px) {
+  .challenges-container {
+    max-height: 85svh;
+  }
+} */
+
+
 
 /* challange_detail */
 .submissions-container {

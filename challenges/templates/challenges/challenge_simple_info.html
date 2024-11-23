@@ -35,7 +35,9 @@
         </div>
     </div>
 
-    <div class="description">{{ challenge.description }}</div>
+    <div class="description">
+        <a href="{% url 'challenges:challenge_detail' challenge_type='CH' challenge_id=challenge.id %}">{{ challenge.description }}</a>
+    </div>
 
     <div class="info-grid">
         <div class="info-item">

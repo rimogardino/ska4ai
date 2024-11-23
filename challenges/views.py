@@ -36,6 +36,7 @@ def create_challenge(request, event_id=None, errors=None):
         if form.is_valid():
             instance = form.save(commit=False)
             instance.user = request.user
+            instance.event = event
             instance.save()
             files = request.FILES.getlist('files')
             for f in files:

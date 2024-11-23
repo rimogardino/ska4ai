@@ -31,7 +31,7 @@ class ChallengeForm(forms.ModelForm):
 
     class Meta:
         model = Challenge
-        fields = ['event', 'longitude', 'latitude', 'files', 'description']
+        fields = ['longitude', 'latitude', 'files', 'description']
 
     def __init__(self, *args, **kwargs):
         # Check if we're editing an existing instance
@@ -43,7 +43,7 @@ class ChallengeForm(forms.ModelForm):
         self.fields['latitude'].widget = forms.HiddenInput()
         # Hide the file field if we're editing
         if self.is_edit:
-            self.fields['event'].widget = forms.HiddenInput()
+            # self.fields['event'].widget = forms.HiddenInput()
             self.fields['files'].widget = forms.HiddenInput()
 
 
@@ -53,7 +53,7 @@ class SpotForm(forms.ModelForm):
 
     class Meta:
         model = Spot
-        fields = ['event', 'name', 'longitude', 'latitude', 'files', 'description']
+        fields = ['name', 'longitude', 'latitude', 'files', 'description']
 
     def __init__(self, *args, **kwargs):
         # Check if we're editing an existing instance
