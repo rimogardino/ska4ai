@@ -89,7 +89,8 @@
             flex-direction: column;
             {% comment %} padding-top: 5svh; {% endcomment %}
             transition: all 0.3s ease;
-            width: 500px;
+            width: 100%;
+            max-width: 30svw;
         }
         {% comment %} .list-view-container > div {
             text-align: center;
@@ -126,6 +127,7 @@
                 transition: all 0.3s ease;
                 margin-bottom: 25svh;
                 max-height: 80svh;
+                max-width: 100svw;
             }
         }
     </style>
@@ -137,7 +139,7 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 
 <script>
-const bigScreen = window.matchMedia('(min-width: 768px)');
+const bigScreen = window.matchMedia('(min-width: 800px)');
    
 {% comment %} function playPause(videoPlayer) { 
     if (videoPlayer.paused) 
@@ -220,7 +222,12 @@ $ (document).ready(function(){
     // Create a media condition that targets viewports at least 768px wide
     
     console.log("Doc is ready, loading map...")
+    if (!bigScreen.matches) {
+        document.getElementById('leaderboard-popup-content-bigscreen').style.display = 'none';
+    };
 
+
+    
     $ (".event-item").on("click", function() {
         var selected_event = $ (this).attr("data-event-id");
         // add data-event to new challenge button

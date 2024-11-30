@@ -68,7 +68,7 @@
             </button>
         {% endif %}
 
-        {% if user.id != challenge.user.id and challenge.points %} 
+        {% if user.is_authenticated and user.id != challenge.user.id and challenge.points %} 
         <button 
                 class="button like-button"
                 onclick="location.href='{% url 'submissions:create_submission' challenge_type=challenge.challenge_type challenge_id=challenge.id %}'"
