@@ -142,7 +142,9 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: start;
-
+    width: 18svw;
+    max-width: 600px;
+    min-width: 18svw;
 }
 
 #active-event > div {
@@ -193,6 +195,9 @@ body {
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
+        width: 100%;
+        max-width: auto;
+        min-width: 18svw;
     }
 
     #active-event > div {

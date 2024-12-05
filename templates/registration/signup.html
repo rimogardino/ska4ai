@@ -9,22 +9,24 @@
     {% csrf_token %}
     
     {% for field in form %}
-        <div class="form-group {% if field.errors %}has-error{% endif %}">
-            <label for="{{ field.id_for_label }}" class="form-label">
-                {{ field.label }}
-            </label>
-            {{ field }}:
-            {% if field.errors %}
-                <div class="error-message">
-                    {% for error in field.errors %}
-                        <span class="error-text">{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% endif %}
-            {% if field.id_for_label == 'id_password2'%}
-                <div>{{ field.help_text|safe }}</div>
-            {% endif %}
-        </div>
+        {% if field.name != 'terms_and_conditions' %}
+            <div class="form-group {% if field.errors %}has-error{% endif %}">
+                <label for="{{ field.id_for_label }}" class="form-label">
+                    {{ field.label }}
+                </label>
+                {{ field }}:
+                {% if field.errors %}
+                    <div class="error-message">
+                        {% for error in field.errors %}
+                            <span class="error-text">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                {% if field.name == 'password2'%}
+                    <div>{{ field.help_text|safe }}</div>
+                {% endif %}
+            </div>
+        {% endif %}
     {% endfor %}
     
     {% if form.non_field_errors %}
@@ -34,7 +36,53 @@
             {% endfor %}
         </div>
     {% endif %}
+
+    <!-- Terms and Conditions Section -->
+    <div class="terms-conditions-section">
+        {{ form.terms_and_conditions.label_tag }}
+        {{ form.terms_and_conditions }}
+        {{ form.terms_and_conditions.help_text|safe }}
+        {% if form.terms_and_conditions.errors %}
+            <div class="error-message">
+                {% for error in form.terms_and_conditions.errors %}
+                    <span class="error-text">{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        {% comment %} <!-- Optional: Add a link to full terms page -->
+        <small>
+            <a href="{% url 'terms_full' %}" target="_blank">
+                Read Full Terms and Conditions
+            </a>
+        </small> {% endcomment %}
+    </div>
+
+
     <button type="submit" class="btn btn-primary">Sign Up</button>
 </form>
 </div>
+{% endblock %}
+
+
+{% block css %}
+<style>
+.terms-conditions-section {
+    margin: 15px 0;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+.terms-conditions-section a {
+    color: #007bff;
+    text-decoration: underline;
+}
+
+.liability-disclaimer {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 10px;
+}
+</style>
 {% endblock %}

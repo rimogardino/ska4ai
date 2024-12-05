@@ -42,10 +42,18 @@ class SignUpForm(UserCreationForm):
         help_text='Required. Enter a valid email address.',
         validators=[validate_email]
     )
+    terms_and_conditions = forms.BooleanField(
+        required=True,
+        widget=forms.CheckboxInput(),
+        label='I agree to the Terms and Conditions',
+        error_messages={
+            'required': 'You must agree to the terms and conditions to proceed.'
+        }
+    )
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2')
+        fields = ('username', 'email', 'password1', 'password2', 'terms_and_conditions')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -63,6 +71,31 @@ class SignUpForm(UserCreationForm):
             "</ul>"
             "</ul>"
             "</div>")
+        # Multiline help text for terms and conditions
+        self.fields['terms_and_conditions'].help_text = (
+            "<div class='terms-conditions'>"
+            "<h3>Terms and Conditions</h3>"
+            "<div class='liability-disclaimer'>"
+            "<h4>Liability Disclaimer</h4>"
+            "<p>By creating an account and using this platform, you acknowledge and agree to the following:</p>"
+            "<ol>"
+            "<li><strong>User Content Responsibility:</strong> Users are solely responsible for the content they upload, share, or interact with on this platform.</li>"
+            "<li><strong>No Liability for User Actions:</strong> The website and its owner/operator shall not be held liable for any damages, injuries, losses, or consequences arising from:</li>"
+            "<ul>"
+            "<li>Content uploaded by users</li>"
+            "<li>Interactions between users</li>"
+            "<li>Participation in website events or activities</li>"
+            "<li>Any claims, actions, or damages resulting from user-generated content or interactions</li>"
+            "</ul>"
+            "<li><strong>Risk Acknowledgment:</strong> Users participate in any platform activities entirely at their own risk.</li>"
+            "<li><strong>Content Disclaimer:</strong> We do not review, verify, or guarantee the accuracy, safety, or appropriateness of user-generated content.</li>"
+            "<li><strong>Legal Protection:</strong> By agreeing, you waive any right to hold the website or its operators legally responsible for user actions or content.</li>"
+            "</ol>"
+            "<p><em>By checking this box, you confirm that you have read, understood, and agree to these terms.</em></p>"
+            "</div>"
+            "</div>"
+        )
+
 
     def clean_email(self):
         # Ensure email is unique
