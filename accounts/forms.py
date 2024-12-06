@@ -73,7 +73,8 @@ class SignUpForm(UserCreationForm):
             "</div>")
         # Multiline help text for terms and conditions
         self.fields['terms_and_conditions'].help_text = (
-            "<div class='terms-conditions'>"
+            "<div id='terms-conditions-popup' class='terms-conditions popup'>"
+            "<button class='close-button stylish-button' onclick='closePopup()'>X</button>"
             "<h3>Terms and Conditions</h3>"
             "<div class='liability-disclaimer'>"
             "<h4>Liability Disclaimer</h4>"

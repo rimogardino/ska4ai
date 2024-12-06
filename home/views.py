@@ -37,6 +37,7 @@ def leaderboard(request, event_id):
     if hasattr(challenge_model, "points"):
         users = User.objects.all()
         for user in users:
+            # This should probably not happen here, but be an attribute in the model and reduce the calculations
             user.submission_points = (Submission.objects.filter(
                                                 user=user
                                                 ).aggregate(
@@ -49,10 +50,22 @@ def leaderboard(request, event_id):
                                                 .aggregate(Sum('points'))['points__sum']
                                     or 0)
             user.points = user.submission_points + user.challenge_points
-            leaderboard[user.username] = user.points
-            print(f"user {user.username} has challenge points {user.challenge_points} " 
-                  + f"and submission points {user.submission_points} and total {user.points} points")
+            if user.points > 0:
+                leaderboard[user.username] = [user.points, 1]
+            # print(f"user {user.username} has challenge points {user.challenge_points} " 
+            #       + f"and submission points {user.submission_points} and total {user.points} points")
+        # leaderboard["gosho"] = [42, 1]
+        # leaderboard["pesho"] = [42, 1]
+        # leaderboard["lelq"] = [4, 1]
+        # leaderboard["Ilabaka"] = [155, 1]
+        # leaderboard["gosho"] = [42, 1]
         leaderboard = sorted(leaderboard.items(), key=lambda x: x[1], reverse=True)
-        print("leaderboard", leaderboard)
+        for i, p in enumerate(leaderboard[1:]):
+            prev_place = leaderboard[i][1]
+            if p[1][0] == prev_place[0]:
+                p[1][1] = prev_place[1]
+            else:
+                p[1][1] = prev_place[1] + 1
+        # print("leaderboard", leaderboard)
     context = {"event": event, "leaderboard": leaderboard}
     return render(request, "home/leaderboard.html", context)

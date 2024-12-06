@@ -39,8 +39,8 @@
 
     <!-- Terms and Conditions Section -->
     <div class="terms-conditions-section">
-        {{ form.terms_and_conditions.label_tag }}
-        {{ form.terms_and_conditions }}
+        {{ form.terms_and_conditions.label_tag|safe }}
+        {{ form.terms_and_conditions|safe }}
         {{ form.terms_and_conditions.help_text|safe }}
         {% if form.terms_and_conditions.errors %}
             <div class="error-message">
@@ -57,7 +57,7 @@
             </a>
         </small> {% endcomment %}
     </div>
-
+    <div class="terms-conditions"><a onclick="showTermsAndConditions()">Terms and Conditions</a></div>
 
     <button type="submit" class="btn btn-primary">Sign Up</button>
 </form>
@@ -67,6 +67,10 @@
 
 {% block css %}
 <style>
+#terms-conditions-popup {
+    display: none;
+}
+
 .terms-conditions-section {
     margin: 15px 0;
     padding: 10px;
@@ -79,10 +83,44 @@
     text-decoration: underline;
 }
 
+.terms-conditions {
+    text-align: center;
+}
+
+.terms-conditions a {
+    text-decoration: underline !important;
+    color: #0056b3 !important;
+}
+
 .liability-disclaimer {
     font-size: 0.9em;
     color: #666;
     margin-top: 10px;
+    text-align: left;
 }
 </style>
+
+
+<script>
+
+    function showTermsAndConditions() {
+        document.getElementById('terms-conditions-popup').style.display = 'flex';
+        document.getElementById('overlay').style.display = 'block';
+    }
+    
+    // Function to close popup
+    function closePopup() {
+        const popupElements = document.getElementsByClassName("popup");
+        const testDivs = Array.prototype.filter.call(
+            popupElements,
+          (popup) => popup.style.display = 'none',
+        );
+        
+
+{% comment %} 
+        document.getElementById('terms-conditions-popup').style.display = 'none'; {% endcomment %}
+        document.getElementById('overlay').style.display = 'none';
+    }
+
+    </script>
 {% endblock %}

@@ -247,16 +247,23 @@ body {
 
   .scores-table th {
     background: #007bff;;
-    padding: 12px 16px;
-    text-align: left;
+    padding: 12px 8px;
+    text-align: center;
     font-weight: 600;
     color: #333;
     border-bottom: 2px solid #e9ecef;
   }
 
+  
   .scores-table td {
     padding: 12px 16px;
     border-bottom: 1px solid #e9ecef;
+  }
+
+  .scores-table th:first-child,
+  .scores-table td:first-child {
+    text-align: left;
+    padding: 12px 12px;
   }
 
   .scores-table tr:last-child td {
@@ -284,6 +291,7 @@ body {
 
 #leaderboard-popup-content-bigscreen {
     display: flex;
+    padding: 0px;
 }
 
 @media (max-width: 800px) {
