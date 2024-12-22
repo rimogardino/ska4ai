@@ -39,9 +39,41 @@
 
     <!-- Terms and Conditions Section -->
     <div class="terms-conditions-section">
+
+        <div id='terms-conditions-popup' class='terms-conditions popup'>
+            <button class='close-button stylish-button' onclick='closePopup()'>
+                <div>{% include 'images/close-square-svgrepo-com.svg' %}</div>
+            </button>
+            <h3>Terms and Conditions</h3>
+            <div class='liability-disclaimer'>
+                <h4>Liability Disclaimer</h4>
+                <p>By creating an account and using this platform, you acknowledge and agree to the following:</p>
+                <ol>
+                    <li><strong>User Content Responsibility:</strong> Users are solely responsible for the content they upload, share, or interact with on this platform.</li>
+                    <li><strong>No Liability for User Actions:</strong> The website and its owner/operator shall not be held liable for any damages, injuries, losses, or consequences arising from:
+                        <ul>
+                            <li>Content uploaded by users</li>
+                            <li>Interactions between users</li>
+                            <li>Participation in website events or activities</li>
+                            <li>Any claims, actions, or damages resulting from user-generated content or interactions</li>
+                        </ul>
+                    </li>
+                    <li><strong>Risk Acknowledgment:</strong> Users participate in any platform activities entirely at their own risk.</li>
+                    <li><strong>Content Disclaimer:</strong> We do not review, verify, or guarantee the accuracy, safety, or appropriateness of user-generated content.</li>
+                    <li><strong>Legal Protection:</strong> By agreeing, you waive any right to hold the website or its operators legally responsible for user actions or content.</li>
+                </ol>
+                <p><em>By checking this box, you confirm that you have read, understood, and agree to these terms.</em></p>
+            </div>
+        </div>
+
+
         {{ form.terms_and_conditions.label_tag|safe }}
         {{ form.terms_and_conditions|safe }}
-        {{ form.terms_and_conditions.help_text|safe }}
+        {% comment %} {{ form.terms_and_conditions.help_text|safe }} {% endcomment %}
+
+
+
+
         {% if form.terms_and_conditions.errors %}
             <div class="error-message">
                 {% for error in form.terms_and_conditions.errors %}
@@ -63,7 +95,6 @@
 </form>
 </div>
 {% endblock %}
-
 
 {% block css %}
 <style>
@@ -91,16 +122,10 @@
     text-decoration: underline !important;
     color: #0056b3 !important;
 }
-
-.liability-disclaimer {
-    font-size: 0.9em;
-    color: #666;
-    margin-top: 10px;
-    text-align: left;
-}
 </style>
+{% endblock %}
 
-
+{% block extra_js %}
 <script>
 
     function showTermsAndConditions() {
@@ -122,5 +147,5 @@
         document.getElementById('overlay').style.display = 'none';
     }
 
-    </script>
+</script>
 {% endblock %}

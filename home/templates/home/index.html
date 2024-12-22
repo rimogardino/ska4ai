@@ -28,11 +28,11 @@
 {% block content %}
 
 <div id="top-popup" class="popup">
-    <button class="close-button stylish-button" onclick="closePopup()">X</button>
+    <button class="close-button stylish-button" onclick="closePopup()"><div>{% include "images/close-square-svgrepo-com.svg" %}</div></button>
     <div id="top-popup-content">Big Popup</div>
 </div>
 <div id="event-popup"  class="popup">
-    <button class="close-button stylish-button" onclick="closePopup()">X</button>
+    <button class="close-button stylish-button" onclick="closePopup()"><div>{% include "images/close-square-svgrepo-com.svg" %}</div></button>
     {% for event in event_list  %}
             <div class="event-item" id="event-{{ event.id }}" data-event-id="{{ event.id }}">
             {{ event.name }}
@@ -40,7 +40,7 @@
         {% endfor%}
 </div>
 <div id="leaderboard-popup" class="popup">
-    <button class="close-button stylish-button" onclick="closePopup()">X</button>
+    <button class="close-button stylish-button" onclick="closePopup()"><div>{% include "images/close-square-svgrepo-com.svg" %}</div></button>
     <div id="leaderboard-popup-content">Leaderboard</div>
 </div>
 
@@ -81,7 +81,6 @@
     <style >
         #view-switcher {
             display: none;
-            
         }
 
         .list-view-container {
@@ -103,10 +102,6 @@
                 display: flex;
                 position: fixed;
                 bottom: 0;
-                &--bottom {
-                    position: fixed;
-                    bottom: 0;
-                }
                 background-color: #007bff;
                 color: #fff;
                 border: none;

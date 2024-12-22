@@ -1,3 +1,51 @@
+/* Import normalize.css or use a reset */
+@import 'normalize.css';
+
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px; /* Base font size */
+}
+
+body {
+  /* Prevent text auto-scaling on mobile */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Use rem for measurements */
+.element {
+  font-size: 1rem;
+  padding: 1rem;
+  margin: 0.5rem;
+}
+
+
+:root {
+  --base-size: 16px;
+  --scale-factor: 1;
+}
+
+
+@media screen and (max-width: 768px) {
+  :root {
+      --scale-factor: 0.9;
+  }
+}
+
+.element {
+  font-size: calc(var(--base-size) * var(--scale-factor));
+}
+
+
+
+
+
 /* logo */
 
 .text-logo {
@@ -19,24 +67,6 @@
   -moz-animation: neon1 1.5s ease-in-out infinite alternate;
   animation: neon1 1.5s ease-in-out infinite alternate; 
 }
-
-
-@media (max-width: 800px) {
-  #active-event {
-      flex-direction: row;
-      flex-wrap: wrap;
-  }
-
-  #active-event > div {
-      margin: 0rem;
-  }
-
-  #choose-event {
-      display: flex;
-  }
-}
-
-
 
 /*glow for webkit*/
 @-webkit-keyframes neon1 {
@@ -162,12 +192,6 @@
   width: 100%;
 }
 
-
-
-
-
-
-
 /* generic */
 .bordered-rounded-container {
   border: 2px solid #0153ac86;
@@ -183,6 +207,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  line-height: 1.5;
   max-width: 960px;
   width: fit-content;
   margin: auto;
@@ -190,6 +215,32 @@
   background: linear-gradient(90deg, #ffffff, #dbeaee);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+
+  /* Reset Styles */
+  ul, ol, li {
+    margin: 0;
+    padding: 0;
+    -webkit-margin-before: 0; /* Safari-specific reset */
+    -webkit-margin-after: 0;
+    -webkit-padding-start: 20px; /* Align using padding */
+  }
+
+  /* Base Styling */
+  ol, ul {
+    position: relative;
+    padding-left: 20px; /* Adjust for main list alignment */
+  }
+
+  ol ul, ul ul {
+    padding-left: 20px; /* Match or align nested list */
+  }
+
+  .liability-disclaimer {
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 10px;
+    text-align: left;
+  }
 }
 
 .signup-form {
@@ -199,6 +250,12 @@
 .signup-container input, .login-container input {
   float: right;
   margin-left: 0.5rem;
+}
+
+@media (max-width: 800px) {
+  .signup-container input:not([type='checkbox']), .login-container input:not([type='checkbox']) {
+    width: 100%;
+  }
 }
 
 .signup-form .btn, .login-container .btn {
@@ -317,16 +374,13 @@
 
 /* navigation bar */
 
-* {
-  box-sizing: border-box;
-}
-
 nav {
   position: relative;
   top: 0;
   left: 0;
   width: 100%;
-  padding: 16px 20px 15px 20px;
+  min-height: fit-content;
+  padding: 16px 20px 8px 20px;
   margin-bottom: 0px;
   display: flex;
   align-items: center;
@@ -338,17 +392,16 @@ nav {
   font-size: 1rem;
   z-index: 5;
   @media (min-width: 640px) {
-    padding: 16px 50px 0px 50px;
+    padding: 16px 50px 16px 50px;
   }
   mask-image: linear-gradient(black 80%, transparent);
   -webkit-mask-image: linear-gradient(black 40%, transparent);
 }
 
 
-
 @media (max-width: 800px) {
   nav {
-    margin-bottom: -20px;
+    margin-bottom: auto;
   }
 }
 
@@ -437,35 +490,61 @@ a {
   z-index: 999;
 }
 
+@media (min-width: 800px) {
+  .stylish-button {
+    /* Shadow for depth */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* Smooth hover effect */
+    transition: all 0.3s ease;
+  } 
 
+  /* Hover effect */
+  .stylish-button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Optional: Active state */
+  .stylish-button:active {
+    transform: scale(0.95);
+  }
+}
 
 .close-button {
   position: absolute;
+  display: inline;
   top: 4px;
   right: 8px;
-  padding-bottom: 37px;
-  background: #ff4b4b;
+  background: #b82727;
   border: none;
-  font-size: 24px;
-  text-align: center;
-  cursor: pointer;
+  font-size: 2rem;
+
   /* Ensure the close button is above popup content */
   z-index: 100000000;
 
   /* Size */
   width: 30px;
   height: 30px;
-
+  max-width: 30px;  /* Prevents overflow */
 
   /* Make it circular */
   border-radius: 30%;
-
-  /* Shadow for depth */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-
-  /* Smooth hover effect */
-  transition: all 0.3s ease;
 }
+
+.close-button div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+}
+
+
+.close-button svg {
+  /* background-color: #357abd; */
+  height: 30px;
+}
+
+
 
 
 /* challenges-list-view */
@@ -488,6 +567,12 @@ a {
   height: 100%;
   min-width: 30svw;
 }
+
+.async-content-challenge-div {
+  padding: 0.5rem;
+}
+
+
 
 .list-view-wrapper {
   display: flex;
@@ -649,10 +734,106 @@ a {
         border-radius: 4px;
     }
 
+
+/* GPT challenge action bar */
+.action-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background-color: #f9f9f9;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.like-button {
+  display: flex;
+  align-items: center;
+}
+
+.likes-points-counter {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
+  font-size: 0.75rem;
+}
+
+.action-bar .like-button svg:hover {
+  /* background-color: #357abd; */
+  fill: #b82727;
+}
+
+.comments-button  svg:hover {
+  fill: #007bff;
+}
+
+.submission-button svg {
+  fill: #007bff;
+}
+
+.submission-button svg:hover {
+  fill: #007bff;
+}
+
+.google-maps-button {
+  display: flex;
+  align-items: center;
+}
+
+.action-bar button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  color: #555;
+  transition: color 0.2s ease;
+}
+
+.action-bar .icon {
+  width: 24px;
+  height: 24px;
+  fill: #555;
+  transition: fill 0.2s ease;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  background: #eee;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #666;
+}
+
+.description {
+  margin: 5px 0;
+  line-height: 1.4;
+  text-align: center;
+  padding: 0.2rem;
+}
+
+/* 
     .info-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 5px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
         padding: 5px 0;
         margin: 5px 0;
         border-top: 1px solid #eee;
@@ -661,6 +842,13 @@ a {
 
     .info-item {
         text-align: center;
+    }
+
+    .info-item svg {
+      width: 100%;
+      height: 4rem;
+
+      object-fit: contain;
     }
 
     .info-label {
@@ -673,33 +861,12 @@ a {
         font-weight: bold;
     }
 
-    .user-info {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 5px;
-    }
 
-    .avatar {
-        width: 32px;
-        height: 32px;
-        background: #eee;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        color: #666;
-    }
-
-    .description {
-        margin: 5px 0;
-        line-height: 1.4;
-    }
 
     .button {
         display: block;
-        width: 100%;
+        width: 80%;
+        min-height: 1rem;
         padding: 8px;
         margin: 8px 0;
         border: none;
@@ -708,22 +875,56 @@ a {
         text-align: center;
         text-decoration: none;
         color: white;
+        background-color: transparent;
     }
 
     .like-button {
-        background-color: #4a90e2;
+      padding: 0;
+      background-color: transparent;
     }
 
-    .like-button:hover {
-        background-color: #357abd;
+    .like-button svg {
+      height: 2rem;
+      min-width: 20px;
+      min-height: unset;
     }
 
-    .submit-button {
-        background-color: #2ecc71;
+
+
+
+    .like-details {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
     }
 
-    .submit-button:hover {
-        background-color: #27ae60;
+  .like-section {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.6rem
+  }
+
+
+    .submit-button svg:hover {
+        fill: #007bff;
+    }
+
+    .google-maps-button {
+        height: 50%;
+        display: flex;
+        background-color: transparent;
+        padding: 8px;
+    }
+
+    .google-maps-button svg {
+      width: 100%;
+      height: 100%;
+      min-height: 50px;
+      min-width: 50px;
+      object-fit: contain;
     }
 
     .approved {
@@ -732,7 +933,7 @@ a {
 
     .pending {
         color: #f1c40f;
-    }
+    } */
 
 
 

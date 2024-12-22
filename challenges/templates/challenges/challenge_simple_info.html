@@ -39,34 +39,58 @@
         <a href="{% url 'challenges:challenge_detail' challenge_type='CH' challenge_id=challenge.id %}">{{ challenge.description }}</a>
     </div>
 
-    <div class="info-grid">
-        <div class="info-item">
-            <div class="info-label">Status</div>
-            <div class="info-value {% if challenge.approved %}approved{% else %}pending{% endif %}">
-                {{ challenge.approved|yesno:"Approved,Pending" }}
+    {% if not form %}
+        <div class="action-bar">
+            <button class="action-bar-button like-button"
+                    hx-post="{% url 'userinteraction:like_challenge' challenge_id=challenge.id challenge_type=challenge.challenge_type %}"
+                    hx-target="#likes-{{challenge.id}}"
+                    hx-swap="textContent"
+            >
+            <svg viewBox="0 0 24 24" class="icon heart-icon" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+            </svg>
+            <div class="likes-points-counter">
+                <span ><span id="likes-{{challenge.id}}">12</span> Likes</span>
+                <span id="points-{{challenge.id}}">0 Points</span>
             </div>
+            </button>
+            
+            <button class="action-bar-button comments-button">
+            <svg viewBox="0 0 24 24" class="icon comments-icon" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 2H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14l4 4V4c0-1.1-.9-2-2-2zM4 4h16v12.17L18.83 14H4V4zm6 7h2v2h-2zm-4 0h2v2H6zm8 0h2v2h-2z"/>
+            </svg>
+            </button>
+            
+
+            <button class="action-bar-button submission-button"
+                {% if user.is_authenticated and user.id != challenge.user.id and challenge.points %} 
+                    hx-post="{% url 'submissions:create_submission' challenge_type=challenge.challenge_type challenge_id=challenge.id  %}"
+                    hx-target="#async-content-{{challenge.id}}"
+                    hx-swap="innerHTML "
+                {% endif %}
+            >
+                {% include "images/done-ring-round-svgrepo-com.svg" %}
+            </button>
+
+
+            <button class="action-bar-button google-maps-button"
+                {% comment %} The first option seems to work the best, opens googlemaps in both browser and app from firefox, but is perfect from chrome and safari {% endcomment %}
+                onclick="window.open('https://www.google.com/maps/search/?api=1&query={{challenge.latitude}},{{challenge.longitude}}','_blank')"
+            >
+                {% include "images/google-maps-icon.svg" %}
+            </button>
+
         </div>
-        <div class="info-item">
-            <div class="info-label">Points</div>
-            <div class="info-value">{{ challenge.points }}</div>
-        </div>
-        <div class="info-item">
-            <div class="info-label">Likes</div>
-            <div class="info-value" id="likes-{{challenge.id}}">{{ likes_count }}</div>
-        </div>
+    {% endif %}
+
+    <div class="async-content-challenge-div" id="async-content-{{challenge.id}}">
+
     </div>
 
+
+{% comment %} 
     {% if not form %}
-        {% if user.id != challenge.user.id %}
-            <button 
-                class="button like-button"
-                hx-post="{% url 'userinteraction:like_challenge' challenge_id=challenge.id challenge_type=challenge.challenge_type %}"
-                hx-target="#likes-{{challenge.id}}"
-                hx-swap="textContent"
-            >
-                Like Challenge
-            </button>
-        {% endif %}
+        
 
         {% if user.is_authenticated and user.id != challenge.user.id and challenge.points %} 
         <button 
@@ -76,5 +100,5 @@
             {% translate "Submit completion." %}
         </button>
         {% endif %}
-    {% endif %}
+    {% endif %} {% endcomment %}
 </div>

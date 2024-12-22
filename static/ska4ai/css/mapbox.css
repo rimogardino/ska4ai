@@ -142,6 +142,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: start;
+    padding-bottom: 0.5rem;
     width: 18svw;
     max-width: 600px;
     min-width: 18svw;
@@ -210,7 +211,6 @@ body {
 }
 
 
-
 /* .event-description {
     text-align: center;
     background-color: grey;
@@ -225,8 +225,7 @@ body {
     font-family: system-ui, -apple-system, sans-serif;
     font-size: 1rem;
     max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
+
   }
 
   .leaderboard-title {
@@ -248,7 +247,7 @@ body {
   .scores-table th {
     background: #007bff;;
     padding: 12px 8px;
-    text-align: center;
+    text-align: left;
     font-weight: 600;
     color: #333;
     border-bottom: 2px solid #e9ecef;
@@ -262,7 +261,7 @@ body {
 
   .scores-table th:first-child,
   .scores-table td:first-child {
-    text-align: left;
+    /* text-align: left; */
     padding: 12px 12px;
   }
 
@@ -348,26 +347,6 @@ body {
   .floating-button:active {
     transform: scale(0.95);
   }
-
- .stylish-button {
-    /* Shadow for depth */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  
-    /* Smooth hover effect */
-    transition: all 0.3s ease;
-  } 
-
-  /* Hover effect */
-  .stylish-button:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-  }
-  
-  /* Optional: Active state */
-  .stylish-button:active {
-    transform: scale(0.95);
-  }
-
 
 
 

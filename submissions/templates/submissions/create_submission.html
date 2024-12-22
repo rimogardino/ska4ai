@@ -1,4 +1,26 @@
-{% extends 'base.html' %}
+{% load i18n %}
+<div class="container" >
+    {% if errors %}
+        {% for error in errors %}
+            <p class="error" style="color: red; weight: bold; font-size: 20px;">{{error}}</p>
+        {% endfor %}
+        <div style="margin: 50px; background-color: green; padding: 5px; width: 50%">
+            <a style="color: white; margin-left: 50px;" href="{% url 'accounts:myprofile' %}">My profile</a>
+        </div>
+    {% else %}
+        <form
+         hx-post="{% url 'submissions:create_submission' challenge_type=challenge.challenge_type challenge_id=challenge.id %}" hx-target="#async-content-{{challenge.id}}" hx-swap="innerHTML"
+          enctype="multipart/form-data"
+        >
+            {% csrf_token %}
+            {{form.as_p}}
+            <input type="submit" value="Create!"/>
+        </form>
+    {% endif %}
+</div>
+
+
+{% comment %} {% extends 'base.html' %}
 {% load i18n %}
 
 {% block title %}Create submission{% endblock %}
@@ -24,4 +46,4 @@
 
 
 </div>
-{% endblock %}
+{% endblock %} {% endcomment %}
