@@ -1,0 +1,26 @@
+{% load i18n %}
+<div>
+    <div class="container" >
+        <form
+            hx-post="{% url 'userinteraction:create_comment' challenge_type=challenge.challenge_type challenge_id=challenge.id %}"
+            hx-target="#new-comment-form-{{challenge.id}}"
+            hx-swap="innerHTML"
+            enctype="multipart/form-data"
+        >
+            {% csrf_token %}
+                <div class="fieldWrapper" id="new-comment-form-{{challenge.id}}">
+                    <div class="avatar">{{ user.username|slice:":1"|upper }}</div>
+                    {{ form.comment }}
+                    <button class="" type="submit" value="Create!">{% include "images/send-square-svgrepo-com.svg" %}</button>
+                </div>
+        </form>
+    </div>
+
+    <div class="challenge-comments">
+        {% for comment in comments %}
+            <div class="fieldWrapper">
+                {% include './comment.html' with comment=comment %}
+            </div>
+        {% endfor %}
+    </div>
+</div>

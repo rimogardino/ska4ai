@@ -12,6 +12,7 @@ class Submission(models.Model):
     approved = models.BooleanField(default=False)
     # Foreign keys to a Challenge
     challenge = models.ForeignKey('challenges.Challenge', on_delete=models.CASCADE, null=True, blank=True)
+    # Why do I have this???
     spot = models.ForeignKey('challenges.Spot', on_delete=models.CASCADE, null=True, blank=True)
 
     @property

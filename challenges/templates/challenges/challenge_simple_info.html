@@ -13,7 +13,7 @@
             <div class="media-wrapper">
                     {% if visual.file.url.lower|slice:"-3:" == "mp4" %}
                         <div class="video-wrapper">
-                        <video class="video-player" name='challenge_video' muted loop onclick="playPause(this)">
+                        <video id="challenge-visual-{{challenge.id}}" class="video-player" name='challenge_video' muted loop onclick="playPause(this)">
                             <source src="{{ visual.file.url }}" type="video/mp4">
                         </video>
                         <div class="play-overlay"></div>
@@ -40,38 +40,45 @@
     </div>
 
     {% if not form %}
-        <div class="action-bar">
+        <div class="action-bar" onClick="cleanContentChallengeDiv('async-content-{{challenge.id}}')">
             <button class="action-bar-button like-button"
                     hx-post="{% url 'userinteraction:like_challenge' challenge_id=challenge.id challenge_type=challenge.challenge_type %}"
-                    hx-target="#likes-{{challenge.id}}"
-                    hx-swap="textContent"
+                    hx-target="#likes-points-counter-{{challenge.id}}"
+                    hx-swap="innerHTML"
+                    onClick="likeSvg('heart-{{challenge.id}}')"
             >
-            <svg viewBox="0 0 24 24" class="icon heart-icon" xmlns="http://www.w3.org/2000/svg">
+            <svg viewBox="0 0 24 24" id="heart-{{challenge.id}}" class="icon heart-icon {% if liked_by_user %}liked-challenge{% endif %}" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
             </svg>
-            <div class="likes-points-counter">
-                <span ><span id="likes-{{challenge.id}}">12</span> Likes</span>
-                <span id="points-{{challenge.id}}">0 Points</span>
+            <div class="likes-points-counter" id="likes-points-counter-{{challenge.id}}">
+                <span>{{ likes_count }} Likes</span>
+                <span>{{ challenge.points }} Points</span>
             </div>
             </button>
             
-            <button class="action-bar-button comments-button">
+            <button class="action-bar-button comments-button"
+                {% if user.is_authenticated %} 
+                    hx-post="{% url 'userinteraction:get_all_comments' challenge_type=challenge.challenge_type challenge_id=challenge.id  %}"
+                    hx-target="#async-content-{{challenge.id}}"
+                    hx-swap="innerHTML "
+                {% endif %}
+            >
             <svg viewBox="0 0 24 24" class="icon comments-icon" xmlns="http://www.w3.org/2000/svg">
                 <path d="M20 2H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14l4 4V4c0-1.1-.9-2-2-2zM4 4h16v12.17L18.83 14H4V4zm6 7h2v2h-2zm-4 0h2v2H6zm8 0h2v2h-2z"/>
             </svg>
             </button>
             
-
-            <button class="action-bar-button submission-button"
-                {% if user.is_authenticated and user.id != challenge.user.id and challenge.points %} 
-                    hx-post="{% url 'submissions:create_submission' challenge_type=challenge.challenge_type challenge_id=challenge.id  %}"
-                    hx-target="#async-content-{{challenge.id}}"
-                    hx-swap="innerHTML "
-                {% endif %}
-            >
-                {% include "images/done-ring-round-svgrepo-com.svg" %}
-            </button>
-
+            {% if challenge.points %}
+                <button class="action-bar-button submission-button"
+                    {% if user.is_authenticated and user.id != challenge.user.id %} 
+                        hx-post="{% url 'submissions:create_submission' challenge_type=challenge.challenge_type challenge_id=challenge.id  %}"
+                        hx-target="#async-content-{{challenge.id}}"
+                        hx-swap="innerHTML "
+                    {% endif %}
+                >
+                    {% include "images/done-ring-round-svgrepo-com.svg" %}
+                </button>
+            {% endif %}
 
             <button class="action-bar-button google-maps-button"
                 {% comment %} The first option seems to work the best, opens googlemaps in both browser and app from firefox, but is perfect from chrome and safari {% endcomment %}
@@ -102,3 +109,7 @@
         {% endif %}
     {% endif %} {% endcomment %}
 </div>
+
+<script>
+loadIOSthubmnails('challenge-visual-{{challenge.id}}');
+</script>

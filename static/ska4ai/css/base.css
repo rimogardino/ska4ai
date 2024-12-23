@@ -42,10 +42,6 @@ body {
   font-size: calc(var(--base-size) * var(--scale-factor));
 }
 
-
-
-
-
 /* logo */
 
 .text-logo {
@@ -454,14 +450,14 @@ a {
 
 
 /* map popup */
-#top-popup, .popup {
+.popup {
   display: None;
   flex-direction: column;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  padding: 20px;
+  /* padding: 20px; */
   border: 1px solid #979696;
   border-radius: 8px;
   box-shadow: 4px 4px 10px rgba(0,0,0,0.1);
@@ -470,6 +466,10 @@ a {
   width: 500px;
   max-height: 90svh;
   overflow-y: auto;
+}
+
+#top-popup {
+  padding: 0px;
 }
 
 
@@ -500,7 +500,7 @@ a {
 
   /* Hover effect */
   .stylish-button:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
   }
   
@@ -511,10 +511,11 @@ a {
 }
 
 .close-button {
-  position: absolute;
+  position: sticky;
   display: inline;
-  top: 4px;
-  right: 8px;
+  top: 0.3rem;
+  left: 800px;
+  margin-right: 0.5rem;
   background: #b82727;
   border: none;
   font-size: 2rem;
@@ -530,6 +531,12 @@ a {
   /* Make it circular */
   border-radius: 30%;
 }
+
+.top-popup .close-button {
+  margin-bottom: -20px;
+}
+
+
 
 .close-button div {
   display: flex;
@@ -605,134 +612,153 @@ a {
     padding: 20px;
   }
 
+.fieldWrapper {
+  display: flex;
+  padding: 0.5rem;
+}
 
+.fieldWrapper .avatar {
+  margin-right: 0.5rem;
 
+}
+
+.fieldWrapper input[type="text"] {
+  flex-grow: 4;
+  width: 100%;
+}
+
+.fieldWrapper button {
+  background: transparent;
+  border: none;
+  flex-shrink: 4;
+  width: 100%;
+}
 
 /* challenge_simple_info */
-    .media-container {
-        width: 100%;
-        overflow-x: auto;
-        white-space: nowrap;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none; /* Firefox */
-        -ms-overflow-style: none; /* IE and Edge */
-        text-align: center;
-      }
-  
-      /* Hide scrollbar for Chrome, Safari and Opera */
-      .media-container::-webkit-scrollbar {
-        display: none;
-      }
-  
-      .media-wrapper {
-        display: inline-block;
-        margin-right: 15px;
-        position: relative;
-        vertical-align: top;
-        max-width: 80wv;
-      }
-  
-      .media-wrapper:last-child {
-        margin-right: 0;
-      }
-  
+.media-container {
+  width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  text-align: center;
+}
 
-      .submission-image,
-      .video-player {
-        height: auto;
-        max-height: 42svh;
-        width: 100%;
-        object-fit: contain;
-        border-radius: 8px;
-        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-      }
-  
-      .video-player {
-        cursor: pointer;
-      }
-  
-      /* Optional: Add scroll buttons */
-      .media-scroll-container {
-        position: relative;
-      }
-  
-      .scroll-button {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        background: rgba(255, 255, 255, 0.9);
-        border: none;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-        z-index: 1;
-      }
-  
-      .scroll-left {
-        left: 10px;
-      }
-  
-      .scroll-right {
-        right: 10px;
-      }
-  
-      /* Optional: Add play button overlay for videos */
-      .video-wrapper {
-        position: relative;
-      }
-  
-      .play-overlay {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 50px;
-        height: 50px;
-        background: rgba(0, 0, 0, 0.5);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        pointer-events: none;
-      }
-  
-      .play-overlay::after {
-        content: '';
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 10px 0 10px 20px;
-        border-color: transparent transparent transparent #ffffff;
-        margin-left: 5px;
-      }
+/* Hide scrollbar for Chrome, Safari and Opera */
+.media-container::-webkit-scrollbar {
+  display: none;
+}
+
+.media-wrapper {
+  display: inline-block;
+  margin-right: 15px;
+  position: relative;
+  vertical-align: top;
+  max-width: 80wv;
+}
+
+.media-wrapper:last-child {
+  margin-right: 0;
+}
 
 
+.submission-image,
+.video-player {
+  height: auto;
+  max-height: 42svh;
+  width: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
 
-    .popup-container {
-        padding: 5px;
-        max-height: 90svh;
-        max-width: 96svw;
-        width: 100%;
-        overflow-y: auto;
-    }
+.video-player {
+  cursor: pointer;
+}
 
-    .media-container {
-        margin-bottom: 5px;
-    }
+/* Optional: Add scroll buttons */
+.media-scroll-container {
+  position: relative;
+}
+
+.scroll-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+.scroll-left {
+  left: 10px;
+}
+
+.scroll-right {
+  right: 10px;
+}
+
+/* Optional: Add play button overlay for videos */
+.video-wrapper {
+  position: relative;
+}
+
+.play-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.play-overlay::after {
+  content: '';
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 10px 0 10px 20px;
+  border-color: transparent transparent transparent #ffffff;
+  margin-left: 5px;
+}
 
 
 
-    .challenge-image {
-        width: 100%;
-        max-width: 100%;
-        height: auto;
-        border-radius: 4px;
-    }
+.popup-container {
+    padding: 5px;
+    /* max-height: 90svh; */
+    max-width: 96svw;
+    width: 100%;
+    overflow-y: auto;
+}
+
+.media-container {
+    margin-bottom: 5px;
+}
+
+
+
+.challenge-image {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
 
 
 /* GPT challenge action bar */
@@ -745,6 +771,12 @@ a {
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+
+.action-bar-button svg {
+  width: 32px;
+  height: 32px;
+}
+
 
 .like-button {
   display: flex;
@@ -802,6 +834,10 @@ a {
   transition: fill 0.2s ease;
 }
 
+.liked-challenge {
+  fill: #b82727 !important;
+}
+
 .user-info {
   display: flex;
   align-items: center;
@@ -827,6 +863,7 @@ a {
   text-align: center;
   padding: 0.2rem;
 }
+
 
 /* 
     .info-grid {

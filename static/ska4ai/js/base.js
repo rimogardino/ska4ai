@@ -15,31 +15,22 @@ function playPause(video) {
     }
   }
 
-  function scrollMedia(direction) {
-    const container = document.querySelector('.media-container');
-    const scrollAmount = 300; // Adjust this value to control scroll distance
-    
-    if (direction === 'left') {
-      container.scrollBy({
-        left: -scrollAmount,
-        behavior: 'smooth'
-      });
-    } else {
-      container.scrollBy({
-        left: scrollAmount,
-        behavior: 'smooth'
-      });
-    }
+function scrollMedia(direction) {
+  const container = document.querySelector('.media-container');
+  const scrollAmount = 300; // Adjust this value to control scroll distance
+  
+  if (direction === 'left') {
+    container.scrollBy({
+      left: -scrollAmount,
+      behavior: 'smooth'
+    });
+  } else {
+    container.scrollBy({
+      left: scrollAmount,
+      behavior: 'smooth'
+    });
   }
-
-
-
-
-
-
-
-
-
+}
 
 
   // Optional: Hide scroll buttons if no overflow

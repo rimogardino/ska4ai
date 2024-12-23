@@ -13,8 +13,12 @@
           enctype="multipart/form-data"
         >
             {% csrf_token %}
-            {{form.as_p}}
-            <input type="submit" value="Create!"/>
+            {% for field in form %}
+            <div class="fieldWrapper">
+                {{ field }}
+            </div>
+        {% endfor %}
+            <button class="stylish-button blue-button" type="submit" value="Create!">Submit!</button>
         </form>
     {% endif %}
 </div>

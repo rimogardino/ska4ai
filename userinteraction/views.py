@@ -1,8 +1,9 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from .models import ChallengeLike
+from django.template.loader import render_to_string
+from .models import ChallengeLike, ChallengeComment
+from .forms import ChallengeCommentForm
 from challenges.models import get_challenge_model_class
-from challenges.utils import ChallengeType
 
 # Create your views here.
 def like_challenge(request, challenge_id, challenge_type):
@@ -23,4 +24,40 @@ def like_challenge(request, challenge_id, challenge_type):
     except AttributeError as e:
         print(e)
     likes_count = ChallengeLike.objects.filter(liked_challenges_query).count()
-    return HttpResponse(likes_count)
+
+    likes_points_html = f"<span>{likes_count} Likes</span> <span>{challenge.points:n} Points</span>" if challenge.points else f"<span>{likes_count} Likes</span>"
+    return HttpResponse(likes_points_html)
+
+def create_comment(request, challenge_type, challenge_id):
+    challenge_model = get_challenge_model_class(challenge_type)
+    challenge = challenge_model.objects.get(pk=challenge_id)
+
+    if request.method == "POST":
+        form = ChallengeCommentForm(request.POST)
+        form.instance.user = request.user
+        form.instance.parent = challenge
+        if form.is_valid():
+            comment = form.save()
+            html = render_to_string('userinteraction/comment.html', {'comment': comment})
+            return HttpResponse(html)
+    else:
+        form = ChallengeCommentForm()
+    context = {
+        'form': form,
+        'challenge': challenge
+    }
+    # miaybe change to HttpResponse for consistency?
+    return render(request, 'userinteraction/create_comment.html', context)
+
+def get_all_comments(request, challenge_type, challenge_id):
+    challenge_model = get_challenge_model_class(challenge_type)
+    challenge = challenge_model.objects.get(pk=challenge_id)
+    challenge_comments_query = ChallengeComment.query_by_parent_challenge(challenge, challenge_type)
+    comments = ChallengeComment.objects.filter(challenge_comments_query)
+    form = ChallengeCommentForm()
+    context = {
+        'comments': comments,
+        'challenge': challenge,
+        'form': form,
+    }
+    return render(request, 'userinteraction/get_all_comments.html', context)

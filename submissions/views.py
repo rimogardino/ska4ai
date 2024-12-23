@@ -6,19 +6,24 @@ from .models import Submission
 from challenges.models import get_challenge_model_class, Visual
 from userinteraction.models import ChallengeLike
 
-# Create your views here.
+
 def create_submission(request, challenge_type, challenge_id):
     challenge_model = get_challenge_model_class(challenge_type)
     challenge = challenge_model.objects.get(pk=challenge_id)
     challenge_visuals = Visual.objects.filter(Visual.query_by_parent_challenge(challenge, challenge_type))
 
+    # Check if user has already submitted a submission
+    query_by_parent_challenge = Submission.query_by_parent_challenge(challenge, challenge_type)
+    old_submission = Submission.objects.filter(query_by_parent_challenge, user=request.user)
+    if old_submission.exists():
+        return HttpResponse("<p>You have already submitted a submission for this challenge!</p>")
+
     if request.method == "POST":
-        print("we postin boys", request.POST)
         form = SubmissionForm(request.POST, request.FILES)
         form.instance.user = request.user
         form.instance.challenge = challenge
         if form.is_valid():
-            submission = form.save()
+            form.save()
             return HttpResponse("<p>Submission submitted successfully!</p>")
     else:
         form = SubmissionForm()
@@ -27,7 +32,9 @@ def create_submission(request, challenge_type, challenge_id):
         'challenge': challenge,
         'visuals': challenge_visuals
     }
+    # miaybe change to HttpResponse for consistency?
     return render(request, 'submissions/create_submission.html', context)
+
 
 def submission_detail(request, submission_id):
     submission  = get_object_or_404(Submission, pk=submission_id)
@@ -37,6 +44,7 @@ def submission_detail(request, submission_id):
                   {'submission': submission, 
                    'likes_count': likes_count,
                    'challenge_visuals': challenge_visuals})
+
 
 def edit_submission(request, submission_id):
     submission = get_object_or_404(Submission, pk=submission_id)
@@ -53,6 +61,7 @@ def edit_submission(request, submission_id):
         'form': form
     }
     return render(request, 'submissions/create_submission.html', context)
+
 
 def delete_submission(request, submission_id):  
     submission = get_object_or_404(Submission, pk=submission_id)

@@ -75,10 +75,14 @@ def challenge_simple_info(request, challenge_type, challenge_id):
     visuals = _get_visuals(challenge, challenge_type)
     # Likes count
     likes_count = _get_likes_count(challenge, challenge_type)
+    liked_challenges_query = ChallengeLike.query_by_liked_challenge(challenge, challenge_type)
+    liked_by_user = ChallengeLike.objects.filter(liked_challenges_query, liked_by=request.user).exists()
     return render(request, "challenges/challenge_simple_info.html",
                   {"challenge": challenge,
                    "visuals": visuals,
-                   "likes_count": likes_count})
+                   "likes_count": likes_count,
+                   "liked_by_user": liked_by_user,
+                   })
 
 def _get_visuals(challenge, challenge_type):
     query_by_parent_challenge = Visual.query_by_parent_challenge(challenge, challenge_type)

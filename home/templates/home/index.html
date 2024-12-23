@@ -143,28 +143,26 @@ const bigScreen = window.matchMedia('(min-width: 800px)');
       videoPlayer.pause(); 
   }; {% endcomment %}
 
-  function switchView() {
-        var map_view = document.getElementById('map-container');
-        var list_view = document.getElementById('list-view-container');
+function switchView() {
+    var map_view = document.getElementById('map-container');
+    var list_view = document.getElementById('list-view-container');
 
-        if (map_view.style.display == 'none') {
-            map_view.style.display = 'flex';
-            //map_view.resize();
-            list_view.style.display = 'none';
-        }
-        else {
-            map_view.style.display = 'none';
-            list_view.style.display = 'flex';
-        }
-    };
+    if (map_view.style.display == 'none') {
+        map_view.style.display = 'flex';
+        //map_view.resize();
+        list_view.style.display = 'none';
+    }
+    else {
+        map_view.style.display = 'none';
+        list_view.style.display = 'flex';
+    }
+};
 
-
-
-  function newChallenge(button) { 
-    var event = button.getAttribute("data-event");
-    const base_link = "{% url 'challenges:create_challenge' 12345 %}".replace(/12345/, event.toString());
-    window.location.href = base_link; 
-  };
+function newChallenge(button) { 
+var event = button.getAttribute("data-event");
+const base_link = "{% url 'challenges:create_challenge' 12345 %}".replace(/12345/, event.toString());
+window.location.href = base_link; 
+};
 
 
 // Function to fetch content using HTMX manually
@@ -338,6 +336,21 @@ $ (document).ready(function(){
 
 //map.resize();
 }); 
+
+// in base.js this doesn't load on IOS..
+function cleanContentChallengeDiv(asyncContentDivId) {
+    document.getElementById(asyncContentDivId).innerHTML = '';
+}
+
+function likeSvg(heartId) {
+    document.getElementById(heartId).classList.toggle('liked-challenge');
+}
+
+// Load thumbnails on IOS
+function loadIOSthubmnails(videoId) {
+    document.getElementById(videoId).load();
+}
+
 </script>
 {% endblock %}
 
