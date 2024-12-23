@@ -76,7 +76,9 @@ def challenge_simple_info(request, challenge_type, challenge_id):
     # Likes count
     likes_count = _get_likes_count(challenge, challenge_type)
     liked_challenges_query = ChallengeLike.query_by_liked_challenge(challenge, challenge_type)
-    liked_by_user = ChallengeLike.objects.filter(liked_challenges_query, liked_by=request.user).exists()
+    liked_by_user = False
+    if request.user.is_authenticated:
+        liked_by_user = ChallengeLike.objects.filter(liked_challenges_query, liked_by=request.user).exists()
     return render(request, "challenges/challenge_simple_info.html",
                   {"challenge": challenge,
                    "visuals": visuals,

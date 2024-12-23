@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
@@ -6,6 +7,7 @@ from .forms import ChallengeCommentForm
 from challenges.models import get_challenge_model_class
 
 # Create your views here.
+@login_required
 def like_challenge(request, challenge_id, challenge_type):
     challenge_model = get_challenge_model_class(challenge_type)
     challenge = challenge_model.objects.get(pk=challenge_id)
