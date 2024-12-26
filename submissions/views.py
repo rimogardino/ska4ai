@@ -4,13 +4,14 @@ from django.http import HttpResponse
 from .forms import SubmissionForm
 from .models import Submission
 from challenges.models import get_challenge_model_class, Visual
+from challenges.views import get_liked_by_user, get_challenge_likes_count, get_challenge_visuals
 from userinteraction.models import ChallengeLike
 
 
 def create_submission(request, challenge_type, challenge_id):
     challenge_model = get_challenge_model_class(challenge_type)
     challenge = challenge_model.objects.get(pk=challenge_id)
-    challenge_visuals = Visual.objects.filter(Visual.query_by_parent_challenge(challenge, challenge_type))
+    challenge_visuals = get_challenge_visuals(challenge, challenge_type)
 
     # Check if user has already submitted a submission
     query_by_parent_challenge = Submission.query_by_parent_challenge(challenge, challenge_type)
@@ -38,12 +39,15 @@ def create_submission(request, challenge_type, challenge_id):
 
 def submission_detail(request, submission_id):
     submission  = get_object_or_404(Submission, pk=submission_id)
-    likes_count = ChallengeLike.objects.filter(liked_challenge=submission.challenge).count()
-    challenge_visuals = Visual.objects.filter(Visual.query_by_parent_challenge(submission.challenge, submission.challenge.challenge_type))
+    likes_count = get_challenge_likes_count(submission.challenge, submission.challenge.challenge_type) #ChallengeLike.objects.filter(challenge=submission.challenge).count()
+    liked_by_user = get_liked_by_user(request.user, submission.challenge, submission.challenge.challenge_type)
+    challenge_visuals = get_challenge_visuals(submission.challenge, submission.challenge.challenge_type) #Visual.objects.filter(Visual.query_by_parent_challenge(submission.challenge, submission.challenge.challenge_type))
     return render(request, 'submissions/submission_detail.html', 
                   {'submission': submission, 
                    'likes_count': likes_count,
-                   'challenge_visuals': challenge_visuals})
+                   'liked_by_user': liked_by_user,
+                   'challenge_visuals': challenge_visuals,
+                   })
 
 
 def edit_submission(request, submission_id):

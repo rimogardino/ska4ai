@@ -24,10 +24,8 @@ def create_challenge(request, event_id=None, errors=None):
     :param errors: A list of errors that occurred during the submission process.
     :return: A rendered page with the form to create a new challenge.
     """
-    print("create_challenge called", event_id)
     event = get_object_or_404(Event, pk=event_id)
     challenge_type = event.get_challenge_type_display()
-    print("event_type:", challenge_type)
     # Determine the form class based on the event type
     form_class = get_challenge_form_class(challenge_type)
     if request.method == 'POST':
@@ -57,14 +55,16 @@ def create_challenge(request, event_id=None, errors=None):
 
 def challenge_detail(request, challenge_type, challenge_id):
     challenge = get_challenge_model_class(challenge_type).objects.get(pk=challenge_id)
-    visuals = _get_visuals(challenge, challenge_type)
-    likes_count = _get_likes_count(challenge, challenge_type)
+    visuals = get_challenge_visuals(challenge, challenge_type)
+    likes_count = get_challenge_likes_count(challenge, challenge_type)
+    liked_by_user = get_liked_by_user(request.user, challenge, challenge_type)
     submissions = _get_submissions(challenge, challenge_type)
     return render(request, "challenges/challenge_detail.html", 
                   {"challenge": challenge,
                    "visuals": visuals, 
                    "likes_count": likes_count,
-                   "submissions": submissions
+                   "liked_by_user": liked_by_user,
+                    "submissions": submissions,
                    })
 
 
@@ -72,13 +72,10 @@ def challenge_simple_info(request, challenge_type, challenge_id):
     print("challenge_simple_info", challenge_type, challenge_id)
     challenge = get_challenge_model_class(challenge_type).objects.get(pk=challenge_id)
     # Visuals
-    visuals = _get_visuals(challenge, challenge_type)
+    visuals = get_challenge_visuals(challenge, challenge_type)
     # Likes count
-    likes_count = _get_likes_count(challenge, challenge_type)
-    liked_challenges_query = ChallengeLike.query_by_liked_challenge(challenge, challenge_type)
-    liked_by_user = False
-    if request.user.is_authenticated:
-        liked_by_user = ChallengeLike.objects.filter(liked_challenges_query, liked_by=request.user).exists()
+    likes_count = get_challenge_likes_count(challenge, challenge_type)
+    liked_by_user = get_liked_by_user(request.user, challenge, challenge_type)
     return render(request, "challenges/challenge_simple_info.html",
                   {"challenge": challenge,
                    "visuals": visuals,
@@ -86,15 +83,22 @@ def challenge_simple_info(request, challenge_type, challenge_id):
                    "liked_by_user": liked_by_user,
                    })
 
-def _get_visuals(challenge, challenge_type):
+def get_challenge_visuals(challenge, challenge_type):
     query_by_parent_challenge = Visual.query_by_parent_challenge(challenge, challenge_type)
     visuals = Visual.objects.filter(query_by_parent_challenge)
     return visuals
 
-def _get_likes_count(challenge, challenge_type):
-    liked_challenges_query = ChallengeLike.query_by_liked_challenge(challenge, challenge_type)
+def get_challenge_likes_count(challenge, challenge_type):
+    liked_challenges_query = ChallengeLike.query_by_parent_challenge(challenge, challenge_type)
     likes_count = ChallengeLike.objects.filter(liked_challenges_query).count()
     return likes_count
+
+def get_liked_by_user(user, challenge, challenge_type):
+    liked_challenges_query = ChallengeLike.query_by_parent_challenge(challenge, challenge_type)
+    liked_by_user = False
+    if user.is_authenticated:
+        liked_by_user = ChallengeLike.objects.filter(liked_challenges_query, user=user).exists()
+    return liked_by_user
 
 def _get_submissions(challenge, challenge_type):
     query_by_parent_challenge = Submission.query_by_parent_challenge(challenge, challenge_type)
