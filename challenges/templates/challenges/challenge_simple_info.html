@@ -36,7 +36,7 @@
     </div>
 
     <div class="description">
-        <a href="{% url 'challenges:challenge_detail' challenge_type='CH' challenge_id=challenge.id %}">{{ challenge.description }}</a>
+        <a href="{% url 'challenges:challenge_detail' challenge_type=challenge.challenge_type challenge_id=challenge.id %}">{{ challenge.description }}</a>
     </div>
 
     {% if not form %}
@@ -46,7 +46,7 @@
                     hx-post="{% url 'userinteraction:like_challenge' challenge_id=challenge.id challenge_type=challenge.challenge_type %}"
                     hx-target="#likes-points-counter-{{challenge.id}}"
                     hx-swap="innerHTML"
-                    onClick="likeSvg('heart-{{challenge.id}}')"
+                    onClick="likeSvg(event, 'heart-{{challenge.id}}')"
                 {% endif %}
             >
             <svg viewBox="0 0 24 24" id="heart-{{challenge.id}}" class="icon heart-icon {% if liked_by_user %}liked-challenge{% endif %}" xmlns="http://www.w3.org/2000/svg">
@@ -115,5 +115,20 @@
 </div>
 
 <script>
+function cleanContentChallengeDiv(asyncContentDivId) {
+    document.getElementById(asyncContentDivId).innerHTML = '';
+}
+
+function likeSvg(event, heartId) {
+    // If you are clicking too fast it can mess up, that's why the timeout is here
+    setTimeout(() => document.getElementById(heartId).classList.toggle('liked-challenge'), 75);
+    event.stopPropagation(); // Stop the click from propagating
+}
+
+// Load thumbnails on IOS
+function loadIOSthubmnails(videoId) {
+    document.getElementById(videoId).load();
+}
+
 loadIOSthubmnails('challenge-visual-{{challenge.id}}');
 </script>

@@ -1,8 +1,9 @@
+{% load i18n %}
 <div class="media-container">
     {% if submission.visual %}
         {% if submission.visual.url.lower|slice:"-3:" == "mp4" %}
         <div class="video-wrapper">
-            <video class="video-player" name='submission_video' muted loop onclick="playPause(this)">
+            <video  id="submission-visual-{{submission.id}}" class="video-player" name='submission_video' muted loop onclick="playPause(this)">
                 <source src="{{ submission.visual.url }}" type="video/mp4">
             </video>
             <div class="play-overlay"></div>
@@ -13,19 +14,41 @@
     {% endif %}
 </div>
 
-<div class="user-info">
-<div class="avatar">{{ submission.user.username|slice:":1"|upper }}</div>
-<div>
-    <div>{{ submission.user }}</div>
-    <div style="color: #666; font-size: 0.9em;">{{ submission.parent.event.name }}</div>
-</div>
-</div>
 
-<div class="info-grid">
-<div class="info-item">
-    <div class="info-label">Status</div>
-    <div class="info-value {% if submission.approved %}approved{% else %}pending{% endif %}">
-        {{ submission.approved|yesno:"Approved,Pending" }}
+
+<div class="action-bar">
+    <div class="info-item user-info">
+        <div class="avatar">{{ submission.user.username|slice:":1"|upper }}</div>
+        <div>
+            <div>{{ submission.user }}</div>
+            <div style="color: #666; font-size: 0.9em;">{{ submission.parent.event.name }}</div>
+        </div>
+    </div>
+
+    <div class="info-item">
+        <div class="info-label">Status: 
+            <span class="info-value {% if submission.approved %}approved{% else %}pending{% endif %}">
+                {{ submission.approved|yesno:"Approved,Pending" }}
+            </span>
+        </div>
     </div>
 </div>
-</div>
+
+<script>
+function cleanContentChallengeDiv(asyncContentDivId) {
+    document.getElementById(asyncContentDivId).innerHTML = '';
+}
+
+function likeSvg(event, heartId) {
+    // If you are clicking too fast it can mess up, that's why the timeout is here
+    setTimeout(() => document.getElementById(heartId).classList.toggle('liked-challenge'), 75);
+    event.stopPropagation(); // Stop the click from propagating
+}
+
+// Load thumbnails on IOS
+function loadIOSthubmnails(videoId) {
+    document.getElementById(videoId).load();
+}
+
+loadIOSthubmnails('submission-visual-{{submission.id}}');
+</script>

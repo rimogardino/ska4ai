@@ -122,7 +122,7 @@ class Challenge(BaseChallenge, MapPoint):
         Returns:
             None
         """
-        likes = ChallengeLike.objects.filter(liked_challenge=self).count() + 1
+        likes = ChallengeLike.objects.filter(challenge=self).count() + 1
         #n_completions = Submission.objects.filter(generic_challenge=self, approved=True).count()
         n_completions = 1
         if n_completions == 0:

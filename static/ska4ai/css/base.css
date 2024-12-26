@@ -397,9 +397,16 @@ nav {
 
 @media (max-width: 800px) {
   nav {
-    margin-bottom: auto;
+    margin-bottom: 0.2rem;
   }
 }
+
+@supports (-webkit-overflow-scrolling: touch) {
+  nav {
+      margin-bottom: 0.8rem; /* Margin for iOS */
+  }
+}
+
 
 @media (max-width: 400px) {
   nav {
@@ -472,6 +479,9 @@ a {
   padding: 0px;
 }
 
+#event-popup {
+  padding-bottom: 1.4rem;
+}
 
 /* Gradient border */
 .popup {
@@ -596,12 +606,31 @@ a {
 /* challange_detail */
 .submissions-container {
   background-color: #7ab0f74d;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   width: 100%;
-  padding: 5px;
+  padding: 0.5rem;
   margin-bottom: 20px;
   /* Make it circular */
-  border-radius: 3%;
+  border-radius: 8px;
   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.1);
+}
+
+.submission-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.5;
+  max-width: 960px;
+  width: 100%;
+  margin-bottom: 0.3rem;
+  padding: 1rem;
+  background: linear-gradient(90deg, #ffffff, #dbeaee);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
 }
 
 /* home/templates/home/index.html */
@@ -609,7 +638,7 @@ a {
     font-family: system-ui, -apple-system, sans-serif;
     max-width: 800px;
     margin: 10px auto;
-    padding: 20px;
+    padding: 0.3rem;
   }
 
 .fieldWrapper {
@@ -632,6 +661,7 @@ a {
   border: none;
   flex-shrink: 4;
   width: 100%;
+  max-width: 4rem;
 }
 
 /* challenge_simple_info */
@@ -962,7 +992,7 @@ a {
       min-height: 50px;
       min-width: 50px;
       object-fit: contain;
-    }
+    } */
 
     .approved {
         color: #2ecc71;
@@ -970,7 +1000,7 @@ a {
 
     .pending {
         color: #f1c40f;
-    } */
+    }
 
 
 
