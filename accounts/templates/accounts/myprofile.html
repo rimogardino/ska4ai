@@ -12,8 +12,8 @@
             <h3>Approved challenges:</h3>
             {% for challenge in all_challenges %}
                 {% if challenge.approved %}
-                    <div class="list-view-wrapper">
-                        <div class="list-view-challenge-container" id="list-view-challenge-{{challenge.id}}"
+                    <div class="list-view-wrapper submission-container">
+                        <div class="" id="list-view-challenge-{{challenge.id}}"
                         hx-trigger="intersect once click delay:0.1s"
                         hx-get="{% url 'challenges:challenge_simple_info' challenge_type=challenge.challenge_type challenge_id=challenge.id  %}"
                         hx-swap="innerHTML"
@@ -33,8 +33,8 @@
             <h3>Waiting challenges:</h3>
             {% for challenge in all_challenges %}
                 {% if not challenge.approved %}
-                    <div class="list-view-wrapper bordered-rounded-container">
-                        <div class="list-view-challenge-container" id="list-view-challenge-{{challenge.id}}"
+                    <div class="list-view-wrapper submission-container">
+                        <div class="" id="list-view-challenge-{{challenge.id}}"
                         hx-trigger="intersect once click delay:0.1s"
                         hx-get="{% url 'challenges:challenge_simple_info' challenge_type=challenge.challenge_type challenge_id=challenge.id  %}"
                         hx-swap="innerHTML"
@@ -62,10 +62,11 @@
             <ul>
             {% for submission in submissions %}
                 {% if submission.approved %}
-                    {% include 'submissions/submission_simple_info.html' with submission=submission %}
-                    <button class="blue-button" type="submit" 
-                        onclick="location.href='{% url 'submissions:submission_detail' submission.id %}}'">
-                            {% translate "More info." %}
+                    <div class="submission-container">
+                        {% include 'submissions/submission_simple_info.html' with submission=submission %}
+                        <button class="blue-button" type="submit" 
+                            onclick="location.href='{% url 'submissions:submission_detail' submission.id %}}'">
+                                {% translate "More info." %}
                         </button>
                     </div>
                 {% endif %}
@@ -75,10 +76,11 @@
             <h3>Waiting submissions:</h3>
             {% for submission in submissions %}
                 {% if not submission.approved %}
-                    {% include 'submissions/submission_simple_info.html' with submission=submission %}
-                    <button class="blue-button" type="submit" 
-                        onclick="location.href='{% url 'submissions:submission_detail' submission.id %}}'">
-                            {% translate "More info." %}
+                    <div class="submission-container">
+                        {% include 'submissions/submission_simple_info.html' with submission=submission %}
+                        <button class="blue-button" type="submit" 
+                            onclick="location.href='{% url 'submissions:submission_detail' submission.id %}}'">
+                                {% translate "More info." %}
                         </button>
                     </div>
                 {% endif %}
