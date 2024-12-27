@@ -34,6 +34,7 @@ class BaseChallenge(models.Model):
 
 class Visual(models.Model):
     file = models.FileField(upload_to="challenge_visuals/", null=True)
+    file_type = models.CharField(max_length=10, null=True)
     uploaded_at = models.DateTimeField(auto_now_add=True)
     # Foreign keys to a Challenge
     challenge = models.ForeignKey('challenges.Challenge', on_delete=models.CASCADE, null=True, blank=True)

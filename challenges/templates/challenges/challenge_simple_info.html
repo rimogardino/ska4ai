@@ -11,7 +11,7 @@
         <div class="media-container">
             {% for visual in visuals %}
             <div class="media-wrapper">
-                    {% if visual.file.url.lower|slice:"-3:" == "mp4" %}
+                    {% if visual.file_type == "video/mp4" %}
                         <div class="video-wrapper">
                         <video id="challenge-visual-{{challenge.id}}" class="video-player" name='challenge_video' muted loop onclick="playPause(this)">
                             <source src="{{ visual.file.url }}" type="video/mp4">
@@ -75,7 +75,7 @@
             {% if challenge.points %}
                 <button class="action-bar-button submission-button"
                     {% if user.is_authenticated and user.id != challenge.user.id %} 
-                        hx-post="{% url 'submissions:create_submission' challenge_type=challenge.challenge_type challenge_id=challenge.id  %}"
+                        hx-get="{% url 'submissions:create_submission' challenge_type=challenge.challenge_type challenge_id=challenge.id  %}"
                         hx-target="#async-content-{{challenge.id}}"
                         hx-swap="innerHTML "
                     {% endif %}

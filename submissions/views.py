@@ -18,11 +18,12 @@ def create_submission(request, challenge_type, challenge_id):
     old_submission = Submission.objects.filter(query_by_parent_challenge, user=request.user)
     if old_submission.exists():
         return HttpResponse("<p>You have already submitted a submission for this challenge!</p>")
-
+    print(request.method)
     if request.method == "POST":
         form = SubmissionForm(request.POST, request.FILES)
         form.instance.user = request.user
         form.instance.challenge = challenge
+        form.instance.file_type = request.FILES['visual'].content_type
         if form.is_valid():
             form.save()
             return HttpResponse("<p>Submission submitted successfully!</p>")

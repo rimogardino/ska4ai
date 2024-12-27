@@ -5,6 +5,7 @@ from userinteraction.models import BaseChallengeInteraction
 # Create your models here.
 class Submission(BaseChallengeInteraction):
     visual = models.FileField(upload_to="submissions/", null=True)
+    file_type = models.CharField(max_length=10, null=True)
     approved = models.BooleanField(default=False)
 
     class Meta:

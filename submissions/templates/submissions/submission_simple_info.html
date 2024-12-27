@@ -1,7 +1,7 @@
 {% load i18n %}
 <div class="media-container">
     {% if submission.visual %}
-        {% if submission.visual.url.lower|slice:"-3:" == "mp4" %}
+        {% if submission.file_type == "video/mp4" %}
         <div class="video-wrapper">
             <video  id="submission-visual-{{submission.id}}" class="video-player" name='submission_video' muted loop onclick="playPause(this)">
                 <source src="{{ submission.visual.url }}" type="video/mp4">

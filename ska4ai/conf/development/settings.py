@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
     # myapps
     'home.apps.HomeConfig',
     'accounts.apps.AccountsConfig',
@@ -127,6 +128,43 @@ TIME_ZONE = 'Europe/Sofia'
 USE_I18N = True
 
 USE_TZ = True
+
+
+from google.oauth2 import service_account
+print("Google Cloud Storage Configuration", os.getcwd())
+# Google Cloud Storage Configuration
+# DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+GS_BUCKET_NAME = 'testing-ska4ai-bucket'
+#GS_CREDENTIALS = 'burnished-form-446012-m2-3bce69569d71.json'
+# ska4ai-dev 
+GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+    os.path.join(BASE_DIR, 'burnished-form-446012-m2-3bce69569d71.json'),
+)
+
+
+STORAGES = {
+    "default": {
+        "BACKEND": "storages.backends.gcloud.GoogleCloudStorage",
+        "OPTIONS": {
+            "credentials": GS_CREDENTIALS,
+            "project_id": "burnished-form-446012-m2",
+            
+        },
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}
+
+# export GOOGLE_APPLICATION_CREDENTIALS="burnished-form-446012-m2-3bce69569d71.json"
+# from google.cloud import storage
+
+# def list_buckets():
+#     client = storage.Client()
+#     buckets = list(client.list_buckets())
+#     print(f"Buckets: {buckets}")
+
+# list_buckets()
 
 
 # Static files (CSS, JavaScript, Images)

@@ -40,6 +40,7 @@ def create_challenge(request, event_id=None, errors=None):
             for f in files:
                 visual = Visual(file=f)
                 visual.parent = instance
+                visual.file_type = f.content_type
                 visual.save()
             return redirect(reverse('challenges:challenge_detail',
                                     kwargs={'challenge_id':instance.id,
