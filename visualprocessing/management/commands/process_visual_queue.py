@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 import psutil
 import ffmpeg
-from PIL import Image
+from PIL import Image, ExifTags
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from visualprocessing.models import VisualsQueue
@@ -33,8 +33,6 @@ def _check_process_visual_queue_cmd_args(process):
 def get_video_orientation_width(video_info):
 	video_info = video_info["streams"][0]
 	orientation  = HORIZONTAL
-	print(video_info)
-	
 	width = video_info["coded_width"]
 	height = video_info["coded_height"]
 	if height > width:
@@ -121,9 +119,29 @@ class Command(BaseCommand):
         
         This uses pillow to generate a thumbnail as that keeps the original aspect ratio.
         """
-        # thumbnail modifies the image in place, so we need to copy it
-        image = Image.open(input_path).copy()
-        # in case the image is not RGB
-        image = image.convert('RGB')
-        image.thumbnail((900, 900))
-        image.save(output_path, quality=80, optimize=True)
+        with Image.open(input_path) as image:
+            # thumbnail modifies the image in place, so we need to copy it
+            image = image.copy()
+            # Handle EXIF orientation to prevent unintended rotation
+            try:
+                for orientation in ExifTags.TAGS.keys():
+                    if ExifTags.TAGS[orientation] == 'Orientation':
+                        break
+                exif = image._getexif()
+                if exif is not None:
+                    orientation_value = exif.get(orientation, None)
+                    if orientation_value == 3:
+                        image = image.rotate(180, expand=True)
+                    elif orientation_value == 6:
+                        image = image.rotate(270, expand=True)
+                    elif orientation_value == 8:
+                        image = image.rotate(90, expand=True)
+            except (AttributeError, KeyError, IndexError):
+                # Ignore if no EXIF data or orientation key is missing
+                pass
+
+            # Convert to RGB if necessary
+            if image.mode != "RGB":
+                image = image.convert("RGB")
+            image.thumbnail((900, 900))
+            image.save(output_path, quality=80, optimize=True)
