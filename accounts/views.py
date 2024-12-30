@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
-from challenges.models import get_challenge_model_class
+from challenges.models import Challenge, Spot, get_challenge_model_class
 from submissions.models import Submission
 from .forms import SignUpForm
 
@@ -30,11 +30,10 @@ def signup(request):
 
 @login_required
 def myprofile(request):
-    challenges = get_challenge_model_class('CH').objects.filter(user=request.user)
-    spots = get_challenge_model_class('SP').objects.filter(user=request.user)
+    challenges = Challenge.objects.filter(user=request.user).order_by('-date')
+    spots = Spot.objects.filter(user=request.user).order_by('-date')
     all_challenges = [*spots, *challenges]
-    submissions = Submission.objects.filter(user=request.user)
-    print("all_challenges", all_challenges)
+    submissions = Submission.objects.filter(user=request.user).order_by('-date')
     context = {
         "all_challenges": all_challenges,
         "submissions": submissions

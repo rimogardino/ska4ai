@@ -1,11 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.contenttypes.models import ContentType
 from django.http import HttpResponse
 from .forms import SubmissionForm
 from .models import Submission
-from challenges.models import get_challenge_model_class, Visual
+from challenges.models import get_challenge_model_class
 from challenges.views import get_liked_by_user, get_challenge_likes_count, get_challenge_visuals
-from userinteraction.models import ChallengeLike
+from visualprocessing.models import VisualsQueue
 
 
 def create_submission(request, challenge_type, challenge_id):
@@ -23,8 +22,10 @@ def create_submission(request, challenge_type, challenge_id):
         form = SubmissionForm(request.POST, request.FILES)
         form.instance.user = request.user
         form.instance.challenge = challenge
+        form.instance.file_type = request.FILES['visual'].content_type
         if form.is_valid():
             form.save()
+            VisualsQueue.objects.create(visual=form.instance.visual.name, file_type=request.FILES['visual'].content_type)
             return HttpResponse("<p>Submission submitted successfully!</p>")
     else:
         form = SubmissionForm()

@@ -60,7 +60,7 @@ INSTALLED_APPS = [
     'events.apps.EventsConfig',
     'submissions.apps.SubmissionsConfig',
     'userinteraction.apps.UserinteractionConfig',
-    
+    'visualprocessing.apps.VisualprocessingConfig',
 ]
 
 MIDDLEWARE = [

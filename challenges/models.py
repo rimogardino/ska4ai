@@ -1,13 +1,12 @@
+import os
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+from django.conf import settings
 from django.db import models
 from django.db.models import Q
 from .utils import ChallengeType
 from events.models import Event
 from userinteraction.models import ChallengeLike
-
-
-
 
 
 def get_challenge_model_class(challenge_type):
@@ -34,10 +33,23 @@ class BaseChallenge(models.Model):
 
 class Visual(models.Model):
     file = models.FileField(upload_to="challenge_visuals/", null=True)
+    file_type = models.CharField(max_length=50)
     uploaded_at = models.DateTimeField(auto_now_add=True)
     # Foreign keys to a Challenge
     challenge = models.ForeignKey('challenges.Challenge', on_delete=models.CASCADE, null=True, blank=True)
     spot = models.ForeignKey('challenges.Spot', on_delete=models.CASCADE, null=True, blank=True)
+
+    @property
+    def processed_url(self):
+        """
+        Return the URL for the processed file.
+        """
+        base, ext = os.path.splitext(self.file.name)
+        if self.file_type.startswith('video'):
+            processed_name = f"{base}_processed.mp4"
+        else:
+            processed_name = f"{base}_processed.jpg"
+        return f"{settings.MEDIA_URL}{processed_name}"
 
     @property
     def parent(self):

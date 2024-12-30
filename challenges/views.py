@@ -6,6 +6,7 @@ from .models import Visual, get_challenge_model_class
 from .forms import get_challenge_form_class, VisualForm
 from userinteraction.models import ChallengeLike
 from submissions.models import Submission
+from visualprocessing.models import VisualsQueue
 import json
 from pathlib import Path
 
@@ -40,7 +41,10 @@ def create_challenge(request, event_id=None, errors=None):
             for f in files:
                 visual = Visual(file=f)
                 visual.parent = instance
+                visual.file_type = f.content_type
                 visual.save()
+                # add visual to processing queue
+                VisualsQueue.objects.create(visual=visual.file.name, file_type=f.content_type)
             return redirect(reverse('challenges:challenge_detail',
                                     kwargs={'challenge_id':instance.id,
                                             'challenge_type': instance.challenge_type}))
@@ -69,7 +73,6 @@ def challenge_detail(request, challenge_type, challenge_id):
 
 
 def challenge_simple_info(request, challenge_type, challenge_id):
-    print("challenge_simple_info", challenge_type, challenge_id)
     challenge = get_challenge_model_class(challenge_type).objects.get(pk=challenge_id)
     # Visuals
     visuals = get_challenge_visuals(challenge, challenge_type)
