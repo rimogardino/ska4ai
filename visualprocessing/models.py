@@ -1,5 +1,7 @@
 import subprocess
+import os
 from django.db import models
+from django.conf import settings
 
 
 class VisualsQueue(models.Model):
@@ -14,3 +16,20 @@ class VisualsQueue(models.Model):
     """
     visual = models.URLField()
     file_type = models.CharField(max_length=50)
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        os.chdir(settings.BASE_DIR)
+        # Try except for when running on windows for dev purposes
+        try:
+            subprocess.Popen(
+                    ['/bin/bash', 'process_visual_queue.sh', settings.BASE_DIR],
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE,
+                )
+        except FileNotFoundError as e:
+            print(e)
+            print("process_visual_queue.sh not found, probably because we are on windows")
+            print("Run the script manually or wait for the cron job to run it")
+            

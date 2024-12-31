@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 import psutil
 import ffmpeg
-from PIL import Image, ExifTags
+from PIL import Image, ImageOps
 from django.core.management.base import BaseCommand
 from django.conf import settings
 from visualprocessing.models import VisualsQueue
@@ -122,26 +122,10 @@ class Command(BaseCommand):
         with Image.open(input_path) as image:
             # thumbnail modifies the image in place, so we need to copy it
             image = image.copy()
-            # Handle EXIF orientation to prevent unintended rotation
-            try:
-                for orientation in ExifTags.TAGS.keys():
-                    if ExifTags.TAGS[orientation] == 'Orientation':
-                        break
-                exif = image._getexif()
-                if exif is not None:
-                    orientation_value = exif.get(orientation, None)
-                    if orientation_value == 3:
-                        image = image.rotate(180, expand=True)
-                    elif orientation_value == 6:
-                        image = image.rotate(270, expand=True)
-                    elif orientation_value == 8:
-                        image = image.rotate(90, expand=True)
-            except (AttributeError, KeyError, IndexError):
-                # Ignore if no EXIF data or orientation key is missing
-                pass
-
             # Convert to RGB if necessary
             if image.mode != "RGB":
                 image = image.convert("RGB")
+            # Handle EXIF orientation to prevent unintended rotation
+            ImageOps.exif_transpose(image, in_place=True)
             image.thumbnail((900, 900))
             image.save(output_path, quality=80, optimize=True)

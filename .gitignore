@@ -1,5 +1,6 @@
 .vscode/
 .venv/
+.project_virtual_environment.conf
 
 __pycache__/
 
