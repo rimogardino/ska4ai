@@ -23,11 +23,12 @@ class VisualsQueue(models.Model):
         os.chdir(settings.BASE_DIR)
         # Try except for when running on windows for dev purposes
         try:
-            subprocess.Popen(
-                    ['/bin/bash', 'process_visual_queue.sh', settings.BASE_DIR],
-                    stdout=subprocess.PIPE,
-                    stderr=subprocess.PIPE,
-                )
+            with open('/tmp/process_visual_queue_model.log', 'w') as log_file:
+                subprocess.Popen(
+                        ['/bin/bash', 'process_visual_queue.sh', settings.BASE_DIR],
+                        stdout=log_file,
+                        stderr=log_file,
+                    )
         except FileNotFoundError as e:
             print(e)
             print("process_visual_queue.sh not found, probably because we are on windows")

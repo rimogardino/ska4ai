@@ -11,6 +11,10 @@
 #
 # This runs the command every 20 minutes and redirects the output to a log file in tmp
 
+# For the cronjob
+# Navigate to the Django project directory
+cd $1
+
 # Activate the virtual environment if any
 source $(<.project_virtual_environment.conf)
 
