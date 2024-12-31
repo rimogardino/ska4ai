@@ -3,7 +3,8 @@
     {% if submission.visual %}
         {% if submission.file_type|slice:":5" == "video"%}
             <div class="video-wrapper">
-                <video  id="submission-visual-{{submission.id}}" class="video-player" name='submission_video' muted loop onclick="playPause(this)">
+                <video  id="submission-visual-{{submission.id}}" class="video-player" name='submission_video'
+                        playsinline webkit-playsinline muted loop onclick="playPause(this)">
                     <source src="{{ submission.processed_url }}" type="video/mp4">
                     <source src="{{ submission.visual.url }}" type="video/mp4">
                 </video>

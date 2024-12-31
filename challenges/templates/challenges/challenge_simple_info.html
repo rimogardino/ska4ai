@@ -13,7 +13,8 @@
             <div class="media-wrapper">
                     {% if visual.file_type|slice:":5" == "video" %}
                         <div class="video-wrapper">
-                        <video id="challenge-visual-{{challenge.id}}" class="video-player" name='challenge_video' muted loop onclick="playPause(this)">
+                        <video id="challenge-visual-{{challenge.id}}" class="video-player" name='challenge_video'
+                                playsinline webkit-playsinline muted loop onclick="playPause(this)">
                             <source src="{{ visual.processed_url }}" type="video/mp4">
                             <source src="{{ visual.file.url }}" type="video/mp4">
                         </video>
