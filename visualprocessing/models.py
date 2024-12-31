@@ -23,7 +23,7 @@ class VisualsQueue(models.Model):
         os.chdir(settings.BASE_DIR)
         # Try except for when running on windows for dev purposes
         try:
-            with open('/tmp/process_visual_queue_model.log', 'w') as log_file:
+            with open('/tmp/process_visual_queue_model.log', 'a') as log_file:
                 subprocess.Popen(
                         ['/bin/bash', 'process_visual_queue.sh', settings.BASE_DIR],
                         stdout=log_file,

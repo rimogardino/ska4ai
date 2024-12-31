@@ -31,6 +31,9 @@ def _check_process_visual_queue_cmd_args(process):
     return match
 
 def get_video_orientation_width(video_info):
+    # base witdth resolution depends on video orientation
+    # I do not think there is a base for both
+    # if the width is not devisible by the base it will throw an error
 	video_info = video_info["streams"][0]
 	orientation  = HORIZONTAL
 	width = video_info["coded_width"]
@@ -97,20 +100,44 @@ class Command(BaseCommand):
     def transcode_to_small_video(self, input_path, output_path):
         """Reduse the resolution and bitrate of the video while keeping the aspect ratio"""
         print("Calling ffmpeg")
-        # base witdth resolution depends on video orientation
-        # I do not think there is a base for both
-        # if the width is not devisible by the base it will throw an error
-        video_streams = ffmpeg.probe(input_path, select_streams = "v")
+        # Probe the input video to detect HDR metadata or resolution
+        video_streams = ffmpeg.probe(input_path, select_streams="v")
         scaled_width = get_video_orientation_width(video_streams)
+        
+        # Base filter options
+        filter_chain = [
+            f"scale={scaled_width}:-2",  # Maintain aspect ratio with new width
+            "setsar=1:1"  # Set pixel aspect ratio to square
+        ]
+        
+        # Check if the video has HDR metadata
+        video_metadata = video_streams["streams"][0]
+        color_primaries = video_metadata.get("color_primaries", "bt709")
+        transfer_characteristics = video_metadata.get("transfer_characteristics", "bt709")
+        
+        if color_primaries != "bt709" or transfer_characteristics != "bt709":
+            # Apply tone mapping for HDR to SDR conversion
+            filter_chain.append("zscale=t=linear:npl=100")  # Linear tone mapping
+            filter_chain.append("format=gbrpf32le")
+            filter_chain.append("zscale=p=bt709")
+            filter_chain.append("tonemap=tonemap=hable:desat=0")
+            filter_chain.append("zscale=t=bt709:m=bt709:r=tv")  # Convert color space to BT.709
+            filter_chain.append("format=yuv420p")  # Ensure compatibility with SDR
+        
+        # Finalize filter chain
+        vf = ",".join(filter_chain)
+        
+        # Run the ffmpeg command
         # This seems to produce bigger veritcal videos.
-        # ffmpeg -i input.mp4 -vf scale=480:-2,setsar=1:1 -c:v libx264 -preset slower -crf 20 output.mp4
         ffmpeg.input(input_path).output(
-                                        output_path,
-                                        vf=f"scale={scaled_width}:-2,setsar=1:1",
-                                        vcodec="libx264",
-                                        preset="slower",
-                                        crf=20,
-                                        ).run(overwrite_output=True)
+            output_path,
+            vf=vf,
+            vcodec="libx264",  # Use H.264 codec for compatibility
+            preset="medium",   # Set encoding speed/quality tradeoff
+            crf=20,            # Adjust quality (lower CRF = higher quality)
+            maxrate="3M",      # Limit bitrate (example: 1 Mbps)
+            bufsize="5M",      # Set buffer size for bitrate control
+        ).run(overwrite_output=True)
         print(f"Finished transcoding: {input_path}")
 
     def transcode_to_small_image(self, input_path, output_path):
