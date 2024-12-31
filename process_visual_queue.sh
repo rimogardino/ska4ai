@@ -12,8 +12,7 @@
 # This runs the command every 20 minutes and redirects the output to a log file in tmp
 
 # Activate the virtual environment if any
-project_virtual_environment=$(<.project_virtual_environment.conf)
-source $(project_virtual_environment)
+source $(<.project_virtual_environment.conf)
 
 # Run the management command
 python3 manage.py process_visual_queue
