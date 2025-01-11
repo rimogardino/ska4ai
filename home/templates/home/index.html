@@ -45,9 +45,9 @@
 </div>
 
 
-
-<div class="main"  data-json='{{ json_data.challenge_list|safe }}'>
-    <div id="active-event">
+<div class="">
+<div class="main-view-wrapper"  data-json='{{ json_data.challenge_list|safe }}'>
+    <div id="active-event" class="index-view">
         {% for event in event_list  %}
             <div class="active-event-item" id="active-event-{{ event.id }}" onClick="fetchLeaderboard({{ event.id }})">
             {{ event.name }}
@@ -73,21 +73,52 @@
         <div id="leaderboard-popup-content-bigscreen">Leaderboard</div>
     </div>
 
-    <div class="map_container" id="map-container" style="">
+    <div class="map_container mobile-view index-view" id="map-container" style="">
         <div id="map"  hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'></div>
         {% if user.is_authenticated %}
             <button class="floating-button" id="new-challenge" onclick="newChallenge(this)">+</button>
         {% endif %}
     </div>
 
-    <div class="list-view-container" id="list-view-container">
+    <div class="list-view-container mobile-view index-view" id="list-view-container">
         {% include './list_view.html' with event_list=event_list all_challenges=all_challenges %}
     </div>
+
+    {% if perms.auth.can_view_moderation_panel and moderation_list %}
+        <div class="list-view-container mobile-view index-view" id="list-view-container-moderation">
+            {% include './moderation_challenge_view.html' with event_list=event_list moderation_list=moderation_list %}
+        </div>
+    {% endif %}
+
+</div>
+</div>
+<div id="view-switcher">
+    <div id="map-switcher"  onclick="switchMap()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="3 3, 10 1, 15 4, 21 3, 21 21, 15 19, 10 22, 3 21, 3 3"></polygon>
+            <line x1="10" y1="22" x2="10" y2="4"></line>
+            <line x1="15" y1="4" x2="15" y2="19"></line>
+          </svg>
+          
+    </div>
+    <div id="list-switcher"  onclick="switchList()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="6" width="15" height="2" rx="1" ry="1"></rect>
+            <rect x="5" y="12" width="15" height="2" rx="1" ry="1"></rect>
+            <rect x="5" y="18" width="15" height="2" rx="1" ry="1"></rect>
+          </svg>          
+    </div>
+    {% if perms.auth.can_view_moderation_panel and moderation_list %}
+        <div id="mod-switcher"  onclick="switchMod()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="8" r="4"></circle>
+                <path d="M6 18v-1a6 6 0 0 1 12 0v1"></path>
+                <path d="M17 16h3v4h-3z"></path>
+              </svg>              
+        </div>
+    {% endif %}
 </div>
 
-<div id="view-switcher"  onclick="switchView()">
-    Switch view
-</div>
 {% endblock %}
 
 {% block css %}
@@ -106,6 +137,12 @@
             transition: all 0.3s ease;
             width: 100%;
             max-width: 30svw;
+            {% if perms.auth.can_view_moderation_panel %}
+                {% if moderation_list %}
+                    max-width: 20svw;
+                {% endif %}
+            {% endif %}
+            
         }
         {% comment %} .list-view-container > div {
             text-align: center;
@@ -116,29 +153,35 @@
         @media (max-width: 800px) {
             #view-switcher {
                 display: flex;
+                flex-direction: row;
+                justify-content: center;
                 position: fixed;
-                bottom: 0;
-                background-color: #007bff;
+                bottom: 10px;
                 color: #fff;
                 border: none;
-                padding: 8px 16px;
-                text-align: center;
-                text-decoration: none;
                 font-size: 1rem;
-                margin: 0.5rem 0px;
-                cursor: pointer;
-                border-radius: 4px;
                 width: 100svw;
                 z-index: 5;
             }
 
-            #list-view-container {
+            #view-switcher > div {
+                background-color: #007bff;
+                padding: 0.5rem;
+                border-radius: 50px;
+                margin: 0.5rem;
+                cursor: pointer;
+            }
+
+
+            #list-view-container, #list-view-container-moderation {
                 display: none;
                 width: 100% !important;
                 transition: all 0.3s ease;
-                margin-bottom: 25svh;
-                max-height: 80svh;
+                padding: 0rem;
+                max-height: 90svh;
                 max-width: 100svw;
+                height: 100%;
+                
             }
         }
     </style>
@@ -173,6 +216,25 @@ function switchView() {
         list_view.style.display = 'flex';
     }
 };
+
+function switchMap() {
+    document.getElementById('map-container').style.display = 'flex';
+    document.getElementById('list-view-container').style.display = 'none';
+    document.getElementById('list-view-container-moderation').style.display = 'none';
+};
+
+function switchList() {
+    document.getElementById('map-container').style.display = 'none';
+    document.getElementById('list-view-container').style.display = 'flex';
+    document.getElementById('list-view-container-moderation').style.display = 'none';
+};
+
+function switchMod() {
+    document.getElementById('map-container').style.display = 'none';
+    document.getElementById('list-view-container').style.display = 'none';
+    document.getElementById('list-view-container-moderation').style.display = 'flex';
+};
+
 
 function newChallenge(button) { 
 var event = button.getAttribute("data-event");
@@ -250,7 +312,8 @@ $ (document).ready(function(){
             $ (".active-event-item").hide();
         };
         $ ("#active-event-" + selected_event).show();
-        $ ('#ev-chs-' + selected_event).show()
+        $ ('.ev-chs-' + selected_event).show()
+        $ ('.ev-mod-chs-' + selected_event).show()
         $ ('#new-challenge-link').attr('href', `{% url 'challenges:create_challenge' 12345 %}`.replace(/12345/, selected_event.toString()))
         //map view markers
         $ (".mapboxgl-marker").hide();
@@ -348,6 +411,10 @@ $ (document).ready(function(){
     mapContainerEl.style.visibility = 'visible';
 
     $ (".event-item").eq(0).click();
+    // Ensure map resizes properly
+    map.on('load', () => {
+        map.resize();
+    });
 });
 
 //map.resize();
@@ -366,8 +433,45 @@ function likeSvg(event, heartId) {
 
 // Load thumbnails on IOS
 function loadIOSthubmnails(videoId) {
-    document.getElementById(videoId).load();
+    let video = document.getElementById(videoId);
+    if (video) {
+        video.load()
+    }
 }
+
+// Try to scoll the undo button into view after an htmx swap
+document.addEventListener("htmx:afterSwap", (event) => {
+    // Check if the replaced element is a list-view-challenge-container
+    const target = event.target;
+    console.log(target);
+    if (target.classList.contains("list-view-challenge-container") && target.querySelector('.undo') ) {
+        console.log("list-view-challenge-container");
+        const wrapper = target.closest(".list-view-wrapper");
+        const scrollableList = target.closest(".challenges-moderation-container");
+
+        // Calculate scroll for list-view-wrapper
+        const wrapperRect = wrapper.getBoundingClientRect();
+        const targetRect = target.getBoundingClientRect();
+        const wrapperScrollOffset =
+            targetRect.top - wrapperRect.top - wrapper.clientHeight / 2 + targetRect.height / 2;
+
+        // Adjust the wrapper scroll position
+        setTimeout(() => {
+            wrapper.scrollBy({ top: wrapperScrollOffset, behavior: "smooth" });
+
+            // Ensure the scrollable-list adjusts as well
+            const listRect = scrollableList.getBoundingClientRect();
+            const wrapperOffset = wrapperRect.top - listRect.top;
+
+            if (wrapperOffset < 0 || wrapperOffset + wrapperRect.height > listRect.height) {
+                scrollableList.scrollBy({
+                    top: wrapperOffset,
+                    behavior: "smooth",
+                });
+            }
+        }, 50); // Delay to allow DOM updates
+    }
+});
 
 </script>
 {% endblock %}

@@ -4,7 +4,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>{% block title %}My Django Project{% endblock %}</title>
 
     <!-- Bootstrap CSS -->
@@ -39,7 +40,7 @@
                     <li><a href="{% url 'logout' %}">Logout</a></li>
                 {% else %}
                     <li><a href="{% url 'login' %}">Login&#160;&#160;</a></li>
-                    <li><a href="{% url 'accounts:signup' %}">Signup</a></li>
+                    {% comment %} <li><a href="{% url 'accounts:signup' %}">Signup</a></li> {% endcomment %}
                 {% endif %}
                 <button type="button" class="icon-button" type="submit" onclick="location.href='{% url 'accounts:myprofile' %}'">
                     <span class="material-icons">notifications</span>

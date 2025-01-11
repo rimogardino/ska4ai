@@ -25,9 +25,12 @@ urlpatterns = [
     path("challenges/", include("challenges.urls")),
     path("submissions/", include("submissions.urls")),
     path("userinteraction/", include("userinteraction.urls")),
+    
     path("accounts/", include("accounts.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
     path('admin/', admin.site.urls),
+    path('accounts/', include('allauth.urls')),
+    
 ]
 
 if settings.DEBUG:

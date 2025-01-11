@@ -6,6 +6,7 @@ from django.db import models
 from django.db.models import Q
 from .utils import ChallengeType
 from events.models import Event
+from submissions.models import Submission
 from userinteraction.models import ChallengeLike
 
 
@@ -27,6 +28,21 @@ class BaseChallenge(models.Model):
     approved = models.BooleanField(default=False)
     disapproved = models.BooleanField(default=False)
     
+    def approve(self):
+        self.approved = True
+        self.disapproved = False
+        self.save()
+
+    def disapprove(self):
+        self.approved = False
+        self.disapproved = True
+        self.save()
+
+    def reset_state(self):
+        self.approved = False
+        self.disapproved = False
+        self.save()
+
     class Meta:
         abstract = True
 
@@ -135,8 +151,7 @@ class Challenge(BaseChallenge, MapPoint):
             None
         """
         likes = ChallengeLike.objects.filter(challenge=self).count() + 1
-        #n_completions = Submission.objects.filter(generic_challenge=self, approved=True).count()
-        n_completions = 1
+        n_completions = Submission.objects.filter(challenge=self, approved=True).count()
         if n_completions == 0:
             n_completions = 1
         self.points = likes / n_completions

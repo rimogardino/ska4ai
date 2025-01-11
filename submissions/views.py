@@ -39,16 +39,58 @@ def create_submission(request, challenge_type, challenge_id):
 
 
 def submission_detail(request, submission_id):
-    submission  = get_object_or_404(Submission, pk=submission_id)
-    likes_count = get_challenge_likes_count(submission.challenge, submission.challenge.challenge_type) #ChallengeLike.objects.filter(challenge=submission.challenge).count()
-    liked_by_user = get_liked_by_user(request.user, submission.challenge, submission.challenge.challenge_type)
-    challenge_visuals = get_challenge_visuals(submission.challenge, submission.challenge.challenge_type) #Visual.objects.filter(Visual.query_by_parent_challenge(submission.challenge, submission.challenge.challenge_type))
+    context = _submission_simple_info_context(request, submission_id)
     return render(request, 'submissions/submission_detail.html', 
-                  {'submission': submission, 
-                   'likes_count': likes_count,
-                   'liked_by_user': liked_by_user,
-                   'challenge_visuals': challenge_visuals,
-                   })
+                  context)
+
+
+def submission_moderation(request, submission_id):
+    context = _submission_simple_info_context(request, submission_id)
+    return render(request, 'submissions/submission_moderation.html', 
+                  context)
+
+
+def _submission_simple_info_context(request, submission_id):
+    submission  = get_object_or_404(Submission, pk=submission_id)
+    likes_count = get_challenge_likes_count(submission.challenge, submission.challenge.challenge_type)
+    liked_by_user = get_liked_by_user(request.user, submission.challenge, submission.challenge.challenge_type)
+    challenge_visuals = get_challenge_visuals(submission.challenge, submission.challenge.challenge_type)
+    context = {"submission": submission,
+                   "likes_count": likes_count,
+                   "liked_by_user": liked_by_user,
+                   "challenge_visuals": challenge_visuals,
+                   }
+    return context
+
+
+def approve_submission(request, submission_id):
+    submission = get_object_or_404(Submission, pk=submission_id)
+    submission.approve()
+    message = f"<div style='color: green; padding:2rem;'>Submission {submission_id} has been approved</div>"
+    html = render(request, 'home/mod_undo_submission_button.html', {
+            'submission': submission,
+            'message': message,
+        })
+    return HttpResponse(html)
+
+
+def disapprove_submission(request, submission_id):
+    submission = get_object_or_404(Submission, pk=submission_id)
+    submission.disapprove()
+    message = f"<div style='color: red; padding:2rem;'>Submission {submission_id}  has been disapproved</div>"
+    html = render(request, 'home/mod_undo_submission_button.html', {
+            'submission': submission,
+            'message': message,
+        })
+    return HttpResponse(html)
+
+
+def reset_submission_state(request, submission_id):
+    submission = get_object_or_404(Submission, pk=submission_id)
+    submission.reset_state()
+    context = _submission_simple_info_context(request, submission_id)
+    return render(request, 'submissions/submission_moderation.html', 
+                  context)
 
 
 def edit_submission(request, submission_id):

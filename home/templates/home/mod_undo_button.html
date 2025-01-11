@@ -1,0 +1,12 @@
+<div class="popup-container submission-container undo">
+    {{ message|safe }}
+    <button class="red-button"
+            {% if user.is_authenticated %} 
+                hx-get="{% url 'challenges:reset_challenge_state' challenge_type=challenge.challenge_type challenge_id=challenge.id %}"
+                hx-target="#list-view-challenge-{{challenge.id}}"
+                hx-swap="innerHTML"
+            {% endif %} 
+        >
+            Undo!
+    </button>
+</div>

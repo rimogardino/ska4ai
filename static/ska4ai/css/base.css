@@ -18,6 +18,15 @@ body {
   text-size-adjust: 100%;
 }
 
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  position: fixed;
+}
+
 /* Use rem for measurements */
 .element {
   font-size: 1rem;
@@ -236,6 +245,7 @@ body {
     color: #666;
     margin-top: 10px;
     text-align: left;
+    padding: 0.5rem;
   }
 }
 
@@ -440,11 +450,10 @@ a {
 
 
 /* , .event-leaderboard */
-.blue-button {
-  background-color: #007bff;
+.blue-button, .red-button, .signup-form button, .login-container button {
   color: #fff;
   border: none;
-  padding: 8px 16px;
+  padding: 0.35rem 0.5rem;
   text-align: center;
   text-decoration: none;
   display: inline-block;
@@ -453,6 +462,34 @@ a {
   cursor: pointer;
   border-radius: 4px;
   width: -moz-available;
+  transition: all 0.3s ease;
+}
+
+.blue-button, .signup-form button, .login-container button {
+  background-color: #007bff;
+}
+
+.red-button {
+  background-color: #dc3545;
+}
+
+/* Hover effect */
+.red-button:hover, .blue-button:hover , .signup-form button:hover , .login-container button:hover {
+  border-color: #aaaaaa;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15);
+}
+
+.moderation-control {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+
+}
+
+.moderation-control button {
+  flex-grow: 1;
 }
 
 
@@ -571,25 +608,26 @@ a {
   margin-bottom: 10px;
   border-radius: 8px;
   width: 100%;
+  transition: height 0.5s ease-out;
 }
 
 .challenges-container {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: -ms-autohiding-scrollbar;
   background-color: lightgrey;
   border-radius: 8px;
   padding: 5px;
   width: 100%;
   height: 100%;
-  min-width: 30svw;
+  min-width: 10svw;
 }
 
 .async-content-challenge-div {
   padding: 0.5rem;
 }
-
-
 
 .list-view-wrapper {
   display: flex;
@@ -598,6 +636,13 @@ a {
 @media (max-width: 800px) {
   .challenges-container {
     max-width: 100svw;
+    -webkit-overflow-scrolling: touch; 
+    padding: 3px 3px 10svh 3px;
+    /* scrollbar-width: none;
+    -ms-overflow-style: none; 
+  }
+  .challenges-container::-webkit-scrollbar {
+    display: none; */
   }
 }
 
@@ -626,7 +671,6 @@ a {
   line-height: 1.5;
   max-width: 960px;
   width: 100%;
-  margin-bottom: 0.3rem;
   padding: 1rem;
   background: linear-gradient(90deg, #ffffff, #dbeaee);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -794,6 +838,7 @@ a {
 /* GPT challenge action bar */
 .action-bar {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 16px;
   background-color: #f9f9f9;

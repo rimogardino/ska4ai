@@ -33,6 +33,9 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['172.232.209.160', 'ska4ai', 'ska4ai.com', 'www.ska4ai.com']
 
+# Django uses the sites framework to manage multiple domains
+SITE_ID = 1
+
 # Security settings
 SECURE_SSL_REDIRECT = True  # Redirect HTTP to HTTPS
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -61,6 +64,13 @@ INSTALLED_APPS = [
     'submissions.apps.SubmissionsConfig',
     'userinteraction.apps.UserinteractionConfig',
     'visualprocessing.apps.VisualprocessingConfig',
+    # django-allauth
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    # 'allauth.socialaccount.providers.instagram',
 ]
 
 MIDDLEWARE = [
@@ -104,6 +114,10 @@ DATABASES = {
     }
 }
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -126,6 +140,12 @@ AUTH_PASSWORD_VALIDATORS = [
 LOGIN_REDIRECT_URL = "index"  
 LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = 'index'
+
+# Allouth settings
+ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"
+ACCOUNT_USERNAME_REQUIRED = True
+SOCIALACCOUNT_AUTO_SIGNUP = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/

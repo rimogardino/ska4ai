@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404, redirect, reverse
 from django.forms import modelformset_factory
@@ -73,28 +74,43 @@ def challenge_detail(request, challenge_type, challenge_id):
 
 
 def challenge_simple_info(request, challenge_type, challenge_id):
+    context = _challenge_simple_info_context(request, challenge_type, challenge_id)
+    return render(request, "challenges/challenge_simple_info.html",
+                  context)
+
+
+def challenge_simple_info_moderation(request, challenge_type, challenge_id):
+    context = _challenge_simple_info_context(request, challenge_type, challenge_id)
+    return render(request, "challenges/challenge_simple_info_moderation.html",
+                  context)
+
+
+def _challenge_simple_info_context(request, challenge_type, challenge_id):
     challenge = get_challenge_model_class(challenge_type).objects.get(pk=challenge_id)
     # Visuals
     visuals = get_challenge_visuals(challenge, challenge_type)
     # Likes count
     likes_count = get_challenge_likes_count(challenge, challenge_type)
     liked_by_user = get_liked_by_user(request.user, challenge, challenge_type)
-    return render(request, "challenges/challenge_simple_info.html",
-                  {"challenge": challenge,
+    context = {"challenge": challenge,
                    "visuals": visuals,
                    "likes_count": likes_count,
                    "liked_by_user": liked_by_user,
-                   })
+                   }
+    return context
+
 
 def get_challenge_visuals(challenge, challenge_type):
     query_by_parent_challenge = Visual.query_by_parent_challenge(challenge, challenge_type)
     visuals = Visual.objects.filter(query_by_parent_challenge)
     return visuals
 
+
 def get_challenge_likes_count(challenge, challenge_type):
     liked_challenges_query = ChallengeLike.query_by_parent_challenge(challenge, challenge_type)
     likes_count = ChallengeLike.objects.filter(liked_challenges_query).count()
     return likes_count
+
 
 def get_liked_by_user(user, challenge, challenge_type):
     liked_challenges_query = ChallengeLike.query_by_parent_challenge(challenge, challenge_type)
@@ -103,10 +119,12 @@ def get_liked_by_user(user, challenge, challenge_type):
         liked_by_user = ChallengeLike.objects.filter(liked_challenges_query, user=user).exists()
     return liked_by_user
 
+
 def _get_submissions(challenge, challenge_type):
     query_by_parent_challenge = Submission.query_by_parent_challenge(challenge, challenge_type)
     submissions = Submission.objects.filter(query_by_parent_challenge)
     return submissions
+
 
 def edit_challenge(request, challenge_type, challenge_id):
     model_class = get_challenge_model_class(challenge_type)
@@ -142,10 +160,39 @@ def edit_challenge(request, challenge_type, challenge_id):
     return render(request, 'challenges/edit_challenge.html', context)
 
 
+def approve_challenge(request, challenge_type, challenge_id):
+    challenge = get_challenge_model_class(challenge_type).objects.get(pk=challenge_id)
+    challenge.approve()
+    # not great to have html styling here, but I'm tired at this point
+    message = f"<div style='color: green; padding:2rem;'>{challenge_type} {challenge.id} has been approved</div>"
+    html = render(request, 'home/mod_undo_button.html', {
+            'challenge': challenge,
+            'message': message,
+        })
+    return HttpResponse(html)
+
+
+def disapprove_challenge(request, challenge_type, challenge_id):
+    challenge = get_challenge_model_class(challenge_type).objects.get(pk=challenge_id)
+    challenge.disapprove()
+    message = f"<div style='color: red; padding:2rem;'>{challenge_type} {challenge.id} has been disapproved</div>"
+    html = render(request, 'home/mod_undo_button.html', {
+            'challenge': challenge,
+            'message': message,
+        })
+    return HttpResponse(html)
+
+
+def reset_challenge_state(request, challenge_type, challenge_id):
+    challenge = get_challenge_model_class(challenge_type).objects.get(pk=challenge_id)
+    challenge.reset_state()
+    context = _challenge_simple_info_context(request, challenge_type, challenge_id)
+    return render(request, "challenges/challenge_simple_info_moderation.html",
+                  context)
+
+
 def delete_challenge(request, challenge_type, challenge_id):
     challenge = get_challenge_model_class(challenge_type).objects.get(pk=challenge_id)
     challenge.delete()
 
     return redirect(reverse("index"))
-
-

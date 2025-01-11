@@ -33,6 +33,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+# Django uses the sites framework to manage multiple domains
+SITE_ID = 1
 
 # Application definition
 
@@ -51,6 +53,13 @@ INSTALLED_APPS = [
     'submissions.apps.SubmissionsConfig',
     'userinteraction.apps.UserinteractionConfig',
     'visualprocessing.apps.VisualprocessingConfig',
+    # django-allauth
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    # 'allauth.socialaccount.providers.instagram',
 ]
 
 MIDDLEWARE = [
@@ -61,6 +70,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'ska4ai.urls'
@@ -94,6 +104,16 @@ DATABASES = {
     }
 }
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+# Allouth settings
+ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"
+ACCOUNT_USERNAME_REQUIRED = True
+SOCIALACCOUNT_AUTO_SIGNUP = True
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

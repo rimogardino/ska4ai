@@ -10,6 +10,25 @@ class Submission(BaseChallengeInteraction):
     file_type = models.CharField(max_length=50)
     date = models.DateTimeField(auto_now_add=True)
     approved = models.BooleanField(default=False)
+    disapproved = models.BooleanField(default=False)
+
+    def approve(self):
+        self.approved = True
+        self.disapproved = False
+        self.parent.update()
+        self.save()
+
+    def disapprove(self):
+        self.approved = False
+        self.disapproved = True
+        self.parent.update()
+        self.save()
+
+    def reset_state(self):
+        self.approved = False
+        self.disapproved = False
+        self.parent.update()
+        self.save()
 
     @property
     def processed_url(self):

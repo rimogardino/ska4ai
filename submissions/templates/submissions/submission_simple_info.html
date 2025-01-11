@@ -53,7 +53,10 @@ function likeSvg(event, heartId) {
 
 // Load thumbnails on IOS
 function loadIOSthubmnails(videoId) {
-    document.getElementById(videoId).load();
+    let video = document.getElementById(videoId);
+    if (video) {
+        video.load()
+    }
 }
 
 loadIOSthubmnails('submission-visual-{{submission.id}}');

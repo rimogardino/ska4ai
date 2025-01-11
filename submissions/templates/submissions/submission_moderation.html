@@ -1,0 +1,23 @@
+
+{% include './submission_and_main_challnge.html' with submission=submission challenge=submission.challenge visuals=challenge_visuals likes_count=likes_count  %}
+
+<div class="moderation-control">
+    <button class="blue-button"
+        {% if user.is_authenticated %} 
+            hx-post="{% url 'submissions:approve_submission' submission_id=submission.id %}"
+            hx-target="#list-view-submission-{{submission.id}}"
+            hx-swap="innerHTML"
+        {% endif %}    
+    >
+        Approve!
+    </button>
+    <button class="red-button"
+        {% if user.is_authenticated %} 
+            hx-post="{% url 'submissions:disapprove_submission' submission_id=submission.id %}"
+            hx-target="#list-view-submission-{{submission.id}}"
+            hx-swap="innerHTML"
+        {% endif %} 
+    >
+        Disapprove!
+    </button>
+</div>

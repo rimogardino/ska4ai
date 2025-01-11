@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load socialaccount %}
+
 
 {% block content %}
 <div class="login-container">
@@ -52,5 +54,46 @@
             </button>
         </div>
     </form>
+
+    <a href="{% provider_login_url 'google'  next="/success/url/" %}" class="google-login-btn">
+        {% include "images/google_g_logo.svg" %}
+        Log in with Google
+      </a>
 </div>
+
+
+  
+  <style>
+  /* Button Styling */
+  .google-login-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    color: #555555;
+    border: 1px solid #cccccc;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 10px 20px;
+    margin-top: 0.7rem;
+    text-decoration: none;
+    width: fit-content;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+   
+  /* Hover Effects */
+  .google-login-btn:hover {
+    background-color: #f5f5f5;
+    border-color: #aaaaaa;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15);
+  }
+  
+  .google-login-btn:active {
+    background-color: #eeeeee;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  </style>
+
 {% endblock %}

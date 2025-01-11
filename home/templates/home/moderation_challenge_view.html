@@ -1,0 +1,42 @@
+
+
+
+{% if event_list %}
+    {% for event in event_list  %}
+    <div class="challenges-container challenges-moderation-container ev-mod-chs-{{event.id}}" id="ev-mod-chs-{{event.id}}">
+        {% if moderation_list %}
+            {% for challenge in moderation_list %}
+                {% if challenge.event == event %}
+                    
+                    <div class="list-view-wrapper">
+                        <div class="list-view-challenge-container"
+                        {% if challenge.type == "submission" %}
+                            id="list-view-submission-{{challenge.id}}"
+                            hx-get="{% url 'submissions:submission_moderation' challenge.id  %}"
+                        {% else %}
+                            id="list-view-challenge-{{challenge.id}}"
+                            hx-get="{% url 'challenges:challenge_simple_info_moderation' challenge_type=challenge.challenge_type challenge_id=challenge.id  %}"
+                        {% endif %}
+                        hx-trigger="intersect once click delay:0.1s"
+                        hx-swap="innerHTML"
+                        >
+                            <div style="height: 50vh;">
+                            </div>
+                            
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <p>No challenges are available for moderation.</p>
+        {% endif %}
+    </div>
+    {% endfor %}
+{% endif %}
+
+
+
+
+{% comment %} <div style="background-color: grey; padding: 5px; margin-bottom: 20px;">
+    <a id="new-challenge-link" type="submit" style="color: white;" href="{% url 'challenges:create_challenge' 99 %}">Create new challenge</a>
+</div> {% endcomment %}

@@ -1,0 +1,12 @@
+<div class="popup-container submission-container undo">
+    {{ message|safe }}
+    <button class="red-button"
+            {% if user.is_authenticated %} 
+                hx-get="{% url 'submissions:reset_submission_state' submission_id=submission.id %}"
+                hx-target="#list-view-submission-{{submission.id}}"
+                hx-swap="innerHTML"
+            {% endif %} 
+        >
+            Undo!
+    </button>
+</div>

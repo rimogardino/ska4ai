@@ -1,0 +1,24 @@
+{% load i18n %}
+
+{% include './challenge_simple_info.html' with challenge=challenge visuals=visuals likes_count=likes_count %}
+
+<div class="moderation-control">
+    <button class="blue-button"
+        {% if user.is_authenticated %} 
+            hx-post="{% url 'challenges:approve_challenge' challenge_id=challenge.id challenge_type=challenge.challenge_type %}"
+            hx-target="#list-view-challenge-{{challenge.id}}"
+            hx-swap="innerHTML"
+        {% endif %}    
+    >
+        Approve!
+    </button>
+    <button class="red-button"
+        {% if user.is_authenticated %} 
+            hx-post="{% url 'challenges:disapprove_challenge' challenge_id=challenge.id challenge_type=challenge.challenge_type %}"
+            hx-target="#list-view-challenge-{{challenge.id}}"
+            hx-swap="innerHTML"
+        {% endif %} 
+    >
+        Disapprove!
+    </button>
+</div>

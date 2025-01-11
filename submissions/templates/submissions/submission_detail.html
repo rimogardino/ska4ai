@@ -4,17 +4,5 @@
 {% block title %}Ska4ai{% endblock %}
 
 {% block content %}
-<div class="center-container submissions-container" >
-    <div class="">
-        <h1>Submission</h1>
-        <div class="submission-container">
-            {% include './submission_simple_info.html' with submission=submission %}
-        </div>
-        <div class="challenge_info_container submission-container" >
-            <h3>Main Challange</h3>
-            {% include 'challenges/challenge_simple_info.html' with challenge=submission.challenge visuals=challenge_visuals likes_count=likes_count %}
-        </div>
-    </div>
-
-</div>
+    {% include './submission_and_main_challnge.html' with submission=submission challenge=submission.challenge visuals=challenge_visuals likes_count=likes_count  %}
 {% endblock %}

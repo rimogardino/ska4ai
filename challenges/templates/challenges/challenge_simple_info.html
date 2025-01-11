@@ -1,8 +1,6 @@
 {% load i18n %}
 
-
-<div class="popup-container">
-
+<div class="popup-container submission-container">
     <div class="media-scroll-container">
         {% if visuals|length > 1 %}
           <button class="scroll-button scroll-left" onclick="scrollMedia('left')">←</button>
@@ -46,6 +44,7 @@
     </div>
 
     {% if not form %}
+        {% comment %} Like button {% endcomment %}
         <div class="action-bar" onClick="cleanContentChallengeDiv('async-content-{{challenge.id}}')">
             <button class="action-bar-button like-button"
                 {% if user.is_authenticated %} 
@@ -66,9 +65,10 @@
             </div>
             </button>
             
+            {% comment %} Comments button {% endcomment %}
             <button class="action-bar-button comments-button"
                 {% if user.is_authenticated %} 
-                    hx-post="{% url 'userinteraction:get_all_comments' challenge_type=challenge.challenge_type challenge_id=challenge.id  %}"
+                    hx-get="{% url 'userinteraction:get_all_comments' challenge_type=challenge.challenge_type challenge_id=challenge.id  %}"
                     hx-target="#async-content-{{challenge.id}}"
                     hx-swap="innerHTML "
                 {% endif %}
@@ -78,6 +78,7 @@
             </svg>
             </button>
             
+            {% comment %} Submission button {% endcomment %}
             {% if challenge.points %}
                 <button class="action-bar-button submission-button"
                     {% if user.is_authenticated and user.id != challenge.user.id %} 
@@ -90,6 +91,7 @@
                 </button>
             {% endif %}
 
+            {% comment %} Maps redirect button {% endcomment %}
             <button class="action-bar-button google-maps-button"
                 {% comment %} The first option seems to work the best, opens googlemaps in both browser and app from firefox, but is perfect from chrome and safari {% endcomment %}
                 onclick="window.open('https://www.google.com/maps/search/?api=1&query={{challenge.latitude}},{{challenge.longitude}}','_blank')"
@@ -103,21 +105,6 @@
     <div class="async-content-challenge-div" id="async-content-{{challenge.id}}">
 
     </div>
-
-
-{% comment %} 
-    {% if not form %}
-        
-
-        {% if user.is_authenticated and user.id != challenge.user.id and challenge.points %} 
-        <button 
-                class="button like-button"
-                onclick="location.href='{% url 'submissions:create_submission' challenge_type=challenge.challenge_type challenge_id=challenge.id %}'"
-            >
-            {% translate "Submit completion." %}
-        </button>
-        {% endif %}
-    {% endif %} {% endcomment %}
 </div>
 
 <script>
@@ -133,7 +120,10 @@ function likeSvg(event, heartId) {
 
 // Load thumbnails on IOS
 function loadIOSthubmnails(videoId) {
-    document.getElementById(videoId).load();
+    let video = document.getElementById(videoId);
+    if (video) {
+        video.load()
+    }
 }
 
 loadIOSthubmnails('challenge-visual-{{challenge.id}}');
