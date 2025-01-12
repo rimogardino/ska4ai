@@ -1,4 +1,5 @@
 import os
+from math import ceil
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
 from django.conf import settings
@@ -25,22 +26,18 @@ class BaseChallenge(models.Model):
     event = models.ForeignKey(Event, verbose_name="Event", on_delete=models.CASCADE)
     description = models.TextField(null=True)
     date = models.DateTimeField(auto_now_add=True)
-    approved = models.BooleanField(default=False)
-    disapproved = models.BooleanField(default=False)
+    approved = models.BooleanField(default=None, blank=True, null=True)
     
     def approve(self):
         self.approved = True
-        self.disapproved = False
         self.save()
 
     def disapprove(self):
         self.approved = False
-        self.disapproved = True
         self.save()
 
     def reset_state(self):
-        self.approved = False
-        self.disapproved = False
+        self.approved = None
         self.save()
 
     class Meta:
@@ -154,8 +151,7 @@ class Challenge(BaseChallenge, MapPoint):
         n_completions = Submission.objects.filter(challenge=self, approved=True).count()
         if n_completions == 0:
             n_completions = 1
-        self.points = likes / n_completions
-        print(f"Likes: {likes}; Completions: {n_completions}; Points: {self.points}")
+        self.points = ceil(likes / n_completions)
         # Save the updated challenge
         self.save()
 

@@ -8,9 +8,10 @@
   padding: 0;
 }
 
-html {
-  font-size: 16px; /* Base font size */
-}
+ /* Base font size */
+/* html {
+  font-size: 16px;
+} */
 
 body {
   /* Prevent text auto-scaling on mobile */
@@ -672,6 +673,7 @@ a {
   max-width: 960px;
   width: 100%;
   padding: 1rem;
+  margin-bottom: 0.5rem;
   background: linear-gradient(90deg, #ffffff, #dbeaee);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
@@ -711,6 +713,19 @@ a {
   width: 100%;
   max-width: 4rem;
   min-width: 2rem;
+}
+
+.comment {
+  border-radius: 8px;
+  padding: 0.1rem;
+  margin-bottom: 0.2rem;
+  background: #dcebee38;
+}
+
+.comment-timestamp {
+  font-size: 0.5rem;
+  color: #666;
+  margin-left: 1rem;
 }
 
 /* challenge_simple_info */

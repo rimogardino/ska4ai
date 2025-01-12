@@ -26,9 +26,9 @@ def index(request):
     event_list = Event.objects.filter(state=events_filter).order_by('-priority')
     if is_moderator:
         # User is a moderator
-        spots_to_moderate = Spot.objects.filter(approved=False).exclude(user=request.user).exclude(disapproved=True).order_by('-date')
-        challenges_to_moderate = Challenge.objects.filter(approved=False).exclude(user=request.user).exclude(disapproved=True).order_by('-date')
-        submissions_to_moderate = Submission.objects.filter(approved=False).exclude(user=request.user).exclude(disapproved=True).order_by('-date')
+        spots_to_moderate = Spot.objects.filter(approved=None).exclude(user=request.user).order_by('-date')
+        challenges_to_moderate = Challenge.objects.filter(approved=None).exclude(user=request.user).order_by('-date')
+        submissions_to_moderate = Submission.objects.filter(approved=None).exclude(user=request.user).order_by('-date')
         for submission in submissions_to_moderate:
             submission.type = "submission"
             submission.event = submission.parent.event
@@ -60,15 +60,13 @@ def leaderboard(request, event_id):
         for user in users:
             # This should probably not happen here, but be an attribute in the model and reduce the calculations
             user.submission_points = (Submission.objects.filter(
-                                                user=user
-                                                ).exclude(
-                                                    approved=False
+                                                user=user,
+                                                approved=True
                                                 ).aggregate(
                                                     Sum('challenge__points'))['challenge__points__sum']
                                     or 0)
             user.challenge_points = (Challenge.objects
-                                                .filter(user=user)
-                                                .exclude(approved=False)
+                                                .filter(user=user, approved=True)
                                                 .order_by(F('points')
                                                 .desc())[:event.n_challenges_for_leaderboard]
                                                 .aggregate(Sum('points'))['points__sum']
@@ -76,8 +74,8 @@ def leaderboard(request, event_id):
             user.points = user.submission_points + user.challenge_points
             if user.points > 0:
                 leaderboard[user.username] = [user.points, 1]
-            # print(f"user {user.username} has challenge points {user.challenge_points} " 
-            #       + f"and submission points {user.submission_points} and total {user.points} points")
+            print(f"user {user.username} has challenge points {user.challenge_points} " 
+                  + f"and submission points {user.submission_points} and total {user.points} points")
         # leaderboard["gosho"] = [42, 1]
         # leaderboard["pesho"] = [42, 1]
         # leaderboard["lelq"] = [4, 1]

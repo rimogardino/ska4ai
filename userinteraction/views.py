@@ -39,7 +39,7 @@ def create_comment(request, challenge_type, challenge_id):
         form.instance.parent = challenge
         if form.is_valid():
             comment = form.save()
-            _create_notification(request, challenge)
+            _create_notification(request, challenge, message=comment.comment)
             html = render_to_string('userinteraction/comment.html', {'comment': comment})
             return HttpResponse(html)
     else:
@@ -51,10 +51,10 @@ def create_comment(request, challenge_type, challenge_id):
     # miaybe change to HttpResponse for consistency?
     return render(request, 'userinteraction/create_comment.html', context)
 
-def _create_notification(request, challenge):
+def _create_notification(request, challenge, message):
     notification = Notification(user=challenge.user)
     notification.save()
-    notification_context = {"challenge": challenge, "notification_id": notification.pk}
+    notification_context = {"challenge": challenge, "notification_id": notification.pk, "message": message[:50]}
     template = 'userinteraction/notification_messages/created_comment.html'
     notification.message = render_to_string(
                                             template,
@@ -65,7 +65,7 @@ def get_all_comments(request, challenge_type, challenge_id):
     challenge_model = get_challenge_model_class(challenge_type)
     challenge = challenge_model.objects.get(pk=challenge_id)
     challenge_comments_query = ChallengeComment.query_by_parent_challenge(challenge, challenge_type)
-    comments = ChallengeComment.objects.filter(challenge_comments_query)
+    comments = ChallengeComment.objects.filter(challenge_comments_query).order_by('-created_at')
     form = ChallengeCommentForm()
     context = {
         'comments': comments,

@@ -9,26 +9,22 @@ class Submission(BaseChallengeInteraction):
     visual = models.FileField(upload_to="submissions/", null=True)
     file_type = models.CharField(max_length=50)
     date = models.DateTimeField(auto_now_add=True)
-    approved = models.BooleanField(default=False)
-    disapproved = models.BooleanField(default=False)
+    approved = models.BooleanField(default=False, blank=True, null=True)
 
     def approve(self):
         self.approved = True
-        self.disapproved = False
-        self.parent.update()
         self.save()
+        self.parent.update()
 
     def disapprove(self):
         self.approved = False
-        self.disapproved = True
-        self.parent.update()
         self.save()
+        self.parent.update()
 
     def reset_state(self):
-        self.approved = False
-        self.disapproved = False
-        self.parent.update()
+        self.approved = None
         self.save()
+        self.parent.update()
 
     @property
     def processed_url(self):

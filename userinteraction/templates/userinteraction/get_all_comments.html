@@ -18,9 +18,12 @@
 
     <div class="challenge-comments">
         {% for comment in comments %}
+        <div class="comment">
             <div class="fieldWrapper">
                 {% include './comment.html' with comment=comment %}
             </div>
+            <div class="comment-timestamp">{{ comment.created_at }}</div>
+        </div>
         {% endfor %}
     </div>
 </div>

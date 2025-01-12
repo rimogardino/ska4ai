@@ -5,6 +5,6 @@
     hx-indicator=".loading-spinner"
     data-target-url="{% url 'challenges:challenge_detail' challenge_type=challenge.challenge_type challenge_id=challenge.id  %}"
 >
-    <span class="notification-text">New comment</span>
+    <span class="notification-text">New comment: {{ message }}</span>
     <div class="loading-spinner" style="display: none;">Loading...</div>
 </div>
