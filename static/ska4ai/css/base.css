@@ -405,6 +405,18 @@ nav {
   -webkit-mask-image: linear-gradient(black 40%, transparent);
 }
 
+.loginout-btn {
+  border: none;
+  background-color: transparent;
+  text-shadow: 0 0 5px rgba(0,0,0,0.5);
+  color: rgba(0, 0, 0, 0.568);
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.loginout-btn:hover {
+  text-decoration: underline;
+}
 
 @media (max-width: 800px) {
   nav {

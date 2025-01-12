@@ -37,9 +37,19 @@
                 {% comment %} # &#160;&#160; makes the two links separate on IOS... {% endcomment %}
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'accounts:myprofile' %}">Hi {{ user.username }}!&#160;&#160;</a></li>
-                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                    <li>
+                        <form action="{% url 'account_logout' %}" method="post">
+                            {% csrf_token %}
+                            <button class="loginout-btn" type="submit">Logout</button>
+                        </form>
+                    </li>
                 {% else %}
-                    <li><a href="{% url 'login' %}">Login&#160;&#160;</a></li>
+                    <li>
+                        <form action="{% url 'login' %}" method="post">
+                            {% csrf_token %}
+                            <button class="loginout-btn" type="submit">Login</button>
+                        </form>
+                    </li>
                     {% comment %} <li><a href="{% url 'accounts:signup' %}">Signup</a></li> {% endcomment %}
                 {% endif %}
                 <button type="button"
