@@ -42,9 +42,19 @@
                     <li><a href="{% url 'login' %}">Login&#160;&#160;</a></li>
                     {% comment %} <li><a href="{% url 'accounts:signup' %}">Signup</a></li> {% endcomment %}
                 {% endif %}
-                <button type="button" class="icon-button" type="submit" onclick="location.href='{% url 'accounts:myprofile' %}'">
+                <button type="button"
+                        class="icon-button"
+                        type="submit"
+                        {% if user.is_authenticated %}
+                            onclick="openNotifications()"
+                            hx-get="{% url 'userinteraction:get_notiications_count' %}"
+                            hx-trigger="intersect once click"
+                            hx-target="#notiications_count"
+                            hx-swap="innerHTML"
+                        {% endif %}
+                        >
                     <span class="material-icons">notifications</span>
-                    <span class="icon-button__badge">0</span>
+                    <span id="notiications_count" class="icon-button__badge">0</span>
                   </button>
                 <li><a href="{% url 'accounts:myprofile' %}">About</a></li>
             </ul>
@@ -114,14 +124,21 @@
 
     <main role="main" class=""  >
 
-        <div id="overlay" class="overlay" onclick="closePopup()"></div>        
+        <div id="overlay" class="overlay" onclick="closePopup()"></div>
+        <div id="notification-popup" class="popup">
+            <button class="close-button stylish-button" onclick="closePopup()"><div>{% include "images/close-square-svgrepo-com.svg" %}</div></button>
+            <div id="notification-popup-content"
+                    class="center-container"
+                    hx-trigger="intersect once click delay:0.1s"
+                    hx-get="{% url 'userinteraction:get_notifications' %}"
+                    hx-swap="innerHTML"
+            >
+                ...
+            </div>
+        </div>
         {% block content %}
         <!-- Default content can go here -->
         {% endblock %}
-
-
-
-
 
     </main>
 
@@ -154,15 +171,22 @@
             window.open(`https://www.google.com/maps?q=${lat},${lng}`, '_blank');
         }
     }
-    
 
-    function openNav() {
-        document.getElementById("mySidepanel").style.width = "250px";
-      }
-      
-    function closeNav() {
-        document.getElementById("mySidepanel").style.width = "0";
-      }
+    function openNotifications() {
+        document.getElementById("notification-popup").style.display = 'flex';
+        document.getElementById('overlay').style.display = 'block';
+    }
+
+
+    // Function to close popup
+    function closePopup() {
+        const popups = document.querySelectorAll(".popup");
+        popups.forEach((popup) => {
+            popup.style.display = 'none';
+        });
+        document.getElementById('overlay').style.display = 'none';
+    }
+
 </script>
 
 <script type="text/javascript"  src="{% static 'ska4ai/js/base.js' %}"></script>

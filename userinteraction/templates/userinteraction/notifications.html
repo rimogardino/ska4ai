@@ -1,0 +1,138 @@
+{% load i18n %}
+
+
+
+{% if notifications %}
+<ul class="notification-list">
+    {% for notif in notifications %}
+    <li>
+        <div id="notification-wrapper-{{notif.id}}" class="notification-wrapper">
+            {{ notif.message|safe }}
+            <div class="notification-item-action"
+                hx-post="{% url 'userinteraction:read_notification' notif.id %}"
+                hx-trigger="click"
+                hx-swap="none"
+                onClick="readNotification(this, 'notification-wrapper-{{notif.id}}')"
+            >
+                Read
+            </div>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+    <div class="alert alert-info">{% translate "No new notifications." %}</div>
+{% endif %}
+
+{% if read_notifications %}
+<ul class="notification-list">
+    {% for notif in read_notifications %}
+    <li>
+        <div class="notification-wrapper old-notification">
+            {{ notif.message|safe }}
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<style>
+    .alert {
+        padding: 0.5rem;
+        color: orange;
+        text-align: center;
+    }
+
+
+    /* Notification List */
+    .notification-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    
+    .notification-list li {
+        border-bottom: 1px solid #eee;
+    }
+    
+    .notification-list li:last-child {
+        border-bottom: none;
+    }
+    
+    /* notification-wrapper */
+    .notification-wrapper {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+    }
+
+
+    /* Notification Item */
+    .notification-item, .notification-item-action {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 15px;
+        cursor: pointer;
+        background-color: #a6e6ff;
+        border-radius: 8px;
+        transition: background-color 0.3s;
+    }
+    
+    .notification-item {
+        flex-grow: 1;
+    }
+
+
+    .notification-item:hover, .notification-item-action:hover {
+        background-color: #5d9eb8;
+    }
+    
+    .notification-item:active {
+        background-color: #f1f1f1;
+    }
+    
+    /* old notifications */
+    .old-notification div {
+        background-color: #a8ccda;
+    }
+    
+    .old-notification div:hover {
+        background-color: #5d9eb8;
+    }
+
+    .notification-item-action {
+        flex-shrink: 2;
+    }
+
+
+    /* Notification Text */
+    .notification-text {
+        flex: 1;
+        font-size: 0.95rem;
+        line-height: 1.4;
+        margin-right: 10px;
+        color: #333;
+        text-decoration: none;
+    }
+</style>
+
+<script>
+    function readNotification(read_div, notif_id) {
+        document.getElementById(notif_id).classList.toggle('old-notification');
+        read_div.style.display = 'none';
+    }
+
+    document.addEventListener("htmx:afterRequest", function(event) {
+        const target = event.target; // The element that triggered the request
+        console.log(target);
+        if (target.classList.contains("notification-item")) {
+            const redirectUrl = target.getAttribute("data-target-url");
+            if (redirectUrl) {
+                window.location.href = redirectUrl;
+            }
+        }
+    });
+</script>

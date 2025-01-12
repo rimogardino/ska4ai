@@ -168,8 +168,13 @@ body {
     justify-content: start;
     padding-bottom: 0.5rem;
     width: 18svw;
-    max-width: 600px;
     min-width: 18svw;
+}
+
+@media (min-width: 800px) {
+  #active-event {
+    max-width: 600px;
+  }
 }
 
 #active-event > div {

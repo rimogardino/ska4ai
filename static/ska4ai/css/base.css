@@ -24,7 +24,7 @@ html, body {
   padding: 0;
   height: 100%;
   width: 100%;
-  position: fixed;
+  /* position: fixed; */
 }
 
 /* Use rem for measurements */
@@ -396,7 +396,7 @@ nav {
   text-shadow: 0 0 5px rgba(0,0,0,0.5);
   color: rgba(0, 0, 0, 0.568);
   font-size: 1rem;
-  z-index: 5;
+  z-index: 6;
   @media (min-width: 640px) {
     padding: 16px 50px 16px 50px;
   }
@@ -637,7 +637,7 @@ a {
   .challenges-container {
     max-width: 100svw;
     -webkit-overflow-scrolling: touch; 
-    padding: 3px 3px 10svh 3px;
+    /* padding: 3px 3px 10svh 3px; */
     /* scrollbar-width: none;
     -ms-overflow-style: none; 
   }
@@ -677,6 +677,10 @@ a {
   border-radius: 8px;
 }
 
+.list-view-container .list-view-wrapper:last-child {
+  margin-bottom: 120px;
+}
+
 /* home/templates/home/index.html */
 .center-container {
     font-family: system-ui, -apple-system, sans-serif;
@@ -703,9 +707,10 @@ a {
 .fieldWrapper button {
   background: transparent;
   border: none;
-  flex-shrink: 4;
+  flex-shrink: 3;
   width: 100%;
   max-width: 4rem;
+  min-width: 2rem;
 }
 
 /* challenge_simple_info */
@@ -921,8 +926,9 @@ a {
 }
 
 .avatar {
-  width: 32px;
+
   height: 32px;
+  padding: 0.5rem;
   background: #eee;
   border-radius: 50%;
   display: flex;

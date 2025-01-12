@@ -98,3 +98,21 @@ class ChallengeComment(BaseChallengeInteraction):
 
     def __str__(self):
         return f"Comment by {self.user} for {self.parent}"
+
+
+class Notification(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.CharField(max_length=1000)
+    created_at = models.DateTimeField(auto_now_add=True)
+    viewed = models.BooleanField(default=False, db_index=True)
+
+    def __str__(self):
+        return f"Notification by {self.user} for {self.message}"
+    
+    def mark_viewed(self):
+        self.viewed = True
+        self.save()
+    
+    def mark_unviewed(self):
+        self.viewed = False
+        self.save()

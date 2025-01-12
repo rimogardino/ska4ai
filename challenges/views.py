@@ -2,10 +2,11 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404, redirect, reverse
 from django.forms import modelformset_factory
+from django.template.loader import render_to_string
 from events.models import Event
 from .models import Visual, get_challenge_model_class
 from .forms import get_challenge_form_class, VisualForm
-from userinteraction.models import ChallengeLike
+from userinteraction.models import ChallengeLike, Notification
 from submissions.models import Submission
 from visualprocessing.models import VisualsQueue
 import json
@@ -163,6 +164,7 @@ def edit_challenge(request, challenge_type, challenge_id):
 def approve_challenge(request, challenge_type, challenge_id):
     challenge = get_challenge_model_class(challenge_type).objects.get(pk=challenge_id)
     challenge.approve()
+    _create_notification(request, challenge, approve=True)
     # not great to have html styling here, but I'm tired at this point
     message = f"<div style='color: green; padding:2rem;'>{challenge_type} {challenge.id} has been approved</div>"
     html = render(request, 'home/mod_undo_button.html', {
@@ -175,6 +177,7 @@ def approve_challenge(request, challenge_type, challenge_id):
 def disapprove_challenge(request, challenge_type, challenge_id):
     challenge = get_challenge_model_class(challenge_type).objects.get(pk=challenge_id)
     challenge.disapprove()
+    _create_notification(request, challenge, approve=False)
     message = f"<div style='color: red; padding:2rem;'>{challenge_type} {challenge.id} has been disapproved</div>"
     html = render(request, 'home/mod_undo_button.html', {
             'challenge': challenge,
@@ -183,9 +186,23 @@ def disapprove_challenge(request, challenge_type, challenge_id):
     return HttpResponse(html)
 
 
+def _create_notification(request, challenge, approve=True):
+    notification = Notification(user=challenge.user)
+    notification.save()
+    notification_context = {"challenge": challenge, "notification_id": notification.pk}
+    template = 'userinteraction/notification_messages/approved_challenge.html'
+    if not approve:
+        template = 'userinteraction/notification_messages/disapproved_challenge.html'
+    notification.message = render_to_string(
+                                            template,
+                                            notification_context)
+    notification.save()
+
+
 def reset_challenge_state(request, challenge_type, challenge_id):
     challenge = get_challenge_model_class(challenge_type).objects.get(pk=challenge_id)
     challenge.reset_state()
+    Notification.objects.filter(user=challenge.user).order_by('-created_at').first().delete()
     context = _challenge_simple_info_context(request, challenge_type, challenge_id)
     return render(request, "challenges/challenge_simple_info_moderation.html",
                   context)
@@ -194,5 +211,4 @@ def reset_challenge_state(request, challenge_type, challenge_id):
 def delete_challenge(request, challenge_type, challenge_id):
     challenge = get_challenge_model_class(challenge_type).objects.get(pk=challenge_id)
     challenge.delete()
-
     return redirect(reverse("index"))

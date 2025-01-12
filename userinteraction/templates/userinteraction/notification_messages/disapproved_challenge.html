@@ -1,0 +1,10 @@
+<div class="notification-item" 
+    hx-post="{% url 'userinteraction:read_notification' notification_id %}"
+    hx-trigger="click"
+    hx-swap="none"
+    hx-indicator=".loading-spinner"
+    data-target-url="{% url 'challenges:challenge_detail' challenge_type=challenge.challenge_type challenge_id=challenge.id %}"
+>
+    <span class="notification-text">Your challenge {{ challenge.id }} has been disapproved</span>
+    <div class="loading-spinner" style="display: none;">Loading...</div>
+</div>

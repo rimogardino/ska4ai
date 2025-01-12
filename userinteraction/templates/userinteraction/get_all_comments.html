@@ -9,7 +9,7 @@
         >
             {% csrf_token %}
                 <div class="fieldWrapper" id="new-comment-form-{{challenge.id}}">
-                    <div class="avatar">{{ user.username|slice:":1"|upper }}</div>
+                    <div class="avatar">{{ user.username }}</div>
                     {{ form.comment }}
                     <button class="" type="submit" value="Create!">{% include "images/send-square-svgrepo-com.svg" %}</button>
                 </div>

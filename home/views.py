@@ -6,6 +6,7 @@ from events.models import Event, States
 from challenges.models import Challenge, Spot, get_challenge_model_class
 from challenges.serializers import geojson_serialize
 from submissions.models import Submission
+from userinteraction.views import get_notifications, get_notiications_count
 import json
 from pathlib import Path
 
@@ -40,13 +41,12 @@ def index(request):
         all_challenges_to_moderate = None
         moderation_list = []
     json_data = {"challenge_list": geojson_serialize(all_challenges)}
-    # print("types ", [[challenge.type for challenge in challenge_list] for challenge_list in moderation_list if challenge_list])
     context = {"all_challenges": all_challenges,
                "all_challenges_to_moderate": all_challenges_to_moderate,
                "submissions_to_moderate": submissions_to_moderate,
                "moderation_list": moderation_list,
                "event_list": event_list, 
-               "json_data": json_data, 
+               "json_data": json_data,
                "mapbox_api_key": django_envs['MAPBOX_API_KEY']}
     return render(request, "home/index.html", context)
 
@@ -61,11 +61,14 @@ def leaderboard(request, event_id):
             # This should probably not happen here, but be an attribute in the model and reduce the calculations
             user.submission_points = (Submission.objects.filter(
                                                 user=user
+                                                ).exclude(
+                                                    approved=False
                                                 ).aggregate(
                                                     Sum('challenge__points'))['challenge__points__sum']
                                     or 0)
             user.challenge_points = (Challenge.objects
                                                 .filter(user=user)
+                                                .exclude(approved=False)
                                                 .order_by(F('points')
                                                 .desc())[:event.n_challenges_for_leaderboard]
                                                 .aggregate(Sum('points'))['points__sum']

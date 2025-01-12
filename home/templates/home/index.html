@@ -29,7 +29,7 @@
 
 <div id="top-popup" class="popup">
     <button class="close-button stylish-button" onclick="closePopup()"><div>{% include "images/close-square-svgrepo-com.svg" %}</div></button>
-    <div id="top-popup-content">Big Popup</div>
+    <div id="top-popup-content">...</div>
 </div>
 <div id="event-popup"  class="popup">
     <button class="close-button stylish-button" onclick="closePopup()"><div>{% include "images/close-square-svgrepo-com.svg" %}</div></button>
@@ -126,6 +126,10 @@
     <link rel="stylesheet" type="text/css" href="{% static "ska4ai/css/mapbox.css" %}" />
 
     <style >
+        body {
+            position: fixed;
+        }
+
         #view-switcher {
             display: none;
         }
@@ -164,14 +168,17 @@
                 z-index: 5;
             }
 
-            #view-switcher > div {
+            #view-switcher div {
                 background-color: #007bff;
                 padding: 0.5rem;
                 border-radius: 50px;
                 margin: 0.5rem;
                 cursor: pointer;
             }
-
+            
+            #view-switcher svg {
+                display: flex;
+            }
 
             #list-view-container, #list-view-container-moderation {
                 display: none;
@@ -252,17 +259,6 @@ function fetchPopupContent(challenge_type, challengeId) {
     });
     document.getElementById('top-popup').style.display = 'flex';
     document.getElementById('overlay').style.display = 'block';
-}
-
-
-// Function to close popup
-function closePopup() {
-    // There has to be a better way :D
-    document.getElementById('top-popup').style.display = 'none';
-    document.getElementById('event-popup').style.display = 'none';
-    document.getElementById('leaderboard-popup').style.display = 'none';
-    document.getElementById('overlay').style.display = 'none';
-    document.getElementById('top-popup-content').innerHTML = "Loading...";
 }
 
 
@@ -443,9 +439,8 @@ function loadIOSthubmnails(videoId) {
 document.addEventListener("htmx:afterSwap", (event) => {
     // Check if the replaced element is a list-view-challenge-container
     const target = event.target;
-    console.log(target);
+
     if (target.classList.contains("list-view-challenge-container") && target.querySelector('.undo') ) {
-        console.log("list-view-challenge-container");
         const wrapper = target.closest(".list-view-wrapper");
         const scrollableList = target.closest(".challenges-moderation-container");
 

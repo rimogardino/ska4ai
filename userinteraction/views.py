@@ -2,9 +2,10 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
-from .models import ChallengeLike, ChallengeComment
+from .models import ChallengeLike, ChallengeComment, Notification
 from .forms import ChallengeCommentForm
 from challenges.models import get_challenge_model_class
+
 
 # Create your views here.
 @login_required
@@ -38,6 +39,7 @@ def create_comment(request, challenge_type, challenge_id):
         form.instance.parent = challenge
         if form.is_valid():
             comment = form.save()
+            _create_notification(request, challenge)
             html = render_to_string('userinteraction/comment.html', {'comment': comment})
             return HttpResponse(html)
     else:
@@ -48,6 +50,16 @@ def create_comment(request, challenge_type, challenge_id):
     }
     # miaybe change to HttpResponse for consistency?
     return render(request, 'userinteraction/create_comment.html', context)
+
+def _create_notification(request, challenge):
+    notification = Notification(user=challenge.user)
+    notification.save()
+    notification_context = {"challenge": challenge, "notification_id": notification.pk}
+    template = 'userinteraction/notification_messages/created_comment.html'
+    notification.message = render_to_string(
+                                            template,
+                                            notification_context)
+    notification.save()
 
 def get_all_comments(request, challenge_type, challenge_id):
     challenge_model = get_challenge_model_class(challenge_type)
@@ -61,3 +73,25 @@ def get_all_comments(request, challenge_type, challenge_id):
         'form': form,
     }
     return render(request, 'userinteraction/get_all_comments.html', context)
+
+def get_notifications(request):
+    notifications = None
+    read_notifications = None
+    if request.user.is_authenticated:
+        notifications = Notification.objects.filter(user=request.user, viewed=False).order_by('-created_at')
+        read_notifications = Notification.objects.filter(user=request.user, viewed=True).order_by('-created_at')[:5]
+    context = {
+        'notifications': notifications,
+        'read_notifications': read_notifications,
+    }
+    html = render(request, 'userinteraction/notifications.html', context)
+    return HttpResponse(html)
+
+def get_notiications_count(request):
+    count = Notification.objects.filter(user=request.user, viewed=False).count()
+    return HttpResponse(count)
+
+def read_notification(request, notification_id):
+    notification = Notification.objects.get(pk=notification_id)
+    notification.mark_viewed()
+    return HttpResponse("Notification read")

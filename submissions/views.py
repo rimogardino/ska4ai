@@ -1,10 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.loader import render_to_string
 from django.http import HttpResponse
 from .forms import SubmissionForm
 from .models import Submission
 from challenges.models import get_challenge_model_class
 from challenges.views import get_liked_by_user, get_challenge_likes_count, get_challenge_visuals
 from visualprocessing.models import VisualsQueue
+from userinteraction.models import Notification
 
 
 def create_submission(request, challenge_type, challenge_id):
@@ -66,6 +68,7 @@ def _submission_simple_info_context(request, submission_id):
 def approve_submission(request, submission_id):
     submission = get_object_or_404(Submission, pk=submission_id)
     submission.approve()
+    _create_notification(request, submission, approve=True)
     message = f"<div style='color: green; padding:2rem;'>Submission {submission_id} has been approved</div>"
     html = render(request, 'home/mod_undo_submission_button.html', {
             'submission': submission,
@@ -77,6 +80,7 @@ def approve_submission(request, submission_id):
 def disapprove_submission(request, submission_id):
     submission = get_object_or_404(Submission, pk=submission_id)
     submission.disapprove()
+    _create_notification(request, submission, approve=False)
     message = f"<div style='color: red; padding:2rem;'>Submission {submission_id}  has been disapproved</div>"
     html = render(request, 'home/mod_undo_submission_button.html', {
             'submission': submission,
@@ -85,9 +89,23 @@ def disapprove_submission(request, submission_id):
     return HttpResponse(html)
 
 
+def _create_notification(request, submission, approve=True):
+    notification = Notification(user=submission.user)
+    notification.save()
+    notification_context = _submission_simple_info_context(request, submission.pk)
+    notification_context['notification_id'] = notification.pk
+    template = 'userinteraction/notification_messages/approved_submission.html'
+    if not approve:
+        template = 'userinteraction/notification_messages/disapproved_submission.html'
+    notification.message = render_to_string(
+                                            template,
+                                            notification_context)
+    notification.save()
+
 def reset_submission_state(request, submission_id):
     submission = get_object_or_404(Submission, pk=submission_id)
     submission.reset_state()
+    Notification.objects.filter(user=submission.user).order_by('-created_at').first().delete()
     context = _submission_simple_info_context(request, submission_id)
     return render(request, 'submissions/submission_moderation.html', 
                   context)
