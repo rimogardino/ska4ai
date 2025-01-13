@@ -50,8 +50,10 @@ body {
 
 #map {
   width: 100%;
-  height: 100%;
+  height: 95%;
   border-radius: 2%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
 }
 
 .mapboxgl-canvas {
@@ -80,18 +82,9 @@ body {
       height: 90svh;
       padding: 0;
       margin: 0;
-        /* position: relative;
-        height: 100%; */
     }
 
-    /* .mapboxgl-canvas {
-        width: 100% !important;
-        height: 100% !important;
-    }*/
-
     #map {
-        /* width: 100svw;  */
-        /* height: 85svh; */
         border-radius: 2%;
     } 
 
@@ -294,8 +287,8 @@ body {
     width: 100%;
     border-collapse: collapse;
     background: white;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     overflow: hidden;
   }
 
