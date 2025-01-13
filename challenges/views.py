@@ -61,6 +61,44 @@ def create_challenge(request, event_id=None, errors=None):
     return render(request, "challenges/create_challenge.html", context)
 
 
+@require_active_event
+def edit_challenge(request, challenge_type, challenge_id):
+    model_class = get_challenge_model_class(challenge_type)
+    challenge = model_class.objects.get(pk=challenge_id)
+    query_by_parent_challenge = Visual.query_by_parent_challenge(challenge, challenge_type)
+    VisualFormSet = modelformset_factory(Visual, form=VisualForm, extra=1, can_delete=True)
+    main_form = get_challenge_form_class(model_class.__name__)
+    if request.method == 'POST':
+        main_form = main_form(request.POST, request.FILES, instance=challenge)
+        visual_formset = VisualFormSet(request.POST,
+                                       request.FILES,
+                                       queryset=Visual.objects.filter(query_by_parent_challenge)
+                                       )
+        for form in visual_formset:
+            form.instance.parent = challenge
+            form.instance.user = request.user
+        if main_form.is_valid() and visual_formset.is_valid():
+            main_form.save()
+            for form in visual_formset:
+                if form.instance.id and form.cleaned_data.get('DELETE'):
+                    form.save(commit=False).delete()
+                elif form.has_changed():
+                    file_type = [file[1].content_type for file in form.files.items()][0]
+                    form.instance.file_type = file_type
+                    form.save()
+            visual_formset.save()
+            return redirect('challenges:challenge_detail', challenge_type, challenge_id)
+    else:
+        main_form = main_form(instance=challenge)
+        visual_formset = VisualFormSet(queryset=Visual.objects.filter(query_by_parent_challenge))
+        #import pdb;pdb.set_trace()
+    context = {
+        'main_form': main_form,
+        'visual_formset': visual_formset,
+    }
+    return render(request, 'challenges/edit_challenge.html', context)
+
+
 def challenge_detail(request, challenge_type, challenge_id):
     challenge = get_challenge_model_class(challenge_type).objects.get(pk=challenge_id)
     visuals = get_challenge_visuals(challenge, challenge_type)
@@ -127,41 +165,6 @@ def _get_submissions(challenge, challenge_type):
     query_by_parent_challenge = Submission.query_by_parent_challenge(challenge, challenge_type)
     submissions = Submission.objects.filter(query_by_parent_challenge)
     return submissions
-
-@require_active_event
-def edit_challenge(request, challenge_type, challenge_id):
-    model_class = get_challenge_model_class(challenge_type)
-    challenge = model_class.objects.get(pk=challenge_id)
-    query_by_parent_challenge = Visual.query_by_parent_challenge(challenge, challenge_type)
-    VisualFormSet = modelformset_factory(Visual, form=VisualForm, extra=1, can_delete=True)
-    main_form = get_challenge_form_class(model_class.__name__)
-    if request.method == 'POST':
-        main_form = main_form(request.POST, request.FILES, instance=challenge)
-        visual_formset = VisualFormSet(request.POST,
-                                       request.FILES,
-                                       queryset=Visual.objects.filter(query_by_parent_challenge)
-                                       )
-        for form in visual_formset:
-            form.instance.parent = challenge
-            form.instance.user = request.user
-        if main_form.is_valid() and visual_formset.is_valid():
-            main_form.save()
-            for form in visual_formset:
-                if form.instance.id and form.cleaned_data.get('DELETE'):
-                    form.save(commit=False).delete()
-                elif form.has_changed():
-                    form.save()
-            visual_formset.save()
-            return redirect('challenges:challenge_detail', challenge_type, challenge_id)
-    else:
-        main_form = main_form(instance=challenge)
-        visual_formset = VisualFormSet(queryset=Visual.objects.filter(query_by_parent_challenge))
-        #import pdb;pdb.set_trace()
-    context = {
-        'main_form': main_form,
-        'visual_formset': visual_formset,
-    }
-    return render(request, 'challenges/edit_challenge.html', context)
 
 
 @require_active_event
