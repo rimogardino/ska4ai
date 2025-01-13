@@ -1,6 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from .models import Challenge, Spot, Visual
+from .models import Challenge, Spot, Visual, get_challenge_model_class
 
 
 def get_challenge_form_class(challenge_type):
@@ -46,6 +46,8 @@ class ChallengeForm(forms.ModelForm):
         self.is_edit = kwargs.get('instance') is not None
         super().__init__(*args, **kwargs)
         self.fields['files'].widget.attrs['accept'] = 'video/*'
+        # the clean makes one required and this allows editing
+        self.fields['files'].required = False
         self.fields['longitude'].widget = forms.HiddenInput()
         self.fields['latitude'].widget = forms.HiddenInput()
         # Hide the file field if we're editing
@@ -58,9 +60,11 @@ class ChallengeForm(forms.ModelForm):
 
         # Check if there is at least one file uploaded
         files = cleaned_data.get('files', [])
-        if not files:  # If the list is empty, raise an error
-            raise ValidationError('At least one file is required.')
 
+        # Check if this is a new instance (creation)
+        if not self.instance.pk:
+            if not files:
+                raise ValidationError('At least one file is required.')        
         return cleaned_data
 
 
@@ -90,8 +94,9 @@ class SpotForm(forms.ModelForm):
         # Check if we're editing an existing instance
         self.is_edit = kwargs.get('instance') is not None
         super().__init__(*args, **kwargs)
-        #self.fields['files'].required = False
         self.fields['files'].widget.attrs['accept'] = 'video/*,image/*'
+        # the clean makes one required and this allows editing
+        self.fields['files'].required = False
         self.fields['longitude'].widget = forms.HiddenInput()
         self.fields['latitude'].widget = forms.HiddenInput()
         # Hide the file field if we're editing
@@ -103,8 +108,9 @@ class SpotForm(forms.ModelForm):
 
         # Check if there is at least one file uploaded
         files = cleaned_data.get('files', [])
-        if not files:  # If the list is empty, raise an error
-            raise ValidationError('At least one file is required.')
+        if not self.instance.pk:
+            if not files:  # If the list is empty, raise an error
+                raise ValidationError('At least one file is required.')
 
         return cleaned_data
 

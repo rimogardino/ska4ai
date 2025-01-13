@@ -43,6 +43,7 @@ def create_challenge(request, event_id=None, errors=None):
             files = request.FILES.getlist('files')
             for f in files:
                 visual = Visual(file=f)
+                visual.user = request.user
                 visual.parent = instance
                 visual.file_type = f.content_type
                 visual.save()
@@ -142,6 +143,7 @@ def edit_challenge(request, challenge_type, challenge_id):
                                        )
         for form in visual_formset:
             form.instance.parent = challenge
+            form.instance.user = request.user
         if main_form.is_valid() and visual_formset.is_valid():
             main_form.save()
             for form in visual_formset:

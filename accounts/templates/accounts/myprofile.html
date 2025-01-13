@@ -31,34 +31,11 @@
                         </div>
 
                         <button class="blue-button" type="submit" 
-                        onclick="location.href='{% url 'challenges:challenge_detail' challenge_type='CH' challenge_id=challenge.id %}'">
+                        onclick="location.href='{% url 'challenges:challenge_detail' challenge_type=challenge.challenge_type challenge_id=challenge.id %}'">
                             {% translate "More info." %}
                         </button>
                     </div>
             {% endfor %}
-
-
-            {% comment %} <h3>Waiting or rejected challenges:</h3>
-            {% for challenge in all_challenges %}
-                {% if not challenge.approved %}
-                    <div class="list-view-wrapper submission-container">
-                        <div class="" id="list-view-challenge-{{challenge.id}}"
-                        hx-trigger="intersect once click delay:0.1s"
-                        hx-get="{% url 'challenges:challenge_simple_info' challenge_type=challenge.challenge_type challenge_id=challenge.id  %}"
-                        hx-swap="innerHTML"
-                        >
-                            Loading...                           
-                        </div>
-
-                        <button class="blue-button" type="submit" 
-                            onclick="location.href='{% url 'challenges:challenge_detail' challenge_type='CH' challenge_id=challenge.id %}'">
-                            {% translate "More info." %}
-                        </button>
-                    </div>
-                {% endif %}
-            {% endfor %} {% endcomment %}
-
-
         {% else %}
             <p>No challenges are available.</p>
         {% endif %}

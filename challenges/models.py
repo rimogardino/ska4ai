@@ -8,7 +8,7 @@ from django.db.models import Q
 from .utils import ChallengeType
 from events.models import Event
 from submissions.models import Submission
-from userinteraction.models import ChallengeLike
+from userinteraction.models import ChallengeLike, BaseChallengeInteraction
 
 
 def get_challenge_model_class(challenge_type):
@@ -44,13 +44,9 @@ class BaseChallenge(models.Model):
         abstract = True
 
 
-class Visual(models.Model):
+class Visual(BaseChallengeInteraction):
     file = models.FileField(upload_to="challenge_visuals/", null=True)
     file_type = models.CharField(max_length=50)
-    uploaded_at = models.DateTimeField(auto_now_add=True)
-    # Foreign keys to a Challenge
-    challenge = models.ForeignKey('challenges.Challenge', on_delete=models.CASCADE, null=True, blank=True)
-    spot = models.ForeignKey('challenges.Spot', on_delete=models.CASCADE, null=True, blank=True)
 
     @property
     def processed_url(self):
@@ -63,50 +59,6 @@ class Visual(models.Model):
         else:
             processed_name = f"{base}_processed.jpg"
         return f"{settings.MEDIA_URL}{processed_name}"
-
-    @property
-    def parent(self):
-        if self.challenge:
-            return self.challenge
-        elif self.spot:
-            return self.spot
-        raise AssertionError("Neither 'challenge' nor 'spot' is set")
-
-    @parent.setter
-    def parent(self, challenge):
-        if ChallengeType.CHALLENGE == challenge.challenge_type:
-            self.challenge = challenge
-        elif ChallengeType.SPOT == challenge.challenge_type:
-            self.spot = challenge
-        else:
-            raise AssertionError("Neither 'challenge' nor 'spot' is set")
-
-    @classmethod
-    def query_by_parent_challenge(cls, challenge, challenge_type):
-        if challenge_type == ChallengeType.CHALLENGE:
-            return Q(challenge=challenge)
-        elif challenge_type == ChallengeType.SPOT:
-            return Q(spot=challenge)
-
-    class Meta:
-        constraints = [
-            # Database-level constraint
-            models.CheckConstraint(
-                check=Q(challenge__isnull=False) | Q(spot__isnull=False),
-                name='visual_challenge_or_spot_not_null'
-            )
-        ]
-    
-    def clean(self):
-        # Model-level validation
-        if self.challenge is None and self.spot is None:
-            raise ValidationError(
-                'At least one of challenge or spot must be set.'
-            )
-
-    def save(self, *args, **kwargs):
-        self.clean()
-        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Visual--for {self.parent}"
