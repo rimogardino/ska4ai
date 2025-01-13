@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404, redirect, reverse
 from django.forms import modelformset_factory
 from django.template.loader import render_to_string
 from events.models import Event
+from events.decorators import require_active_event
 from .models import Visual, get_challenge_model_class
 from .forms import get_challenge_form_class, VisualForm
 from userinteraction.models import ChallengeLike, Notification
@@ -11,13 +12,13 @@ from submissions.models import Submission
 from visualprocessing.models import VisualsQueue
 import json
 from pathlib import Path
-import time
+
 
 home = Path.home()
 with open(home / ".django_envs.json", "r") as f:
     django_envs = json.load(f)[0]
 
-
+@require_active_event
 def create_challenge(request, event_id=None, errors=None):
     """
     Creates a new challenge based on the data provided in the request.
@@ -126,7 +127,7 @@ def _get_submissions(challenge, challenge_type):
     submissions = Submission.objects.filter(query_by_parent_challenge)
     return submissions
 
-
+@require_active_event
 def edit_challenge(request, challenge_type, challenge_id):
     model_class = get_challenge_model_class(challenge_type)
     challenge = model_class.objects.get(pk=challenge_id)
@@ -161,6 +162,7 @@ def edit_challenge(request, challenge_type, challenge_id):
     return render(request, 'challenges/edit_challenge.html', context)
 
 
+@require_active_event
 def approve_challenge(request, challenge_type, challenge_id):
     challenge = get_challenge_model_class(challenge_type).objects.get(pk=challenge_id)
     challenge.approve()
@@ -174,6 +176,7 @@ def approve_challenge(request, challenge_type, challenge_id):
     return HttpResponse(html)
 
 
+@require_active_event
 def disapprove_challenge(request, challenge_type, challenge_id):
     challenge = get_challenge_model_class(challenge_type).objects.get(pk=challenge_id)
     challenge.disapprove()
@@ -199,6 +202,7 @@ def _create_notification(request, challenge, approve=True):
     notification.save()
 
 
+@require_active_event
 def reset_challenge_state(request, challenge_type, challenge_id):
     challenge = get_challenge_model_class(challenge_type).objects.get(pk=challenge_id)
     challenge.reset_state()
@@ -207,7 +211,7 @@ def reset_challenge_state(request, challenge_type, challenge_id):
     return render(request, "challenges/challenge_simple_info_moderation.html",
                   context)
 
-
+@require_active_event
 def delete_challenge(request, challenge_type, challenge_id):
     challenge = get_challenge_model_class(challenge_type).objects.get(pk=challenge_id)
     visuals = get_challenge_visuals(challenge, challenge_type)

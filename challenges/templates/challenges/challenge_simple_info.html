@@ -47,7 +47,7 @@
         {% comment %} Like button {% endcomment %}
         <div class="action-bar" onClick="cleanContentChallengeDiv('async-content-{{challenge.id}}')">
             <button class="action-bar-button like-button"
-                {% if user.is_authenticated %} 
+                {% if user.is_authenticated and challenge.event.state == 'AC' %} 
                     hx-post="{% url 'userinteraction:like_challenge' challenge_id=challenge.id challenge_type=challenge.challenge_type %}"
                     hx-target="#likes-points-counter-{{challenge.id}}"
                     hx-swap="innerHTML"
@@ -81,7 +81,7 @@
             {% comment %} Submission button {% endcomment %}
             {% if challenge.points %}
                 <button class="action-bar-button submission-button"
-                    {% if user.is_authenticated and user.id != challenge.user.id %} 
+                    {% if user.is_authenticated and user.id != challenge.user.id and challenge.event.state == 'AC' %} 
                         hx-get="{% url 'submissions:create_submission' challenge_type=challenge.challenge_type challenge_id=challenge.id  %}"
                         hx-target="#async-content-{{challenge.id}}"
                         hx-swap="innerHTML "

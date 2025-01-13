@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 {% load static %}
 
 {% block title %}Ska4ai{% endblock %}
@@ -11,11 +12,27 @@
 </div>
 <div id="event-popup"  class="popup">
     <button class="close-button stylish-button" onclick="closePopup()"><div>{% include "images/close-square-svgrepo-com.svg" %}</div></button>
-    {% for event in event_list  %}
-            <div class="event-item" id="event-{{ event.id }}" data-event-id="{{ event.id }}">
+        {% for event in active_event_list  %}
+            <div class="event-item" 
+                id="event-{{ event.id }}"
+                data-event-id="{{ event.id }}"
+                data-event-active="True"
+            >
             {{ event.name }}
             </div>
         {% endfor%}
+        {% if archived_events %}
+            <div class="event-category-label">{% translate "Old events:" %}</div>
+            {% for event in archived_events  %}
+                <div class="event-item old-event-item"
+                    id="event-{{ event.id }}"
+                    data-event-id="{{ event.id }}"
+                    data-event-active=""
+                >
+                {{ event.name }}
+                </div>
+            {% endfor%}
+        {% endif %}
 </div>
 <div id="leaderboard-popup" class="popup">
     <button class="close-button stylish-button" onclick="closePopup()"><div>{% include "images/close-square-svgrepo-com.svg" %}</div></button>
@@ -26,7 +43,7 @@
 <div class="">
 <div class="main-view-wrapper"  data-json='{{ json_data.challenge_list|safe }}'>
     <div id="active-event" class="index-view">
-        {% for event in event_list  %}
+        {% for event in active_event_list  %}
             <div id="active-event-{{ event.id }}"  class="event-buttons-wrapper">
                 <button id="event-info-{{ event.id }}" class="event-info-button" onclick="showEventInfo({{ event.id }})" >
                     i
@@ -36,7 +53,19 @@
                 </div>
             </div>
         {% endfor%}
-
+        {% if archived_events %}
+            <div class="event-category-label event-buttons-wrapper">{% translate "Old events:" %}</div>
+            {% for event in archived_events %}
+                <div id="active-event-{{ event.id }}"  class="event-buttons-wrapper">
+                    <button id="event-info-{{ event.id }}" class="event-info-button" onclick="showEventInfo({{ event.id }})" >
+                        i
+                    </button>
+                    <div class="active-event-item" onClick="fetchLeaderboard({{ event.id }})">
+                    {{ event.name }}
+                    </div>
+                </div>
+            {% endfor%}
+        {% endif %}
             <button id="choose-event" class="" onclick="showEvents()">
                 <svg 
                 xmlns="http://www.w3.org/2000/svg" 
@@ -220,10 +249,12 @@ function switchMod() {
 };
 
 
-function newChallenge(button) { 
-var event = button.getAttribute("data-event");
-const base_link = "{% url 'challenges:create_challenge' 12345 %}".replace(/12345/, event.toString());
-window.location.href = base_link; 
+function newChallenge(button) {
+    if (button.getAttribute("data-event-active")) {
+        var event = button.getAttribute("data-event");
+        const base_link = "{% url 'challenges:create_challenge' 12345 %}".replace(/12345/, event.toString());
+        window.location.href = base_link;
+    }
 };
 
 
@@ -278,16 +309,17 @@ $ (document).ready(function(){
     if (!bigScreen.matches) {
         document.getElementById('leaderboard-popup-content-bigscreen').style.display = 'none';
     };
-
-
     
     $ (".event-item").on("click", function() {
-        var selected_event = $ (this).attr("data-event-id");
+        const selected_event = $ (this).attr("data-event-id");
+        const event_state = $ (this).attr("data-event-active");
         // add data-event to new challenge button
         const new_challenge_button = document.getElementById('new-challenge');
-        if (new_challenge_button) {
-            new_challenge_button.setAttribute("data-event", selected_event);
-        };
+        new_challenge_button.setAttribute("data-event", selected_event);
+        new_challenge_button.setAttribute("data-event-active", event_state);
+        // hide new challenge button if event is not active
+        new_challenge_button.style.display = event_state? 'block' : 'none';
+
         // list view logic
         $ (".challenges-container").hide();
         if (!bigScreen.matches) {
@@ -365,42 +397,30 @@ $ (document).ready(function(){
             }).setHTML(popupContent);
         
             // make a marker for each feature and add to the map
-            console.log("creating marker with coords: ", feature.geometry.coordinates)
             const marker = new mapboxgl.Marker({
                 className: `marker-event-${feature.properties.event}`,
                 //color: "#FFFFFF",
                 draggable: false,
             }).setLngLat(feature.geometry.coordinates)
-            //.setPopup(
-            //    ch_popup
-            //) // sets a popup on this marker
             .addTo(map);
-            console.log("Setting challenge_type", feature.properties.challenge_type)
             marker.getElement().addEventListener('click', () => {
                 // Small delay to ensure popup is rendered
                 setTimeout(() => {
                     fetchPopupContent(feature.properties.challenge_type, feature.properties.challenge_id);
                 }, 50);
             });
-
-
-            //marker.on('dragend', onDragEnd);
         }
 
+        const mapContainerEl = document.getElementById('map');
+        mapContainerEl.style.visibility = 'visible';
 
-    //const staticContainer = document.getElementById('static');
-    //staticContainer.style.visibility = 'hidden';
-    const mapContainerEl = document.getElementById('map');
-    mapContainerEl.style.visibility = 'visible';
-
-    $ (".event-item").eq(0).click();
-    // Ensure map resizes properly
-    map.on('load', () => {
-        map.resize();
+        $ (".event-item").eq(0).click();
+        // Ensure map resizes properly
+        map.on('load', () => {
+            map.resize();
+        });
     });
-});
 
-//map.resize();
 }); 
 
 // in base.js this doesn't load on IOS..

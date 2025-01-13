@@ -5,10 +5,12 @@ from .forms import SubmissionForm
 from .models import Submission
 from challenges.models import get_challenge_model_class
 from challenges.views import get_liked_by_user, get_challenge_likes_count, get_challenge_visuals
+from events.decorators import require_active_event
 from visualprocessing.models import VisualsQueue
 from userinteraction.models import Notification
 
 
+@require_active_event
 def create_submission(request, challenge_type, challenge_id):
     challenge_model = get_challenge_model_class(challenge_type)
     challenge = challenge_model.objects.get(pk=challenge_id)
@@ -65,6 +67,7 @@ def _submission_simple_info_context(request, submission_id):
     return context
 
 
+@require_active_event
 def approve_submission(request, submission_id):
     submission = get_object_or_404(Submission, pk=submission_id)
     submission.approve()
@@ -77,6 +80,7 @@ def approve_submission(request, submission_id):
     return HttpResponse(html)
 
 
+@require_active_event
 def disapprove_submission(request, submission_id):
     submission = get_object_or_404(Submission, pk=submission_id)
     submission.disapprove()
@@ -102,6 +106,7 @@ def _create_notification(request, submission, approve=True):
                                             notification_context)
     notification.save()
 
+@require_active_event
 def reset_submission_state(request, submission_id):
     submission = get_object_or_404(Submission, pk=submission_id)
     submission.reset_state()
@@ -111,6 +116,7 @@ def reset_submission_state(request, submission_id):
                   context)
 
 
+@require_active_event
 def edit_submission(request, submission_id):
     submission = get_object_or_404(Submission, pk=submission_id)
     if request.method == "POST":
@@ -128,6 +134,7 @@ def edit_submission(request, submission_id):
     return render(request, 'submissions/create_submission.html', context)
 
 
+@require_active_event
 def delete_submission(request, submission_id):  
     submission = get_object_or_404(Submission, pk=submission_id)
     submission.delete()

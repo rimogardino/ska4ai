@@ -160,9 +160,13 @@ body {
   width: -moz-available;
 }
 
+.old-event-item {
+  background-color: #429dffda;
+}
 
 #active-event {
     position: relative;
+    height: max-content;
     display: flex;
     flex-direction: column;
     justify-content: start;
@@ -207,6 +211,12 @@ body {
   font-size: 0.6rem;
   text-align: center;
   padding: 0.4rem;
+}
+
+.event-category-label {
+  color: #666;
+  font-size: 1.1rem;
+  margin: auto;
 }
 
 #active-event button {
@@ -360,7 +370,7 @@ body {
 /* floating button */
 .floating-button {
     /* Position */
-    position: fixed;
+    position: absolute;
     bottom: 10svh;
     right: 20px;
     z-index: 20;

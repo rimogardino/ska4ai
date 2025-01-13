@@ -22,13 +22,14 @@ def index(request):
     spots = Spot.objects.filter(approved=True).order_by('-date')
     challenges = Challenge.objects.filter(approved=True).order_by('-date')
     all_challenges = [*spots, *challenges]
-    event_list = Event.objects.filter(state=States.ACTIVE).order_by('-priority')
+    active_event_list = Event.objects.filter(state=States.ACTIVE).order_by('-priority')
     archived_events = Event.objects.filter(state=States.CLOSED).order_by('-priority')
+    event_list = [*active_event_list, *archived_events]
     if is_moderator:
         # User is a moderator
-        spots_to_moderate = Spot.objects.filter(approved=None).exclude(user=request.user).order_by('-date')
-        challenges_to_moderate = Challenge.objects.filter(approved=None).exclude(user=request.user).order_by('-date')
-        submissions_to_moderate = Submission.objects.filter(approved=None).exclude(user=request.user).order_by('-date')
+        spots_to_moderate = Spot.objects.filter(approved=None).exclude(user=request.user).exclude(event__state=States.CLOSED).order_by('-date')
+        challenges_to_moderate = Challenge.objects.filter(approved=None).exclude(user=request.user).exclude(event__state=States.CLOSED).order_by('-date')
+        submissions_to_moderate = Submission.objects.filter(approved=None).exclude(user=request.user).exclude(challenge__event__state=States.CLOSED).order_by('-date')
         for submission in submissions_to_moderate:
             submission.type = "submission"
             submission.event = submission.parent.event
@@ -45,8 +46,9 @@ def index(request):
                "all_challenges_to_moderate": all_challenges_to_moderate,
                "submissions_to_moderate": submissions_to_moderate,
                "moderation_list": moderation_list,
-               "event_list": event_list,
+               "active_event_list": active_event_list,
                "archived_events": archived_events,
+               "event_list": event_list,
                "json_data": json_data,
                "mapbox_api_key": django_envs['MAPBOX_API_KEY']}
     return render(request, "home/index.html", context)
@@ -75,20 +77,15 @@ def leaderboard(request, event_id):
             user.points = user.submission_points + user.challenge_points
             if user.points > 0:
                 leaderboard[user.username] = [user.points, 1]
-            print(f"user {user.username} has challenge points {user.challenge_points} " 
-                  + f"and submission points {user.submission_points} and total {user.points} points")
-        # leaderboard["gosho"] = [42, 1]
-        # leaderboard["pesho"] = [42, 1]
-        # leaderboard["lelq"] = [4, 1]
-        # leaderboard["Ilabaka"] = [155, 1]
-        # leaderboard["gosho"] = [42, 1]
+            # print(f"user {user.username} has challenge points {user.challenge_points} " 
+            #       + f"and submission points {user.submission_points} and total {user.points} points")
         leaderboard = sorted(leaderboard.items(), key=lambda x: x[1], reverse=True)
+        # Add placings to the leaderboard
         for i, p in enumerate(leaderboard[1:]):
             prev_place = leaderboard[i][1]
             if p[1][0] == prev_place[0]:
                 p[1][1] = prev_place[1]
             else:
                 p[1][1] = prev_place[1] + 1
-        # print("leaderboard", leaderboard)
     context = {"event": event, "leaderboard": leaderboard}
     return render(request, "home/leaderboard.html", context)

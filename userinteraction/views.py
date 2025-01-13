@@ -5,10 +5,13 @@ from django.template.loader import render_to_string
 from .models import ChallengeLike, ChallengeComment, Notification
 from .forms import ChallengeCommentForm
 from challenges.models import get_challenge_model_class
+from events.decorators import require_active_event
+from events.models import States
 
 
 # Create your views here.
 @login_required
+@require_active_event
 def like_challenge(request, challenge_id, challenge_type):
     challenge_model = get_challenge_model_class(challenge_type)
     challenge = challenge_model.objects.get(pk=challenge_id)
@@ -29,6 +32,7 @@ def like_challenge(request, challenge_id, challenge_type):
         likes_points_html = f"<span>{likes_count} Likes</span> <span>{challenge.points:n} Points</span>"
     return HttpResponse(likes_points_html)
 
+
 def create_comment(request, challenge_type, challenge_id):
     challenge_model = get_challenge_model_class(challenge_type)
     challenge = challenge_model.objects.get(pk=challenge_id)
@@ -39,7 +43,8 @@ def create_comment(request, challenge_type, challenge_id):
         form.instance.parent = challenge
         if form.is_valid():
             comment = form.save()
-            _create_notification(request, challenge, message=comment.comment)
+            if request.user != challenge.user:
+                _create_notification(request, challenge, message=comment.comment)
             html = render_to_string('userinteraction/comment.html', {'comment': comment})
             return HttpResponse(html)
     else:
@@ -54,7 +59,7 @@ def create_comment(request, challenge_type, challenge_id):
 def _create_notification(request, challenge, message):
     notification = Notification(user=challenge.user)
     notification.save()
-    notification_context = {"challenge": challenge, "notification_id": notification.pk, "message": message[:50]}
+    notification_context = {"challenge": challenge, "notification_id": notification.pk, "message": f"\"{message[:30]}..\" by {request.user}"}
     template = 'userinteraction/notification_messages/created_comment.html'
     notification.message = render_to_string(
                                             template,
