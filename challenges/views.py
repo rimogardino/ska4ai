@@ -11,7 +11,7 @@ from submissions.models import Submission
 from visualprocessing.models import VisualsQueue
 import json
 from pathlib import Path
-
+import time
 
 home = Path.home()
 with open(home / ".django_envs.json", "r") as f:
@@ -210,5 +210,9 @@ def reset_challenge_state(request, challenge_type, challenge_id):
 
 def delete_challenge(request, challenge_type, challenge_id):
     challenge = get_challenge_model_class(challenge_type).objects.get(pk=challenge_id)
+    visuals = get_challenge_visuals(challenge, challenge_type)
+    for visual in visuals:
+        visual.file.delete()
+        visual.delete()
     challenge.delete()
     return redirect(reverse("index"))

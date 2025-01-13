@@ -52,6 +52,28 @@ html, body {
   font-size: calc(var(--base-size) * var(--scale-factor));
 }
 
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-challenge-container {
+  height: 90svh;
+  align-content: space-evenly;
+  justify-content: space-evenly;
+}
+
+.create-challenge-container p {
+  margin-bottom: 0.5rem;
+}
+
+.errorlist {
+  color: red;
+  list-style-type: none;
+  margin: auto;
+  padding: 0;
+}
 /* logo */
 
 .text-logo {
@@ -410,7 +432,6 @@ nav {
   background-color: transparent;
   text-shadow: 0 0 5px rgba(0,0,0,0.5);
   color: rgba(0, 0, 0, 0.568);
-  font-size: 0.8rem;
   cursor: pointer;
 }
 
@@ -697,7 +718,6 @@ a {
 
 /* home/templates/home/index.html */
 .center-container {
-    font-family: system-ui, -apple-system, sans-serif;
     max-width: 800px;
     margin: 10px auto;
     padding: 0.3rem;

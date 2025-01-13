@@ -60,6 +60,7 @@
                             hx-get="{% url 'userinteraction:get_notiications_count' %}"
                             hx-trigger="intersect once click"
                             hx-target="#notiications_count"
+                            hx-indicator="#loading-indicator"
                             hx-swap="innerHTML"
                         {% endif %}
                         >
@@ -71,69 +72,8 @@
           </nav> 
     </header>
 
-
-      
-   {% comment %}  <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="{% url 'index' %}">Ska4ai</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'index' %}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" >About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" >Contact</a>
-                    </li>
-                </ul>
-            </div> 
-            <div id="view-switcher" style="flex-grow: 5; text-align: center;">
-                <button class="btn btn-outline-success my-2 my-sm-0" onclick="switchView()">Switch view</button>
-            </div>
-
-            <div class="user-accounts" >
-                {% if user.is_authenticated %}
-                    Hi {{ user.username }}!
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" onclick="location.href='{% url 'accounts:myprofile' %}'">My profile</button>
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" onclick="location.href='{% url 'logout' %}'">Logout</button>
-                {% else %}
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" onclick="location.href='{% url 'login' %}'">Login</button>
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" onclick="location.href='{% url 'accounts:signup' %}'">Signup</button>
-                {% endif %}
-            </div>
-        </nav>
-    </header>{% endcomment %}
-   {% comment %} <div id="mySidepanel" class="sidepanel">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-        <a href="{% url 'index' %}" class="text-logo"><span class="text-logo">Ska</span><span class="four-logo">4</span><span class="text-logo">ai</span></a>
-        {% if user.is_authenticated %}
-        <a href="#">Hi {{ user.username }}!</a>
-        <button class="blue-button" type="submit" onclick="location.href='{% url 'accounts:myprofile' %}'">My profile</button>
-        <button class="blue-button" type="submit" onclick="location.href='{% url 'logout' %}'">Logout</button>
-        {% else %}
-            <button class="blue-button" type="submit" onclick="location.href='{% url 'login' %}'">Login</button>
-            <button class="blue-button" type="submit" onclick="location.href='{% url 'accounts:signup' %}'">Signup</button>
-        {% endif %}
-        {% block sidePanelItems %}
-        <!-- Page specific sidepanel items go here -->
-        {% endblock %}
-        <a href="#">Services</a>
-        <a href="#">Clients</a>
-        <a href="#">Contact</a>
-      </div>
-      
-      <button class="openbtn" onclick="openNav()">☰</button>   {% endcomment %}
-
-
-
-
     <main role="main" class=""  >
-
+        <div id="loading-indicator" style="display: none;">Loading...</div>
         <div id="overlay" class="overlay" onclick="closePopup()"></div>
         <div id="notification-popup" class="popup">
             <button class="close-button stylish-button" onclick="closePopup()"><div>{% include "images/close-square-svgrepo-com.svg" %}</div></button>
@@ -192,7 +132,10 @@
     function closePopup() {
         const popups = document.querySelectorAll(".popup");
         popups.forEach((popup) => {
-            popup.style.display = 'none';
+            popup.style.display = 'none';       
+        });
+        document.querySelectorAll(".popup-html-content").forEach((popup_content) => {
+            popup_content.innerHTML = '';        
         });
         document.getElementById('overlay').style.display = 'none';
     }

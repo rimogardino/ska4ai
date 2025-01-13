@@ -2,9 +2,7 @@
     hx-post="{% url 'userinteraction:read_notification' notification_id %}"
     hx-trigger="click"
     hx-swap="none"
-    hx-indicator=".loading-spinner"
     data-target-url="{% url 'submissions:submission_detail' submission.id %}"
 >
     <span class="notification-text">Your submission {{ submission.id }} has been approved</span>
-    <div class="loading-spinner" style="display: none;">Loading...</div>
 </div>

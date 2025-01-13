@@ -127,7 +127,7 @@ class MapPoint(models.Model):
 
 
 class Spot(BaseChallenge, MapPoint):
-    name = models.CharField(default="Spot name", max_length=50)
+    name = models.CharField(max_length=50)
     challenge_type = ChallengeType.SPOT
     def __str__(self):
         return f"{self.name}--{self.event}-{self.pk}-: {self.description}"

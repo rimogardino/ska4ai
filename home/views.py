@@ -22,8 +22,8 @@ def index(request):
     spots = Spot.objects.filter(approved=True).order_by('-date')
     challenges = Challenge.objects.filter(approved=True).order_by('-date')
     all_challenges = [*spots, *challenges]
-    events_filter = States.ACTIVE or States.CLOSED if is_moderator else States.ACTIVE
-    event_list = Event.objects.filter(state=events_filter).order_by('-priority')
+    event_list = Event.objects.filter(state=States.ACTIVE).order_by('-priority')
+    archived_events = Event.objects.filter(state=States.CLOSED).order_by('-priority')
     if is_moderator:
         # User is a moderator
         spots_to_moderate = Spot.objects.filter(approved=None).exclude(user=request.user).order_by('-date')
@@ -45,7 +45,8 @@ def index(request):
                "all_challenges_to_moderate": all_challenges_to_moderate,
                "submissions_to_moderate": submissions_to_moderate,
                "moderation_list": moderation_list,
-               "event_list": event_list, 
+               "event_list": event_list,
+               "archived_events": archived_events,
                "json_data": json_data,
                "mapbox_api_key": django_envs['MAPBOX_API_KEY']}
     return render(request, "home/index.html", context)

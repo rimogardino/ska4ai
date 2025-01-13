@@ -3,33 +3,11 @@
 
 {% block title %}Ska4ai{% endblock %}
 
-{% comment %} {% block sidePanelItems %}
-    {% if event_list %}
-        <div class="sidepanel-events" >
-            <h3>Events:</h3>
-            {% for event in event_list  %}
-                <a class="event-item" id="event-{{ event.id }}" data-event-id="{{ event.id }}">{{ event.name }}</a>
-            {% endfor%}
-        </div>
-
-        <div class="sidepanel-events" >
-            <h3>Leaderboards:</h3>
-            {% for event in event_list  %}
-                {% if event.challenge_type == "CH" %}
-                    <a class="event-leaderboard-item" id="event-leaderboard-{{ event.id }}"  onclick="location.href='{% url 'leaderboard' event_id=event.id %}'">Leaderboard for {{ event.name }}</a>
-                {% endif %}
-            {% endfor%}
-        </div>
-
-        {% endif %}
-{% endblock %} {% endcomment %}
-
-
 {% block content %}
 
 <div id="top-popup" class="popup">
     <button class="close-button stylish-button" onclick="closePopup()"><div>{% include "images/close-square-svgrepo-com.svg" %}</div></button>
-    <div id="top-popup-content">...</div>
+    <div id="top-popup-content"  class="popup-html-content">...</div>
 </div>
 <div id="event-popup"  class="popup">
     <button class="close-button stylish-button" onclick="closePopup()"><div>{% include "images/close-square-svgrepo-com.svg" %}</div></button>
@@ -41,7 +19,7 @@
 </div>
 <div id="leaderboard-popup" class="popup">
     <button class="close-button stylish-button" onclick="closePopup()"><div>{% include "images/close-square-svgrepo-com.svg" %}</div></button>
-    <div id="leaderboard-popup-content">Leaderboard</div>
+    <div id="leaderboard-popup-content" class="popup-html-content">Leaderboard</div>
 </div>
 
 
@@ -49,10 +27,16 @@
 <div class="main-view-wrapper"  data-json='{{ json_data.challenge_list|safe }}'>
     <div id="active-event" class="index-view">
         {% for event in event_list  %}
-            <div class="active-event-item" id="active-event-{{ event.id }}" onClick="fetchLeaderboard({{ event.id }})">
-            {{ event.name }}
+            <div id="active-event-{{ event.id }}"  class="event-buttons-wrapper">
+                <button id="event-info-{{ event.id }}" class="event-info-button" onclick="showEventInfo({{ event.id }})" >
+                    i
+                </button>
+                <div class="active-event-item" onClick="fetchLeaderboard({{ event.id }})">
+                {{ event.name }}
+                </div>
             </div>
         {% endfor%}
+
             <button id="choose-event" class="" onclick="showEvents()">
                 <svg 
                 xmlns="http://www.w3.org/2000/svg" 
@@ -201,13 +185,6 @@
 
 <script>
 const bigScreen = window.matchMedia('(min-width: 800px)');
-   
-{% comment %} function playPause(videoPlayer) { 
-    if (videoPlayer.paused) 
-      videoPlayer.play(); 
-    else 
-      videoPlayer.pause(); 
-  }; {% endcomment %}
 
 function switchView() {
     var map_view = document.getElementById('map-container');
@@ -284,6 +261,15 @@ function fetchLeaderboard(event_id) {
 
 }
 
+function showEventInfo(event_id) {
+    htmx.ajax('GET', `{% url 'event_info' event_id=12345 %}`.replace(/12345/, event_id.toString()), {
+        target: `#leaderboard-popup-content`,
+        swap: 'innerHTML'
+    });
+    document.getElementById('leaderboard-popup').style.display = 'flex';
+    document.getElementById('overlay').style.display = 'block';
+}
+
 
 $ (document).ready(function(){
     // Create a media condition that targets viewports at least 768px wide
@@ -305,7 +291,8 @@ $ (document).ready(function(){
         // list view logic
         $ (".challenges-container").hide();
         if (!bigScreen.matches) {
-            $ (".active-event-item").hide();
+            $ (".event-buttons-wrapper").hide();
+
         };
         $ ("#active-event-" + selected_event).show();
         $ ('.ev-chs-' + selected_event).show()

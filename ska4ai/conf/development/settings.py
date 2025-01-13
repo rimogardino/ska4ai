@@ -109,6 +109,11 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
+# For the allauth google login we need to Run the following command:
+# python manage.py makemigrations and migrate
+# python manage.py setup_groups
+# Then in the admin create a socialapp with the client_id and client_secret from the google developer console
+
 # Allouth settings
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_AUTHENTICATION_METHOD = "username_email"

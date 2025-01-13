@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from .models import Challenge, Spot, Visual
 
 
@@ -28,7 +29,14 @@ class MultipleFileField(forms.FileField):
 
 class ChallengeForm(forms.ModelForm):
     files = MultipleFileField(label='Select files', required=False)
-
+    description = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'placeholder': "Enter a description...",
+            'rows': 3,
+            'required': 'required',  # Explicitly mark it as required in HTML
+        }),
+        required=True
+    )
     class Meta:
         model = Challenge
         fields = ['longitude', 'latitude', 'files', 'description']
@@ -37,7 +45,6 @@ class ChallengeForm(forms.ModelForm):
         # Check if we're editing an existing instance
         self.is_edit = kwargs.get('instance') is not None
         super().__init__(*args, **kwargs)
-        #self.fields['files'].required = False
         self.fields['files'].widget.attrs['accept'] = 'video/*'
         self.fields['longitude'].widget = forms.HiddenInput()
         self.fields['latitude'].widget = forms.HiddenInput()
@@ -46,10 +53,34 @@ class ChallengeForm(forms.ModelForm):
             # self.fields['event'].widget = forms.HiddenInput()
             self.fields['files'].widget = forms.HiddenInput()
 
+    def clean(self):
+        cleaned_data = super().clean()
+
+        # Check if there is at least one file uploaded
+        files = cleaned_data.get('files', [])
+        if not files:  # If the list is empty, raise an error
+            raise ValidationError('At least one file is required.')
+
+        return cleaned_data
 
 
 class SpotForm(forms.ModelForm):
     files = MultipleFileField(label='Select files', required=False)
+    description = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'placeholder': "Enter a description...",
+            'rows': 3,
+            'required': 'required',  # Explicitly mark it as required in HTML
+        }),
+        required=True
+    )
+    name = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'placeholder': "Enter a spot name...",
+            'required': 'required',  # Explicitly mark it as required in HTML
+        }),
+        required=True
+    )
 
     class Meta:
         model = Spot
@@ -67,6 +98,15 @@ class SpotForm(forms.ModelForm):
         if self.is_edit:
             self.fields['files'].widget = forms.HiddenInput()
 
+    def clean(self):
+        cleaned_data = super().clean()
+
+        # Check if there is at least one file uploaded
+        files = cleaned_data.get('files', [])
+        if not files:  # If the list is empty, raise an error
+            raise ValidationError('At least one file is required.')
+
+        return cleaned_data
 
 class VisualForm(forms.ModelForm):
     class Meta:
