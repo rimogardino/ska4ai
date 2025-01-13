@@ -314,10 +314,12 @@ $ (document).ready(function(){
         const event_state = $ (this).attr("data-event-active");
         // add data-event to new challenge button
         const new_challenge_button = document.getElementById('new-challenge');
-        new_challenge_button.setAttribute("data-event", selected_event);
-        new_challenge_button.setAttribute("data-event-active", event_state);
-        // hide new challenge button if event is not active
-        new_challenge_button.style.display = event_state? 'block' : 'none';
+        if (new_challenge_button ) {
+            new_challenge_button.setAttribute("data-event", selected_event);
+            new_challenge_button.setAttribute("data-event-active", event_state);
+            // hide new challenge button if event is not active
+            new_challenge_button.style.display = event_state? 'block' : 'none';
+        }
 
         // list view logic
         $ (".challenges-container").hide();
