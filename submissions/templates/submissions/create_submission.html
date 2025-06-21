@@ -5,7 +5,7 @@
             <p class="error" style="color: red; weight: bold; font-size: 20px;">{{error}}</p>
         {% endfor %}
         <div style="margin: 50px; background-color: green; padding: 5px; width: 50%">
-            <a style="color: white; margin-left: 50px;" href="{% url 'accounts:myprofile' %}">My profile</a>
+            <a style="color: white; margin-left: 50px;" href="{% url 'accounts:myprofile' %}">{% translate "My profile" %}</a>
         </div>
     {% else %}
         <form
@@ -18,7 +18,7 @@
                 {{ field }}
             </div>
         {% endfor %}
-            <button class="stylish-button blue-button" type="submit" value="Create!">Submit!</button>
+            <button class="stylish-button blue-button" type="submit" value="Create!">{% translate "Submit!" %}</button>
         </form>
     {% endif %}
 </div>

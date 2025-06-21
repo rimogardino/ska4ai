@@ -249,7 +249,7 @@
 </head>
 <body>
   <div class="center-container">
-    <h1>Edit Challenge</h1>
+    <h1>{% translate "Edit Challenge" %}</h1>
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
       {{ main_form.as_p }}
@@ -259,7 +259,7 @@
           <div class="file-edit">{{ file_form }}</div>
         {% endfor %}
       </div>
-      <button type="submit">Save Changes</button>
+      <button type="submit">{% translate "Save Changes" %}</button>
     </form>
   </div>
 </body>

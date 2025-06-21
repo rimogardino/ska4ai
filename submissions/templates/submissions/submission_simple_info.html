@@ -32,7 +32,7 @@
     </div>
 
     <div class="info-item">
-        <div class="info-label">Status: 
+        <div class="info-label">{% translate "Status: " %}
             <span class="info-value {% if submission.approved %}approved{% else %}pending{% endif %}">
                 {{ submission.approved|yesno:"Approved,Pending" }}
             </span>

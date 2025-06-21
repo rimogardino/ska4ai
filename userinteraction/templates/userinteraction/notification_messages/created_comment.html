@@ -1,8 +1,9 @@
+{% load i18n %}
 <div class="notification-item" 
     hx-post="{% url 'userinteraction:read_notification' notification_id %}"
     hx-trigger="click"
     hx-swap="none"
     data-target-url="{% url 'challenges:challenge_detail' challenge_type=challenge.challenge_type challenge_id=challenge.id  %}"
 >
-    <span class="notification-text">New comment: {{ message }}</span>
+    <span class="notification-text">{% translate "New comment:" %} {{ message }}</span>
 </div>

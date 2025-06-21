@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -6,7 +7,7 @@
     <meta charset="UTF-8">
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>{% block title %}My Django Project{% endblock %}</title>
+    <title>{% block title %}Ska4ai{% endblock %}</title>
 
     <!-- Bootstrap CSS -->
     {% comment %} <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> {% endcomment %}
@@ -36,18 +37,18 @@
             <ul class="list">
                 {% comment %} # &#160;&#160; makes the two links separate on IOS... {% endcomment %}
                 {% if user.is_authenticated %}
-                    <li><a href="{% url 'accounts:myprofile' %}">Hi {{ user.username }}!&#160;&#160;</a></li>
+                    <li><a href="{% url 'accounts:myprofile' %}">{% translate "Hi" %} {{ user.username }}!&#160;&#160;</a></li>
                     <li>
                         <form action="{% url 'account_logout' %}" method="post">
                             {% csrf_token %}
-                            <button class="loginout-btn" type="submit">Logout</button>
+                            <button class="loginout-btn" type="submit">{% translate "Logout" %}</button>
                         </form>
                     </li>
                 {% else %}
                     <li>
                         <form action="{% url 'login' %}" method="post">
                             {% csrf_token %}
-                            <button class="loginout-btn" type="submit">Login</button>
+                            <button class="loginout-btn" type="submit">{% translate "Login" %}</button>
                         </form>
                     </li>
                     {% comment %} <li><a href="{% url 'accounts:signup' %}">Signup</a></li> {% endcomment %}
@@ -64,16 +65,16 @@
                             hx-swap="innerHTML"
                         {% endif %}
                         >
-                    <span class="material-icons">notifications</span>
+                    <span class="material-icons">{% translate "notifications" %}</span>
                     <span id="notiications_count" class="icon-button__badge">0</span>
                   </button>
-                <li><a href="{% url 'accounts:myprofile' %}">About</a></li>
+                <li><a href="{% url 'accounts:myprofile' %}">{% translate "About" %}</a></li>
             </ul>
           </nav> 
     </header>
 
     <main role="main" class=""  >
-        <div id="loading-indicator" style="display: none;">Loading...</div>
+        <div id="loading-indicator" style="display: none;">{% translate "Loading..." %}</div>
         <div id="overlay" class="overlay" onclick="closePopup()"></div>
         <div id="notification-popup" class="popup">
             <button class="close-button stylish-button" onclick="closePopup()"><div>{% include "images/close-square-svgrepo-com.svg" %}</div></button>

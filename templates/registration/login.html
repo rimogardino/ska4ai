@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% load socialaccount %}
 
 
@@ -6,7 +7,7 @@
 <div class="login-container">
     <div>
         <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Log in to your account
+            {% translate "Log in to your account" %}
         </h2>
     </div>
     
@@ -26,7 +27,7 @@
         {% if form.errors %}
         <div class="rounded-md bg-red-50 p-4">
             <div class="text-sm text-red-700">
-                Your username and password didn't match. Please try again.
+                {% translate "Your username and password didn't match. Please try again." %}
             </div>
         </div>
         {% endif %}
@@ -43,21 +44,21 @@
         <div class="flex items-center justify-between">
             <div class="text-sm">
                 <a href="{% url 'accounts:signup' %}" class="font-medium text-indigo-600 hover:text-indigo-500">
-                    Don't have an account?
+                    {% translate "Don't have an account?" %}
                 </a>
             </div>
         </div>
 
         <div>
             <button type="submit" class="btn btn-primary">
-                Log in
+                {% translate "Log in" %}
             </button>
         </div>
     </form>
 
     <a href="{% provider_login_url 'google'  next="/" %}" class="google-login-btn">
         {% include "images/google_g_logo.svg" %}
-        Log in with Google
+        {% translate "Log in with Google" %}
       </a>
 </div>
 

@@ -1,6 +1,4 @@
-
-
-
+{% load i18n %}
 {% if event_list %}
     {% for event in event_list  %}
     <div class="challenges-container ev-chs-{{event.id}}" id="ev-chs-{{event.id}}">
@@ -23,7 +21,7 @@
                 {% endif%}
             {% endfor %}
         {% else %}
-            <p>No challenges are available.</p>
+            <p>{% translate "No challenges are available." %}</p>
         {% endif %}
     </div>
     {% endfor %}

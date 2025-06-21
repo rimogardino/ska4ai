@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
-{% block title %}My profile{% endblock %}
+{% block title %}{% translate "My profile" %}{% endblock %}
 
 {% block content %}
 <div class="center-container">
-    <h1>My challenges:</h1>
+    <h1>{% translate "My challenges:" %}</h1>
 
     <div class="challenges-container" id="ev-chs-{{event.id}}" >
         {% if all_challenges %}
@@ -14,12 +14,12 @@
                     <div class="list-view-wrapper submission-container">
                         <div class="personal-challenge-info">
                             ID: {{ challenge.pk }}
-                            Status: {% if challenge.approved %} 
-                                        <span style="color: green">Approved</span>
+                            {% translate "Status:" %} {% if challenge.approved %} 
+                                        <span style="color: green">{% translate "Approved" %}</span>
                                     {% elif challenge.approved == False %}
-                                        <span style="color: red">Disapproved</span>
+                                        <span style="color: red">{% translate "Disapproved" %}</span>
                                     {% else %}
-                                        <span style="color: orage">Pending</span>
+                                        <span style="color: orage">{% translate "Pending" %}</span>
                                     {% endif %}
                         </div>
                         <div class="" id="list-view-challenge-{{challenge.id}}"
@@ -27,7 +27,7 @@
                         hx-get="{% url 'challenges:challenge_simple_info' challenge_type=challenge.challenge_type challenge_id=challenge.id  %}"
                         hx-swap="innerHTML"
                         >
-                            Loading...                           
+                            {% translate "Loading..." %}
                         </div>
 
                         <button class="blue-button" type="submit" 
@@ -37,25 +37,25 @@
                     </div>
             {% endfor %}
         {% else %}
-            <p>No challenges are available.</p>
+            <p>{% translate "No challenges are available." %}</p>
         {% endif %}
     </div>
 
     <div class="submissions-container">
         {% if submissions %}
-            <h3>Submissions:</h3>
+            <h3>{% translate "Submissions:" %}</h3>
             <ul>
             {% for submission in submissions %}
                 <div class="submission-container">
                     <div class="personal-challenge-info">
                         ID: {{ submission.pk }}
-                        Status: {% if submission.approved %} 
-                                    <span style="color: green">Approved</span>
+                        {% translate "Status:" %} {% if submission.approved %} 
+                                    <span style="color: green">{% translate "Approved" %}</span>
                                     Points: {{ submission.challenge.points }}
                                 {% elif submission.approved == False %}
-                                    <span style="color: red">Disapproved</span>
+                                    <span style="color: red">{% translate "Disapproved" %}</span>
                                 {% else %}
-                                    <span style="color: orage">Pending</span>
+                                    <span style="color: orage">{% translate "Pending" %}</span>
                                 {% endif %}
                     </div>
                     {% include 'submissions/submission_simple_info.html' with submission=submission %}
@@ -82,7 +82,7 @@
 
 
         {% else %}
-            <p>No submissions are available.</p>
+            <p>{% translate "No submissions are available." %}</p>
         {% endif %}
     </div>
 </div>

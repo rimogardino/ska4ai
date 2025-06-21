@@ -1,4 +1,4 @@
-
+{% load i18n %}
 {% include './submission_and_main_challnge.html' with submission=submission challenge=submission.challenge visuals=challenge_visuals likes_count=likes_count  %}
 
 <div class="moderation-control">
@@ -9,7 +9,7 @@
             hx-swap="innerHTML"
         {% endif %}    
     >
-        Approve!
+        {% translate "Approve!" %}
     </button>
     <button class="red-button"
         {% if user.is_authenticated %} 
@@ -18,6 +18,6 @@
             hx-swap="innerHTML"
         {% endif %} 
     >
-        Disapprove!
+        {% translate "Disapprove!" %}
     </button>
 </div>

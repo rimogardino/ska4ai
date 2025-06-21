@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-
-{% block title %}Sign Up{% endblock %}
+{% load i18n %}
+{% block title %}{% translate "Sign Up" %}{% endblock %}
 
 {% block content %}
 <div class="signup-container">
-  <h2>Sign up</h2>
+  <h2>{% translate "Sign up" %}</h2>
   <form method="post" class="signup-form">
     {% csrf_token %}
     
@@ -44,9 +44,9 @@
             <button class='close-button stylish-button' onclick='closePopup()'>
                 <div>{% include 'images/close-square-svgrepo-com.svg' %}</div>
             </button>
-            <h3>Terms and Conditions</h3>
+            <h3>{% translate "Terms and Conditions" %}</h3>
             <div class='liability-disclaimer'>
-                <h4>Liability Disclaimer</h4>
+                {% translate "<h4>Liability Disclaimer</h4>
                 <p>By creating an account and using this platform, you acknowledge and agree to the following:</p>
                 <ol>
                     <li><strong>User Content Responsibility:</strong> Users are solely responsible for the content they upload, share, or interact with on this platform.</li>
@@ -62,7 +62,7 @@
                     <li><strong>Content Disclaimer:</strong> We do not review, verify, or guarantee the accuracy, safety, or appropriateness of user-generated content.</li>
                     <li><strong>Legal Protection:</strong> By agreeing, you waive any right to hold the website or its operators legally responsible for user actions or content.</li>
                 </ol>
-                <p><em>By checking this box, you confirm that you have read, understood, and agree to these terms.</em></p>
+                <p><em>By checking this box, you confirm that you have read, understood, and agree to these terms.</em></p>" %}
             </div>
         </div>
 
@@ -89,9 +89,9 @@
             </a>
         </small> {% endcomment %}
     </div>
-    <div class="terms-conditions"><a onclick="showTermsAndConditions()">Terms and Conditions</a></div>
+    <div class="terms-conditions"><a onclick="showTermsAndConditions()">{% translate "Terms and Conditions" %}</a></div>
 
-    <button type="submit" class="btn btn-primary">Sign Up</button>
+    <button type="submit" class="btn btn-primary">{% translate "Sign Up" %}</button>
 </form>
 </div>
 {% endblock %}

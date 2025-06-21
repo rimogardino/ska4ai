@@ -24,7 +24,7 @@
 
     <div class="submissions-container" >
         {% if submissions %}
-            <h3>Submissions:</h3>
+            <h3>{% translate "Submissions:" %}</h3>
             {% for submission in submissions %}
                 <div class="submission-container">
                     {% include 'submissions/submission_simple_info.html' with submission=submission %}
@@ -35,7 +35,7 @@
                 </div>
             {% endfor %}
         {% else %}
-            <p>No submissions are available.</p>
+            <p>{% translate "No submissions are available." %}</p>
         {% endif %}
     </div>
 </div>

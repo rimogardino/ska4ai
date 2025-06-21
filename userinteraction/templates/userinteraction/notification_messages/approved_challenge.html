@@ -1,8 +1,9 @@
+{% load i18n %}
 <div class="notification-item" 
     hx-post="{% url 'userinteraction:read_notification' notification_id %}"
     hx-trigger="click"
     hx-swap="none"
     data-target-url="{% url 'challenges:challenge_detail' challenge_type=challenge.challenge_type challenge_id=challenge.id %}"
 >
-    <span class="notification-text">Your challenge {{ challenge.id }} has been approved</span>
+    <span class="notification-text">{% blocktrans with challenge_id=challenge.id %}Your challenge {{ challenge_id }} has been approved{% endblocktranslate %}</span>
 </div>

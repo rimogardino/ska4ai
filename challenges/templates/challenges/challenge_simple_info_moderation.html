@@ -10,7 +10,7 @@
             hx-swap="innerHTML"
         {% endif %}    
     >
-        Approve!
+        {% translate "Approve!" %}
     </button>
     <button class="red-button"
         {% if user.is_authenticated %} 
@@ -19,6 +19,6 @@
             hx-swap="innerHTML"
         {% endif %} 
     >
-        Disapprove!
+        {% translate "Disapprove!" %}
     </button>
 </div>

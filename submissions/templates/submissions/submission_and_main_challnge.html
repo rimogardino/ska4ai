@@ -1,11 +1,12 @@
+{% load i18n %}
 <div class="center-container" >
     <div class="">
         <div class="challenge_info_container submission-container" >
-            <h3>Main Challange</h3>
+            <h3>{% translate "Main Challange" %}</h3>
             {% include 'challenges/challenge_simple_info.html' with challenge=submission.challenge visuals=challenge_visuals likes_count=likes_count %}
         </div>  
         <div class="submission-container">
-            <h3>Submission</h3>
+            <h3>{% translate "Submission" %}</h3>
             {% include './submission_simple_info.html' with submission=submission %}
         </div>
     </div>

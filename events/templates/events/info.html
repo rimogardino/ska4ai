@@ -1,13 +1,14 @@
+{% load i18n %}
 <div class="submission-container">
     <h3>{{ event.name }}</h3>
 
     {{ event.description }}
 
-    <h3>Rules:</h3>
+    <h3>{% translate "Rules:" %}</h3>
 
     {% if event.rules %}
         {{ event.rules }}
     {% else %}
-        Just be nice to each other and don't do anything illegal!
+        {% translate "Just be nice to each other and don't do anything illegal!" %}"
     {% endif %}
 </div>

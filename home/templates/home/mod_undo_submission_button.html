@@ -1,3 +1,4 @@
+{% load i18n %}
 <div class="popup-container submission-container undo">
     {{ message|safe }}
     <button class="red-button"
@@ -7,6 +8,6 @@
                 hx-swap="innerHTML"
             {% endif %} 
         >
-            Undo!
+            {% translate "Undo!" %}
     </button>
 </div>
