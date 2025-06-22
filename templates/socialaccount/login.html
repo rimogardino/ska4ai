@@ -9,17 +9,17 @@
     <div class="login-container">
         {% if process == "connect" %}
             {% element h1 %}
-                {% blocktrans with provider.name as provider %}Connect {{ provider }}{% endblocktrans %}
+                {% blocktranslate with provider=provider.name %}Connect {{ provider }}{% endblocktranslate %}
             {% endelement %}
             {% element p %}
-                {% blocktrans with provider.name as provider %}You are about to connect a new third-party account from {{ provider }}.{% endblocktrans %}
+                {% blocktranslate with provider=provider.name %}You are about to connect a new third-party account from {{ provider }}.{% endblocktranslate %}
             {% endelement %}
         {% else %}
             {% element h1 %}
-                {% blocktrans with provider.name as provider %}Sign In Via {{ provider }}{% endblocktrans %}
+                {% blocktranslate with provider=provider.name %}Sign In Via {{ provider }}{% endblocktranslate %}
             {% endelement %}
             {% element p %}
-                {% blocktrans with provider.name as provider %}You are about to sign in using third-party account from {{ provider }}.{% endblocktrans %}
+                {% blocktranslate with provider=provider.name %}You are about to sign in using third-party account from {{ provider }}.{% endblocktranslate %}
             {% endelement %}
         {% endif %}
         {% element form method="post" no_visible_fields=True %}

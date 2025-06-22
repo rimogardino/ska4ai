@@ -66,6 +66,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -96,6 +97,18 @@ WSGI_APPLICATION = 'ska4ai.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Stores sessions in DB
+
+# Optional: change cookie name (default: 'sessionid')
+SESSION_COOKIE_NAME = 'sessionid'
+
+# Optional: how long session persists (seconds)
+SESSION_COOKIE_AGE = 1209600  # 2 weeks
+
+# Optional: session expires on browser close
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
 
 DATABASES = {
     'default': {
@@ -150,8 +163,19 @@ LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Europe/Sofia'
 
 USE_I18N = True
-
+USE_L10N = True  # For localized formatting
 USE_TZ = True
+
+# Define available languages
+LANGUAGES = [
+    ('en', 'English'),
+    ('bg', 'Bulgarian'),
+]
+
+# Specify where translation files will be stored
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
 
 
 # Static files (CSS, JavaScript, Images)

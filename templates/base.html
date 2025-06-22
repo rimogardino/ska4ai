@@ -37,7 +37,7 @@
             <ul class="list">
                 {% comment %} # &#160;&#160; makes the two links separate on IOS... {% endcomment %}
                 {% if user.is_authenticated %}
-                    <li><a href="{% url 'accounts:myprofile' %}">{% translate "Hi" %} {{ user.username }}!&#160;&#160;</a></li>
+                    <li><a href="{% url 'accounts:myprofile' %}">{% translate "Hi" %} {{ user.username }}!</a>&#160;&#160;</li>
                     <li>
                         <form action="{% url 'account_logout' %}" method="post">
                             {% csrf_token %}
@@ -65,9 +65,24 @@
                             hx-swap="innerHTML"
                         {% endif %}
                         >
-                    <span class="material-icons">{% translate "notifications" %}</span>
+                    <span class="material-icons">notifications</span>
                     <span id="notiications_count" class="icon-button__badge">0</span>
                   </button>
+
+                <form action="{% url 'set_language' %}" method="post">
+                    {% csrf_token %}
+                    {% get_current_language as CURRENT_LANGUAGE %}
+                    <input name="next" type="hidden" value="{{ request.path }}">
+                    <input name="language" type="hidden" value="{% if CURRENT_LANGUAGE == 'en' %}bg{% else %}en{% endif %}">
+                    <button type="submit">
+                        {% if CURRENT_LANGUAGE == 'en' %}
+                        🇧🇬 BG
+                        {% else %}
+                        🇬🇧 ENG
+                        {% endif %}
+                    </button>
+                </form>
+                  
                 <li><a href="{% url 'accounts:myprofile' %}">{% translate "About" %}</a></li>
             </ul>
           </nav> 

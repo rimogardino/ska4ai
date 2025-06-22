@@ -5,5 +5,5 @@
     hx-swap="none"
     data-target-url="{% url 'submissions:submission_detail' submission.id %}"
 >
-    <span class="notification-text">{% blocktrans with submission_id=submission.id %}Your submission {{ submission_id }} has been approved{% endblocktranslate %}</span>
+    <span class="notification-text">{% blocktranslate with submission_id=submission.id %}Your submission {{ submission_id }} has been approved{% endblocktranslate %}</span>
 </div>

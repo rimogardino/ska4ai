@@ -1,0 +1,353 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-06-22 13:03+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: accounts/templates/accounts/myprofile.html:4
+#: submissions/templates/submissions/create_submission.html:8
+#: userinteraction/templates/userinteraction/create_comment.html:8
+msgid "My profile"
+msgstr "Моят профил"
+
+#: accounts/templates/accounts/myprofile.html:8
+msgid "My challenges:"
+msgstr "Моите предизвикателства"
+
+#: accounts/templates/accounts/myprofile.html:18
+#: accounts/templates/accounts/myprofile.html:53
+msgid "Status:"
+msgstr "Статус:"
+
+#: accounts/templates/accounts/myprofile.html:19
+#: accounts/templates/accounts/myprofile.html:54
+msgid "Approved"
+msgstr "Одобрен"
+
+#: accounts/templates/accounts/myprofile.html:21
+#: accounts/templates/accounts/myprofile.html:57
+msgid "Disapproved"
+msgstr "Отказан"
+
+#: accounts/templates/accounts/myprofile.html:23
+#: accounts/templates/accounts/myprofile.html:59
+msgid "Pending"
+msgstr "В очакване"
+
+#: accounts/templates/accounts/myprofile.html:31 templates/base.html:96
+msgid "Loading..."
+msgstr "Зарежда..."
+
+#: accounts/templates/accounts/myprofile.html:36
+#: accounts/templates/accounts/myprofile.html:65
+msgid "More info."
+msgstr "Още информация."
+
+#: accounts/templates/accounts/myprofile.html:41
+#: home/templates/home/list_view.html:24
+msgid "No challenges are available."
+msgstr "Няма предизвикателства."
+
+#: accounts/templates/accounts/myprofile.html:47
+#: challenges/templates/challenges/challenge_detail.html:27
+msgid "Submissions:"
+msgstr "Изпълнения:"
+
+#: accounts/templates/accounts/myprofile.html:87
+#: challenges/templates/challenges/challenge_detail.html:38
+msgid "No submissions are available."
+msgstr "Няма Изпълнения."
+
+#: challenges/templates/challenges/challenge_detail.html:15
+msgid "Edit Challenge."
+msgstr "Редактирай предизвикателство."
+
+#: challenges/templates/challenges/challenge_detail.html:20
+msgid "Delete challenge."
+msgstr "Изтрий предизвикателство."
+
+#: challenges/templates/challenges/challenge_detail.html:33
+msgid "Detailed view."
+msgstr "Детайлен поглед."
+
+#: challenges/templates/challenges/challenge_simple_info.html:62
+msgid "Likes"
+msgstr "Харесвания"
+
+#: challenges/templates/challenges/challenge_simple_info.html:64
+#: home/templates/home/leaderboard.html:11
+msgid "Points"
+msgstr "Точки"
+
+#: challenges/templates/challenges/challenge_simple_info_moderation.html:13
+#: submissions/templates/submissions/submission_moderation.html:12
+msgid "Approve!"
+msgstr "Одобри!"
+
+#: challenges/templates/challenges/challenge_simple_info_moderation.html:22
+#: submissions/templates/submissions/submission_moderation.html:21
+msgid "Disapprove!"
+msgstr "Откажи!"
+
+#: challenges/templates/challenges/create_challenge.html:20
+msgid "Select the spot where the challenge is:"
+msgstr "Избери място:"
+
+#: challenges/templates/challenges/create_challenge.html:27
+msgid "Uploading..."
+msgstr "Качва се..."
+
+#: challenges/templates/challenges/edit_challenge.html:252
+msgid "Edit Challenge"
+msgstr "Редактирай предизвикателство"
+
+#: challenges/templates/challenges/edit_challenge.html:262
+msgid "Save Changes"
+msgstr "Запази промените"
+
+#: challenges/utils.py:5
+msgid "Challenge"
+msgstr "Предизвикателство"
+
+#: challenges/utils.py:6
+msgid "Spot"
+msgstr "Място"
+
+#: events/models.py:6
+msgid "Hidden"
+msgstr "Скрит"
+
+#: events/models.py:7
+msgid "Active"
+msgstr "Активен"
+
+#: events/models.py:8
+msgid "Closed"
+msgstr "Затворен"
+
+#: events/models.py:12
+msgid "Parkour"
+msgstr "Паркур"
+
+#: events/models.py:18
+msgid "Sofia"
+msgstr "София"
+
+#: events/models.py:19
+msgid "Plovdiv"
+msgstr "Пловдив"
+
+#: events/models.py:20
+msgid "Bulgaria"
+msgstr "България"
+
+#: events/templates/events/info.html:7
+msgid "Rules:"
+msgstr "Правила:"
+
+#: events/templates/events/info.html:12
+msgid "Just be nice to each other and don't do anything illegal!"
+msgstr ""
+
+#: home/templates/home/index.html:25 home/templates/home/index.html:57
+msgid "Old events:"
+msgstr "Стари събития:"
+
+#: home/templates/home/index.html:39 home/templates/home/index.html:86
+msgid "Leaderboard"
+msgstr "Класация"
+
+#: home/templates/home/leaderboard.html:5
+msgid "Leaderbord for"
+msgstr "Класация за"
+
+#: home/templates/home/leaderboard.html:10
+msgid "User"
+msgstr "Потребител"
+
+#: home/templates/home/mod_undo_button.html:11
+#: home/templates/home/mod_undo_submission_button.html:11
+msgid "Undo!"
+msgstr "Отмяна!"
+
+#: home/templates/home/moderation_challenge_view.html:30
+msgid "No challenges are available for moderation."
+msgstr "Няма предизвикателства за модериране."
+
+#: submissions/templates/submissions/create_submission.html:21
+msgid "Submit!"
+msgstr "Изпълни!"
+
+#: submissions/templates/submissions/submission_and_main_challnge.html:5
+msgid "Main Challange"
+msgstr "Главно предизвикателство"
+
+#: submissions/templates/submissions/submission_and_main_challnge.html:9
+msgid "Submission"
+msgstr "Изпълнение"
+
+#: submissions/templates/submissions/submission_simple_info.html:35
+msgid "Status: "
+msgstr "Статус: "
+
+#: templates/base.html:43
+msgid "Hi"
+msgstr "Здравей"
+
+#: templates/base.html:47
+msgid "Logout"
+msgstr "Излез"
+
+#: templates/base.html:54
+msgid "Login"
+msgstr "Влез"
+
+#: templates/base.html:90
+msgid "About"
+msgstr "Относно"
+
+#: templates/registration/login.html:10
+msgid "Log in to your account"
+msgstr "Влез в акаунта си"
+
+#: templates/registration/login.html:30
+msgid "Your username and password didn't match. Please try again."
+msgstr "Потребителското име или паролата не са правилни. Моля опитайте отново."
+
+#: templates/registration/login.html:47
+msgid "Don't have an account?"
+msgstr "Нямаш акаунт?"
+
+#: templates/registration/login.html:54
+msgid "Log in"
+msgstr "Влез"
+
+#: templates/registration/login.html:61
+msgid "Log in with Google"
+msgstr "Влез със Гугъл"
+
+#: templates/registration/signup.html:3 templates/registration/signup.html:96
+msgid "Sign Up"
+msgstr "Запиши се"
+
+#: templates/registration/signup.html:7
+msgid "Sign up"
+msgstr "Запиши се"
+
+#: templates/registration/signup.html:47 templates/registration/signup.html:94
+msgid "Terms and Conditions"
+msgstr "Правила и условия"
+
+#: templates/registration/signup.html:49
+msgid ""
+"<h4>Liability Disclaimer</h4>\n"
+"                <p>By creating an account and using this platform, you "
+"acknowledge and agree to the following:</p>\n"
+"                <ol>\n"
+"                    <li><strong>User Content Responsibility:</strong> Users "
+"are solely responsible for the content they upload, share, or interact with "
+"on this platform.</li>\n"
+"                    <li><strong>No Liability for User Actions:</strong> The "
+"website and its owner/operator shall not be held liable for any damages, "
+"injuries, losses, or consequences arising from:\n"
+"                        <ul>\n"
+"                            <li>Content uploaded by users</li>\n"
+"                            <li>Interactions between users</li>\n"
+"                            <li>Participation in website events or "
+"activities</li>\n"
+"                            <li>Any claims, actions, or damages resulting "
+"from user-generated content or interactions</li>\n"
+"                        </ul>\n"
+"                    </li>\n"
+"                    <li><strong>Risk Acknowledgment:</strong> Users "
+"participate in any platform activities entirely at their own risk.</li>\n"
+"                    <li><strong>Content Disclaimer:</strong> We do not "
+"review, verify, or guarantee the accuracy, safety, or appropriateness of "
+"user-generated content.</li>\n"
+"                    <li><strong>Legal Protection:</strong> By agreeing, you "
+"waive any right to hold the website or its operators legally responsible for "
+"user actions or content.</li>\n"
+"                </ol>\n"
+"                <p><em>By checking this box, you confirm that you have read, "
+"understood, and agree to these terms.</em></p>"
+msgstr ""
+
+#: templates/socialaccount/login.html:7
+msgid "Sign In"
+msgstr "Влез"
+
+#: templates/socialaccount/login.html:13
+#, python-format
+msgid "Connect %(provider)s"
+msgstr "Свържи се с %(provider)s"
+
+#: templates/socialaccount/login.html:16
+#, python-format
+msgid "You are about to connect a new third-party account from %(provider)s."
+msgstr "На път сте да свържете нов акаунт от %(provider)s."
+
+#: templates/socialaccount/login.html:20
+#, python-format
+msgid "Sign In Via %(provider)s"
+msgstr "Влез със %(provider)s"
+
+#: templates/socialaccount/login.html:23
+#, python-format
+msgid "You are about to sign in using third-party account from %(provider)s."
+msgstr "На път сте да запишете нов акаунт через %(provider)s."
+
+#: templates/socialaccount/login.html:30
+msgid "Continue"
+msgstr "Продължи"
+
+#: userinteraction/templates/userinteraction/create_comment.html:19
+msgid "Create!"
+msgstr "Създай!"
+
+#: userinteraction/templates/userinteraction/notification_messages/approved_challenge.html:8
+#, python-format
+msgid "Your challenge %(challenge_id)s has been approved"
+msgstr "Предизвикателство %(challenge_id)s е одобрено"
+
+#: userinteraction/templates/userinteraction/notification_messages/approved_submission.html:8
+#, python-format
+msgid "Your submission %(submission_id)s has been approved"
+msgstr "Изпълнението %(submission_id)s е одобрено"
+
+#: userinteraction/templates/userinteraction/notification_messages/disapproved_challenge.html:8
+#, python-format
+msgid "Your challenge %(challenge_id)s has been disapproved"
+msgstr "Предизвикателство %(challenge_id)s е отказано"
+
+#: userinteraction/templates/userinteraction/notification_messages/disapproved_submission.html:8
+#, python-format
+msgid "Your submission %(submission_id)s has been disapproved"
+msgstr "Изпълнение %(submission_id)s е отказано"
+
+#: userinteraction/templates/userinteraction/notifications.html:15
+msgid "Read"
+msgstr "Прочети"
+
+#: userinteraction/templates/userinteraction/notifications.html:20
+msgid "No new notifications."
+msgstr "Няма нови известия."
+
+#~ msgid "notifications"
+#~ msgstr "известия"
+
+#~ msgid "New comment:"
+#~ msgstr "Нов коментар:"

@@ -15,12 +15,21 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.conf.urls.i18n import i18n_patterns
+from django.views.i18n import set_language
 from django.urls import include, path
 from django.conf import settings
 from django.urls import re_path
 from django.views.static import serve
 
+
 urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('set_language/', set_language, name='set_language'),
+    path('i18n/', include('django.conf.urls.i18n')),
+]
+
+urlpatterns += i18n_patterns(
     path("", include("home.urls")),
     path("events/", include("events.urls")),
     path("challenges/", include("challenges.urls")),
@@ -30,10 +39,7 @@ urlpatterns = [
     path("accounts/", include("accounts.urls")),
     path("accounts/", include("django.contrib.auth.urls")),
     path('accounts/', include('allauth.urls')),
-    path('admin/', admin.site.urls),
-    
-    
-]
+)
 
 if settings.DEBUG:
     urlpatterns += [
