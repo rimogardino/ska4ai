@@ -89,3 +89,7 @@ def leaderboard(request, event_id):
                 p[1][1] = prev_place[1] + 1
     context = {"event": event, "leaderboard": leaderboard}
     return render(request, "home/leaderboard.html", context)
+
+
+def about(request):
+    return render(request, "home/about.html")

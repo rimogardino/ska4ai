@@ -14,7 +14,7 @@
     <link rel="stylesheet" type="text/css" href="{% static "ska4ai/css/base.css" %}" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Bootstrap JS and dependencies -->
-    <script src="https://unpkg.com/htmx.org@2.0.3" integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.5/dist/htmx.js" integrity="sha384-5DNWP7/6VfmFjDrEgZ0MwJiuIz0/juUdZwgMAqxCaHBd/BH8MF4yWxDv+mo/o9CG" crossorigin="anonymous"></script>
    
  
     {% comment %} <!-- Custom CSS (if any) -->
@@ -74,16 +74,16 @@
                     {% get_current_language as CURRENT_LANGUAGE %}
                     <input name="next" type="hidden" value="{{ request.path }}">
                     <input name="language" type="hidden" value="{% if CURRENT_LANGUAGE == 'en' %}bg{% else %}en{% endif %}">
-                    <button type="submit">
+                    <button class="icon-button language-button" type="submit">
                         {% if CURRENT_LANGUAGE == 'en' %}
-                        🇧🇬 BG
+                            {% include "images/bg.svg" %}
                         {% else %}
-                        🇬🇧 ENG
+                            {% include "images/gb.svg" %}
                         {% endif %}
                     </button>
                 </form>
                   
-                <li><a href="{% url 'accounts:myprofile' %}">{% translate "About" %}</a></li>
+                <li><a href="{% url 'about' %}">{% translate "About" %}</a></li>
             </ul>
           </nav> 
     </header>

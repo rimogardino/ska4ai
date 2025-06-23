@@ -1,5 +1,6 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext as _
 from .models import Challenge, Spot, Visual, get_challenge_model_class
 
 
@@ -28,10 +29,10 @@ class MultipleFileField(forms.FileField):
 
 
 class ChallengeForm(forms.ModelForm):
-    files = MultipleFileField(label='Select files', required=False)
+    files = MultipleFileField(label=_('Select files'), required=False)
     description = forms.CharField(
         widget=forms.Textarea(attrs={
-            'placeholder': "Enter a description...",
+            'placeholder': _("Enter a description..."),
             'rows': 3,
             'required': 'required',  # Explicitly mark it as required in HTML
         }),
@@ -64,15 +65,15 @@ class ChallengeForm(forms.ModelForm):
         # Check if this is a new instance (creation)
         if not self.instance.pk:
             if not files:
-                raise ValidationError('At least one file is required.')        
+                raise ValidationError(_('At least one file is required.'))
         return cleaned_data
 
 
 class SpotForm(forms.ModelForm):
-    files = MultipleFileField(label='Select files', required=False)
+    files = MultipleFileField(label=_('Select files'), required=False)
     description = forms.CharField(
         widget=forms.Textarea(attrs={
-            'placeholder': "Enter a description...",
+            'placeholder': _("Enter a description..."),
             'rows': 3,
             'required': 'required',  # Explicitly mark it as required in HTML
         }),
@@ -80,7 +81,7 @@ class SpotForm(forms.ModelForm):
     )
     name = forms.CharField(
         widget=forms.TextInput(attrs={
-            'placeholder': "Enter a spot name...",
+            'placeholder': _("Enter a spot name..."),
             'required': 'required',  # Explicitly mark it as required in HTML
         }),
         required=True
@@ -110,7 +111,7 @@ class SpotForm(forms.ModelForm):
         files = cleaned_data.get('files', [])
         if not self.instance.pk:
             if not files:  # If the list is empty, raise an error
-                raise ValidationError('At least one file is required.')
+                raise ValidationError(_('At least one file is required.'))
 
         return cleaned_data
 

@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404, redirect, reverse
 from django.forms import modelformset_factory
+from django.utils.translation import gettext as _
 from django.template.loader import render_to_string
 from events.models import Event
 from events.decorators import require_active_event
@@ -173,7 +174,7 @@ def approve_challenge(request, challenge_type, challenge_id):
     challenge.approve()
     _create_notification(request, challenge, approve=True)
     # not great to have html styling here, but I'm tired at this point
-    message = f"<div style='color: green; padding:2rem;'>{challenge_type} {challenge.id} has been approved</div>"
+    message = _("<div style='color: green; padding:2rem;'>{challenge_type} {challenge_id} has been approved</div>").format(challenge_type=challenge_type, challenge_id=challenge.id)
     html = render(request, 'home/mod_undo_button.html', {
             'challenge': challenge,
             'message': message,
@@ -186,7 +187,7 @@ def disapprove_challenge(request, challenge_type, challenge_id):
     challenge = get_challenge_model_class(challenge_type).objects.get(pk=challenge_id)
     challenge.disapprove()
     _create_notification(request, challenge, approve=False)
-    message = f"<div style='color: red; padding:2rem;'>{challenge_type} {challenge.id} has been disapproved</div>"
+    message = _("<div style='color: red; padding:2rem;'>{challenge_type} {challenge_id} has been disapproved</div>").format(challenge_type=challenge_type, challenge_id=challenge.id)
     html = render(request, 'home/mod_undo_button.html', {
             'challenge': challenge,
             'message': message,

@@ -1,9 +1,10 @@
 from functools import wraps
 from django.http import HttpResponse
-from django.http import Http404
 from django.shortcuts import get_object_or_404
+from django.utils.translation import gettext_lazy as _
 from .models import Event, States
 from challenges.models import get_challenge_model_class
+from submissions.models import Submission
 
 
 def require_active_event(function=None, model_param='pk'):
@@ -22,6 +23,7 @@ def require_active_event(function=None, model_param='pk'):
     def actual_decorator(view_func):
         @wraps(view_func)
         def _wrapped_view(request, *args, **kwargs):
+            event = None
             # Get the model instance
             if 'event_id' in kwargs:
                 # Assume that the model instance's primary key (id) is passed as a URL parameter
@@ -32,11 +34,16 @@ def require_active_event(function=None, model_param='pk'):
                 challenge_model = get_challenge_model_class(challenge_type)
                 challenge = challenge_model.objects.get(pk=challenge_id)
                 event = challenge.event
+            elif "submission_id" in kwargs:
+                submission_id = kwargs["submission_id"]
+                submission = Submission.objects.get(pk=submission_id)
+                event = submission.challenge.event
 
             # Check if event exists and is active
-            if event.state == States.CLOSED:
-                return HttpResponse(status=200, content="<div style='color: red; font-size: 2rem;'>Event is closed!</div>")  # Silent success
-            
+            if event and event.state == States.CLOSED:
+                return HttpResponse(status=200, content=_("<div style='color: red; font-size: 2rem;'>Event is closed!</div>"))  # Silent success
+            if not event:
+                return HttpResponse(status=200, content=_("<div style='color: red; font-size: 2rem;'>Event not found!</div>"))
             return view_func(request, *args, **kwargs)
         return _wrapped_view
     

@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.utils.translation import gettext as _
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from .models import ChallengeLike, ChallengeComment, Notification
@@ -26,10 +27,10 @@ def like_challenge(request, challenge_id, challenge_type):
         like.parent = challenge
         like.save()
     likes_count = ChallengeLike.objects.filter(liked_challenges_query).count()
-    likes_points_html = f"<span>{likes_count} Likes</span>"
+    likes_points_html = _("<span>{likes_count} Likes</span>").format(likes_count=likes_count)
     if hasattr(challenge, 'points'):
         challenge.update()
-        likes_points_html = f"<span>{likes_count} Likes</span> <span>{challenge.points:n} Points</span>"
+        likes_points_html = _("<span>{likes_count} Likes</span> <span>{challenge_points:n} Points</span>").format(likes_count=likes_count, challenge_points=challenge.points)
     return HttpResponse(likes_points_html)
 
 
@@ -89,6 +90,7 @@ def get_notifications(request):
         'notifications': notifications,
         'read_notifications': read_notifications,
     }
+    print("notifications: ", notifications)
     html = render(request, 'userinteraction/notifications.html', context)
     return HttpResponse(html)
 
@@ -99,4 +101,4 @@ def get_notiications_count(request):
 def read_notification(request, notification_id):
     notification = Notification.objects.get(pk=notification_id)
     notification.mark_viewed()
-    return HttpResponse("Notification read")
+    return HttpResponse(_("Notification read"))

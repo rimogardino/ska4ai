@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-22 13:03+0300\n"
+"POT-Creation-Date: 2025-06-23 18:59+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,59 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: accounts/forms.py:21
+msgid "Password must be at least 8 characters long."
+msgstr "Паролата трябва да е с дължина поне 8 знака."
+
+#: accounts/forms.py:25
+msgid "Password must contain at least one uppercase letter."
+msgstr "Паролата трябва да съдържа поне една главна буква"
+
+#: accounts/forms.py:27
+msgid "Password must contain at least one lowercase letter."
+msgstr "Паролата трябва да съдържа поне една малка буква."
+
+#: accounts/forms.py:29
+msgid "Password must contain at least one number."
+msgstr "Паролата трябва да съдържа поне едина цифра."
+
+#: accounts/forms.py:31
+msgid "Password must contain at least one special character."
+msgstr "Паролата трябва да съдържа поне един специален символ."
+
+#: accounts/forms.py:35
+msgid ""
+"Your password must contain at least one uppercase letter, one lowercase "
+"letter, one number, and one special character."
+msgstr ""
+"Вашата парола трябва да съдържа поне една главна буква, една малка буква, "
+"една цифра и един специален символ"
+
+#: accounts/forms.py:49
+msgid "I agree to the Terms and Conditions"
+msgstr "Съгласявам се с общите условия"
+
+#: accounts/forms.py:51
+msgid "You must agree to the terms and conditions to proceed."
+msgstr "Трябва да се съгласите с общите условия за да продължите."
+
+#: accounts/forms.py:62
+msgid ""
+"<div class='password-requirements'><p>Your password must meet the following "
+"requirements:</p><ul><li>At least 8 characters long</li><li>Cannot be too "
+"common or easily guessed</li><li>Must include:<ul><li>One uppercase letter</"
+"li><li>One lowercase letter</li><li>One number</li></ul></li></ul></div>"
+msgstr ""
+"<div class='password-requirements'><p>Вашата парола трябва да отговаря на "
+"следните изисквания:</p><ul><li>Да е с дължина поне 8 знака</li><li>Не може "
+"да е често срещана или лесна за отгатване</li><li>Трябва да включва:"
+"<ul><li>Една главна буква</li><li>Една малка буква</li><li>Една цифра</li></"
+"ul></li></ul></div>"
+
+#: accounts/forms.py:82
+msgid "This email is already in use."
+msgstr "Този имейл вече се използва."
 
 #: accounts/templates/accounts/myprofile.html:4
 #: submissions/templates/submissions/create_submission.html:8
@@ -72,6 +125,22 @@ msgstr "Изпълнения:"
 msgid "No submissions are available."
 msgstr "Няма Изпълнения."
 
+#: challenges/forms.py:32 challenges/forms.py:73
+msgid "Select files"
+msgstr "Изберете файлове"
+
+#: challenges/forms.py:35 challenges/forms.py:76
+msgid "Enter a description..."
+msgstr "Въведете описание..."
+
+#: challenges/forms.py:68 challenges/forms.py:114
+msgid "At least one file is required."
+msgstr "Изисква се поне един файл."
+
+#: challenges/forms.py:84
+msgid "Enter a spot name..."
+msgstr "Въведете име..."
+
 #: challenges/templates/challenges/challenge_detail.html:15
 msgid "Edit Challenge."
 msgstr "Редактирай предизвикателство."
@@ -126,6 +195,39 @@ msgstr "Предизвикателство"
 #: challenges/utils.py:6
 msgid "Spot"
 msgstr "Място"
+
+#: challenges/views.py:177
+#, python-brace-format
+msgid ""
+"<div style='color: green; padding:2rem;'>{challenge_type} {challenge_id} has "
+"been approved</div>"
+msgstr ""
+"<div style='color: green; padding:2rem;'>{challenge_type} {challenge_id} е "
+"одобрено</div>"
+
+#: challenges/views.py:190
+#, python-brace-format
+msgid ""
+"<div style='color: red; padding:2rem;'>{challenge_type} {challenge_id} has "
+"been disapproved</div>"
+msgstr ""
+"<div style='color: red; padding:2rem;'>{challenge_type} {challenge_id} е "
+"отказано</div>"
+
+#: events/decorators.py:45
+#, fuzzy
+#| msgid ""
+#| "<div style='color: red; padding:2rem;'>{challenge_type} {challenge_id} "
+#| "has been disapproved</div>"
+msgid "<div style='color: red; font-size: 2rem;'>Event is closed!</div>"
+msgstr ""
+"<div style='color: red; padding:2rem;'>{challenge_type} {challenge_id} е "
+"отказано</div>"
+
+#: events/decorators.py:47
+msgid "<div style='color: red; font-size: 2rem;'>Event not found!</div>"
+msgstr ""
+"<div style='color: red; font-size: 2rem;'>Събитието не е намерено!</div>"
 
 #: events/models.py:6
 msgid "Hidden"
@@ -250,7 +352,7 @@ msgstr "Запиши се"
 
 #: templates/registration/signup.html:47 templates/registration/signup.html:94
 msgid "Terms and Conditions"
-msgstr "Правила и условия"
+msgstr "Общи условия"
 
 #: templates/registration/signup.html:49
 msgid ""
@@ -285,6 +387,38 @@ msgid ""
 "                <p><em>By checking this box, you confirm that you have read, "
 "understood, and agree to these terms.</em></p>"
 msgstr ""
+"<h4>Отказ от отговорност</h4>\n"
+"                <p>Чрез създаване на акаунт и използване на тази платформа, "
+"вие признавате и се съгласявате със следното:</p>\n"
+"                <ol>\n"
+"                    <li><strong>Отговорност за потребителско съдържание:</"
+"strong> Потребителите носят пълна отговорност за съдържанието, което качват, "
+"споделят или с което взаимодействат в тази платформа.</li>\n"
+"                    <li><strong>Липса на отговорност за действия на "
+"потребители:</strong> Уебсайтът и неговият собственик/оператор не носят "
+"отговорност за каквито и да било щети, наранявания, загуби или последствия, "
+"произтичащи от:\n"
+"                        <ul>\n"
+"                            <li>Съдържание, качено от потребители</li>\n"
+"                            <li>Взаимодействия между потребители</li>\n"
+"                            <li>Участие в събития или дейности на уебсайта</"
+"li>\n"
+"                            <li>Всякакви претенции, действия или щети, "
+"произтичащи от потребителско съдържание или взаимодействия</li>\n"
+"                        </ul>\n"
+"                    </li>\n"
+"                    <li><strong>Признаване на риска:</strong> Потребителите "
+"участват в каквито и да било дейности на платформата изцяло на собствена "
+"отговорност.</li>\n"
+"                    <li><strong>Отказ от отговорност за съдържанието:</"
+"strong> Ние не преглеждаме, проверяваме или гарантираме точността, "
+"безопасността или уместността на потребителско съдържание.</li>\n"
+"                    <li><strong>Правна защита:</strong> Чрез съгласяването "
+"си, вие се отказвате от правото да търсите правна отговорност от уебсайта "
+"или неговите оператори за действия или съдържание на потребители.</li>\n"
+"                </ol>\n"
+"                <p><em>Чрез отмятане на това поле, вие потвърждавате, че сте "
+"прочели, разбрали и се съгласявате с тези условия.</em></p>"
 
 #: templates/socialaccount/login.html:7
 msgid "Sign In"
@@ -328,6 +462,11 @@ msgstr "Предизвикателство %(challenge_id)s е одобрено"
 msgid "Your submission %(submission_id)s has been approved"
 msgstr "Изпълнението %(submission_id)s е одобрено"
 
+#: userinteraction/templates/userinteraction/notification_messages/created_comment.html:8
+#, python-format
+msgid "New comment: %(message)s"
+msgstr "Нов коментар: %(message)s"
+
 #: userinteraction/templates/userinteraction/notification_messages/disapproved_challenge.html:8
 #, python-format
 msgid "Your challenge %(challenge_id)s has been disapproved"
@@ -346,8 +485,20 @@ msgstr "Прочети"
 msgid "No new notifications."
 msgstr "Няма нови известия."
 
-#~ msgid "notifications"
-#~ msgstr "известия"
+#: userinteraction/views.py:30
+#, python-brace-format
+msgid "<span>{likes_count} Likes</span>"
+msgstr "<span>{likes_count} Харесвания</span>"
 
-#~ msgid "New comment:"
-#~ msgstr "Нов коментар:"
+#: userinteraction/views.py:33
+#, python-brace-format
+msgid ""
+"<span>{likes_count} Likes</span> <span>{challenge_points:n} Points</span>"
+msgstr ""
+"<span>{likes_count} Харесвания</span> <span>{challenge_points:n} Точки</span>"
+
+#: userinteraction/views.py:103
+#, fuzzy
+#| msgid "notifications"
+msgid "Notification read"
+msgstr "Известието е прочетено"
