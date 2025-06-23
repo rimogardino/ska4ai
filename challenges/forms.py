@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
-from django.utils.translation import gettext as _
-from .models import Challenge, Spot, Visual, get_challenge_model_class
+from django.utils.translation import gettext_lazy as _
+from .models import Challenge, Spot, Visual
 
 
 def get_challenge_form_class(challenge_type):

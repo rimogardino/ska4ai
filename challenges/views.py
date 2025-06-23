@@ -30,7 +30,9 @@ def create_challenge(request, event_id=None, errors=None):
     :return: A rendered page with the form to create a new challenge.
     """
     event = get_object_or_404(Event, pk=event_id)
+    print("event", event.challenge_type)
     challenge_type = event.get_challenge_type_display()
+    print("challenge_type", challenge_type)
     # Determine the form class based on the event type
     form_class = get_challenge_form_class(challenge_type)
     if request.method == 'POST':

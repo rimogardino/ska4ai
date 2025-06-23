@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-23 18:59+0300\n"
+"POT-Creation-Date: 2025-06-23 23:21+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -188,15 +188,7 @@ msgstr "Редактирай предизвикателство"
 msgid "Save Changes"
 msgstr "Запази промените"
 
-#: challenges/utils.py:5
-msgid "Challenge"
-msgstr "Предизвикателство"
-
-#: challenges/utils.py:6
-msgid "Spot"
-msgstr "Място"
-
-#: challenges/views.py:177
+#: challenges/views.py:179
 #, python-brace-format
 msgid ""
 "<div style='color: green; padding:2rem;'>{challenge_type} {challenge_id} has "
@@ -205,7 +197,7 @@ msgstr ""
 "<div style='color: green; padding:2rem;'>{challenge_type} {challenge_id} е "
 "одобрено</div>"
 
-#: challenges/views.py:190
+#: challenges/views.py:192
 #, python-brace-format
 msgid ""
 "<div style='color: red; padding:2rem;'>{challenge_type} {challenge_id} has "
@@ -214,7 +206,7 @@ msgstr ""
 "<div style='color: red; padding:2rem;'>{challenge_type} {challenge_id} е "
 "отказано</div>"
 
-#: events/decorators.py:45
+#: events/decorators.py:44
 #, fuzzy
 #| msgid ""
 #| "<div style='color: red; padding:2rem;'>{challenge_type} {challenge_id} "
@@ -224,7 +216,7 @@ msgstr ""
 "<div style='color: red; padding:2rem;'>{challenge_type} {challenge_id} е "
 "отказано</div>"
 
-#: events/decorators.py:47
+#: events/decorators.py:46
 msgid "<div style='color: red; font-size: 2rem;'>Event not found!</div>"
 msgstr ""
 "<div style='color: red; font-size: 2rem;'>Събитието не е намерено!</div>"
@@ -497,8 +489,14 @@ msgid ""
 msgstr ""
 "<span>{likes_count} Харесвания</span> <span>{challenge_points:n} Точки</span>"
 
-#: userinteraction/views.py:103
+#: userinteraction/views.py:104
 #, fuzzy
 #| msgid "notifications"
 msgid "Notification read"
 msgstr "Известието е прочетено"
+
+#~ msgid "Challenge"
+#~ msgstr "Предизвикателство"
+
+#~ msgid "Spot"
+#~ msgstr "Място"
