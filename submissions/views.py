@@ -6,6 +6,8 @@ from .models import Submission
 from challenges.models import get_challenge_model_class
 from challenges.views import get_liked_by_user, get_challenge_likes_count, get_challenge_visuals
 from events.decorators import require_active_event
+from userinteraction.views import create_notification
+from userinteraction.models import NotificationTypes
 from visualprocessing.models import VisualsQueue
 from userinteraction.models import Notification
 
@@ -19,7 +21,8 @@ def create_submission(request, challenge_type, challenge_id):
     # Check if user has already submitted a submission
     query_by_parent_challenge = Submission.query_by_parent_challenge(challenge, challenge_type)
     old_submission = Submission.objects.filter(query_by_parent_challenge, user=request.user)
-    if old_submission.exists():
+    # Either has an approved submision or is waiting for evaluation.
+    if old_submission.exists() and old_submission[0].approved in [None, True]:
         return HttpResponse("<p>You have already submitted a submission for this challenge!</p>")
 
     if request.method == "POST":
@@ -71,8 +74,8 @@ def _submission_simple_info_context(request, submission_id):
 def approve_submission(request, submission_id):
     submission = get_object_or_404(Submission, pk=submission_id)
     submission.approve()
-    _create_notification(request, submission, approve=True)
-    message = f"<div style='color: green; padding:2rem;'>Submission {submission_id} has been approved</div>"
+    create_notification(request, NotificationTypes.SUBMISSION_APPROVED, submission)
+    message = "<div style='color: green; padding:2rem;'>✅</div>"
     html = render(request, 'home/mod_undo_submission_button.html', {
             'submission': submission,
             'message': message,
@@ -84,8 +87,8 @@ def approve_submission(request, submission_id):
 def disapprove_submission(request, submission_id):
     submission = get_object_or_404(Submission, pk=submission_id)
     submission.disapprove()
-    _create_notification(request, submission, approve=False)
-    message = f"<div style='color: red; padding:2rem;'>Submission {submission_id}  has been disapproved</div>"
+    create_notification(request,NotificationTypes.SUBMISSION_DISAPPROVED, submission)
+    message = "<div style='color: red; padding:2rem;'>❌</div>"
     html = render(request, 'home/mod_undo_submission_button.html', {
             'submission': submission,
             'message': message,
@@ -95,6 +98,7 @@ def disapprove_submission(request, submission_id):
 
 def _create_notification(request, submission, approve=True):
     notification = Notification(user=submission.user)
+    notification.parent = submission.challenge
     notification.save()
     notification_context = _submission_simple_info_context(request, submission.pk)
     notification_context['notification_id'] = notification.pk
@@ -105,6 +109,7 @@ def _create_notification(request, submission, approve=True):
                                             template,
                                             notification_context)
     notification.save()
+
 
 @require_active_event
 def reset_submission_state(request, submission_id):

@@ -33,8 +33,15 @@
 
     <div class="info-item">
         <div class="info-label">{% translate "Status: " %}
-            <span class="info-value {% if submission.approved %}approved{% else %}pending{% endif %}">
-                {{ submission.approved|yesno:"Approved,Pending" }}
+            <span class="info-value {% if submission.approved %}approved{% elif submission.approved == False %}disapproved{% else %}pending{% endif %}">
+                {% if submission.approved %} 
+                    <span style="color: green">{% translate "Approved" %}</span></br>
+                    Points: {{ submission.challenge.points }}
+                {% elif submission.approved == False %}
+                    <span style="color: red">{% translate "Disapproved" %}</span>
+                {% else %}
+                    <span style="color: orage">{% translate "Pending" %}</span>
+                {% endif %}
             </span>
         </div>
     </div>

@@ -8,7 +8,8 @@ from events.models import Event
 from events.decorators import require_active_event
 from .models import Visual, get_challenge_model_class
 from .forms import get_challenge_form_class, VisualForm
-from userinteraction.models import ChallengeLike, Notification
+from userinteraction.views import create_notification
+from userinteraction.models import ChallengeLike, Notification, NotificationTypes
 from submissions.models import Submission
 from visualprocessing.models import VisualsQueue
 import json
@@ -174,9 +175,9 @@ def _get_submissions(challenge, challenge_type):
 def approve_challenge(request, challenge_type, challenge_id):
     challenge = get_challenge_model_class(challenge_type).objects.get(pk=challenge_id)
     challenge.approve()
-    _create_notification(request, challenge, approve=True)
+    create_notification(request, NotificationTypes.CHALLENGE_APPROVED, challenge)
     # not great to have html styling here, but I'm tired at this point
-    message = _("<div style='color: green; padding:2rem;'>{challenge_type} {challenge_id} has been approved</div>").format(challenge_type=challenge_type, challenge_id=challenge.id)
+    message = "<div style='color: green; padding:2rem;'>✅</div>"
     html = render(request, 'home/mod_undo_button.html', {
             'challenge': challenge,
             'message': message,
@@ -188,8 +189,8 @@ def approve_challenge(request, challenge_type, challenge_id):
 def disapprove_challenge(request, challenge_type, challenge_id):
     challenge = get_challenge_model_class(challenge_type).objects.get(pk=challenge_id)
     challenge.disapprove()
-    _create_notification(request, challenge, approve=False)
-    message = _("<div style='color: red; padding:2rem;'>{challenge_type} {challenge_id} has been disapproved</div>").format(challenge_type=challenge_type, challenge_id=challenge.id)
+    create_notification(request, NotificationTypes.CHALLENGE_DISAPPROVED, challenge)
+    message = "<div style='color: red; padding:2rem;'>❌</div>"
     html = render(request, 'home/mod_undo_button.html', {
             'challenge': challenge,
             'message': message,
@@ -199,6 +200,7 @@ def disapprove_challenge(request, challenge_type, challenge_id):
 
 def _create_notification(request, challenge, approve=True):
     notification = Notification(user=challenge.user)
+    notification.parent = challenge
     notification.save()
     notification_context = {"challenge": challenge, "notification_id": notification.pk}
     template = 'userinteraction/notification_messages/approved_challenge.html'

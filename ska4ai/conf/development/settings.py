@@ -168,8 +168,8 @@ USE_TZ = True
 
 # Define available languages
 LANGUAGES = [
-    ('bg', 'Bulgarian'),
     ('en', 'English'),
+    ('bg', 'Bulgarian'),
 ]
 
 # Specify where translation files will be stored

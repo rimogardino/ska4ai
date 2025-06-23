@@ -1,13 +1,13 @@
+from django.db import models
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.utils.translation import gettext as _
 from django.shortcuts import render
 from django.template.loader import render_to_string
-from .models import ChallengeLike, ChallengeComment, Notification
+from .models import ChallengeLike, ChallengeComment, Notification, NotificationTypes
 from .forms import ChallengeCommentForm
 from challenges.models import get_challenge_model_class
 from events.decorators import require_active_event
-from events.models import States
 
 
 # Create your views here.
@@ -45,7 +45,10 @@ def create_comment(request, challenge_type, challenge_id):
         if form.is_valid():
             comment = form.save()
             if request.user != challenge.user:
-                _create_notification(request, challenge, message=comment.comment)
+                create_notification(request,
+                                    NotificationTypes.NEW_COMMENT,
+                                    challenge,
+                                    message=comment.comment)
             html = render_to_string('userinteraction/comment.html', {'comment': comment})
             return HttpResponse(html)
     else:
@@ -57,14 +60,26 @@ def create_comment(request, challenge_type, challenge_id):
     # miaybe change to HttpResponse for consistency?
     return render(request, 'userinteraction/create_comment.html', context)
 
-def _create_notification(request, challenge, message):
+
+def create_notification(request, notif_type, challenge, message=None):
+    """
+    Creates a notification for the given notification type.
+
+    The message is a string describing the notification. Examples:
+
+    * New comment: "{message[:30]}.. by {request.user}"
+    * Your challenge {challenge_id} has been approved
+    * Your challenge {challenge_id} has been disapproved
+    * Your submission {submission_id} has been approved
+    * Your submission {submission_id} has been disapproved
+
+    The notif_type is one of the NotificationTypes constants.
+    """
     notification = Notification(user=challenge.user)
-    notification.save()
-    notification_context = {"challenge": challenge, "notification_id": notification.pk, "message": f"\"{message[:30]}..\" by {request.user}"}
-    template = 'userinteraction/notification_messages/created_comment.html'
-    notification.message = render_to_string(
-                                            template,
-                                            notification_context)
+    notification.message = message
+    notification.parent = challenge.parent if hasattr(challenge, 'parent') else challenge
+    notification.parent_id = challenge.id
+    notification.notif_type = notif_type
     notification.save()
 
 def get_all_comments(request, challenge_type, challenge_id):
@@ -90,7 +105,6 @@ def get_notifications(request):
         'notifications': notifications,
         'read_notifications': read_notifications,
     }
-    print("notifications: ", notifications)
     html = render(request, 'userinteraction/notifications.html', context)
     return HttpResponse(html)
 

@@ -9,7 +9,7 @@ class Submission(BaseChallengeInteraction):
     visual = models.FileField(upload_to="submissions/", null=True)
     file_type = models.CharField(max_length=50)
     date = models.DateTimeField(auto_now_add=True)
-    approved = models.BooleanField(default=False, blank=True, null=True)
+    approved = models.BooleanField(default=None, blank=True, null=True)
 
     def approve(self):
         self.approved = True

@@ -5,7 +5,17 @@
 {% if notifications %}
     {% for notif in notifications %}
         <div id="notification-wrapper-{{notif.id}}" class="notification-wrapper">
-            {{ notif.message|safe }}
+            {% if notif.notif_type == 'NC' %}
+                {% include './notification_messages/created_comment.html' with notification=notif %}
+            {% elif notif.notif_type == 'CA' %}
+                {% include './notification_messages/approved_challenge.html' with notification=notif %}
+            {% elif notif.notif_type == 'CD' %}
+                {% include './notification_messages/disapproved_challenge.html' with notification=notif %}
+            {% elif notif.notif_type == 'SA' %}
+                {% include './notification_messages/approved_submission.html' with notification=notif %}
+            {% elif notif.notif_type == 'SD' %}
+                {% include './notification_messages/disapproved_submission.html' with notification=notif %}
+            {% endif %}            
             <div class="notification-item-action"
                 hx-post="{% url 'userinteraction:read_notification' notif.id %}"
                 hx-trigger="click"
@@ -23,7 +33,17 @@
 {% if read_notifications %}
     {% for notif in read_notifications %}
         <div class="notification-wrapper old-notification">
-            {{ notif.message|safe }}
+            {% if notif.notif_type == 'NC' %}
+                {% include './notification_messages/created_comment.html' with notification=notif %}
+            {% elif notif.notif_type == 'CA' %}
+                {% include './notification_messages/approved_challenge.html' with notification=notif %}
+            {% elif notif.notif_type == 'CD' %}
+                {% include './notification_messages/disapproved_challenge.html' with notification=notif %}
+            {% elif notif.notif_type == 'SA' %}
+                {% include './notification_messages/approved_submission.html' with notification=notif %}
+            {% elif notif.notif_type == 'SD' %}
+                {% include './notification_messages/disapproved_submission.html' with notification=notif %}
+            {% endif %}   
         </div>
     {% endfor %}
 {% endif %}
