@@ -50,7 +50,9 @@ class ChallengeForm(forms.ModelForm):
         # the clean makes one required and this allows editing
         self.fields['files'].required = False
         self.fields['longitude'].widget = forms.HiddenInput()
+        self.fields['longitude'].localize = False
         self.fields['latitude'].widget = forms.HiddenInput()
+        self.fields['latitude'].localize = False
         # Hide the file field if we're editing
         if self.is_edit:
             # self.fields['event'].widget = forms.HiddenInput()
@@ -99,7 +101,9 @@ class SpotForm(forms.ModelForm):
         # the clean makes one required and this allows editing
         self.fields['files'].required = False
         self.fields['longitude'].widget = forms.HiddenInput()
+        self.fields['longitude'].localize = False
         self.fields['latitude'].widget = forms.HiddenInput()
+        self.fields['latitude'].localize = False
         # Hide the file field if we're editing
         if self.is_edit:
             self.fields['files'].widget = forms.HiddenInput()

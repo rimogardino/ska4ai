@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load l10n %}
 
 <div class="popup-container submission-container">
     <div class="media-scroll-container">
@@ -93,8 +94,8 @@
 
             {% comment %} Maps redirect button {% endcomment %}
             <button class="action-bar-button google-maps-button"
-                {% comment %} The first option seems to work the best, opens googlemaps in both browser and app from firefox, but is perfect from chrome and safari {% endcomment %}
-                onclick="window.open('https://www.google.com/maps/search/?api=1&query={{challenge.latitude}},{{challenge.longitude}}','_blank')"
+                {% comment %} The first option seems to work the best, opens googlemaps in both browser and app from firefox, but isn't perfect from chrome and safari {% endcomment %}
+                onclick="window.open('https://www.google.com/maps/search/?api=1&query={{challenge.latitude|unlocalize}},{{challenge.longitude|unlocalize}}','_blank')"
             >
                 {% include "images/google-maps-icon.svg" %}
             </button>
