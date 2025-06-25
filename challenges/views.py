@@ -164,7 +164,7 @@ def get_liked_by_user(user, challenge, challenge_type):
 
 def _get_submissions(challenge, challenge_type):
     query_by_parent_challenge = Submission.query_by_parent_challenge(challenge, challenge_type)
-    submissions = Submission.objects.filter(query_by_parent_challenge)
+    submissions = Submission.objects.filter(query_by_parent_challenge, approved=True)
     return submissions
 
 

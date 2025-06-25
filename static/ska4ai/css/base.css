@@ -82,18 +82,82 @@ html, body {
   font-size: 1.5em;
   font-family: 'Times New Roman', Times, serif;
   position: absolute;
-  top: 0;
+  top: 0.3rem;
 }
+
+/* Chrome only maybe */
+@supports (-webkit-appearance: none) and (not (-moz-appearance: none)) {
+  /* Hack to alight the logo on chromium browsers... */
+  .text-logo {
+    margin-top: -0.25rem;
+  }
+}
+
+
+
+@keyframes pulse-border {
+  80% {
+    box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.5);
+    border-color: rgba(0, 123, 255, 1);
+  }
+  90% {
+    box-shadow: 0 0 0 5px rgba(0, 123, 255, 0);
+    border-color: rgba(0, 123, 255, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
+    border-color: rgba(0, 123, 255, 1);
+  }
+}
+
+.clickable-highlight {
+  animation: pulse-border 10s infinite;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+@keyframes pulse-size {
+  80% {
+    scale: 1;
+  }
+  90% {
+    scale: 1.1;
+  }
+  100% {
+    scale: 1;
+  }
+}
+
+.clickable-size-highlight {
+  animation: pulse-size 10s infinite;
+}
+
+
+@keyframes pulse-size-small {
+  80% {
+    scale: 1;
+  }
+  90% {
+    scale: 1.01;
+  }
+  100% {
+    scale: 1;
+  }
+}
+
+.clickable-size-small-highlight {
+  animation: pulse-size-small 10s infinite;
+}
+
 
 .four-logo {
   color: #fffb00;
   /* font-weight: 600; */
   font-size: 1.5em;
   font-family: 'Times New Roman', Times, serif;
-  text-shadow: 0 0 5px rgba(255, 215, 57, 0.71);
-  -webkit-animation: neon1 1.5s ease-in-out infinite alternate;
+  text-shadow: 0 0 150px #FFDD1B;
+  /*-webkit-animation: neon1 1.5s ease-in-out infinite alternate;
   -moz-animation: neon1 1.5s ease-in-out infinite alternate;
-  animation: neon1 1.5s ease-in-out infinite alternate; 
+  animation: neon1 1.5s ease-in-out infinite alternate; */
 }
 
 /*glow for webkit*/
@@ -205,10 +269,6 @@ html, body {
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-}
-
-.language-button {
-  width: 1.5em;
 }
 
 
@@ -429,6 +489,10 @@ nav {
   -webkit-mask-image: linear-gradient(black 40%, transparent);
 }
 
+nav .list {
+  align-items: center;
+}
+
 .loginout-btn {
   border: none;
   background-color: transparent;
@@ -440,6 +504,32 @@ nav {
 .loginout-btn:hover {
   text-decoration: underline;
 }
+
+.language-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0rem 0rem 0rem 0.4rem;
+  width: 1.3rem;
+  height: 1.3rem;
+  background: none;
+  border: none;
+  outline: none;
+  border-radius: 50%;
+}
+
+.circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.4rem;
+}
+
+.circle svg {
+  width: 1.3rem;
+  height: 1.3rem;
+}
+
 
 @media (max-width: 800px) {
   nav {
@@ -950,7 +1040,6 @@ a {
   gap: 8px;
   background: none;
   border: none;
-  padding: 8px;
   cursor: pointer;
   font-family: Arial, sans-serif;
   font-size: 14px;

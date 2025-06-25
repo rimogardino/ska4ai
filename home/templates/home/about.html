@@ -3,12 +3,98 @@
 
 
 {% block content %}
-    <div class="login-container">
+        <section class="about-container login-container">
+            <h1>{% trans "About Ska4ai" %}</h1>
 
-                        About stuff
+            <p>
+                {% blocktrans %}
+                Ska4ai.com is a social parkour platform built for movement, creativity, and friendly competition. Whether you're just getting started or you've been training for years, Ska4ai gives you a place to share, challenge, and connect with others who love parkour.
+                {% endblocktrans %}
+            </p>
+
+            <h2>{% trans "What We Do" %}</h2>
+            <ul>
+                <li>{% trans "🔥 Create challenges — a trick or line at a real-world spot, marked on the map and submitted with a video." %}</li>
+                <li>{% trans "🏃‍♂️ Complete challenges — try others' challenges, record your attempt, and upload your video to earn points." %}</li>
+                <li>{% trans "👍 Like challenges — show love to creative or difficult lines and influence their value." %}</li>
+            </ul>
+
+            <h2>{% trans "How the Points Work" %}</h2>
+            <p>{% blocktrans %}Your total points come from:{% endblocktrans %}</p>
+            <ul>
+                <li>{% trans "Your 5 most liked challenges (you created them)" %}</li>
+                <li>{% trans "All approved completions (you completed others’ challenges)" %}</li>
+            </ul>
+
+            <p>
+                {% blocktrans %}Each challenge earns points based on:{% endblocktrans %}<br>
+                <span class="highlight">👍 {% trans "Number of likes" %} / ✅ {% trans "Number of completions" %}</span>
+            </p>
+
+            <p>
+                {% blocktrans %}
+                This means creative, original, and tough challenges score higher if they’re respected by the community.
+                {% endblocktrans %}
+            </p>
+
+            <h2>{% trans "The Leaderboard" %}</h2>
+            <p>
+                {% blocktrans %}
+                Points fuel the leaderboard — a live ranking of who’s crushing it this event. At the end of each event, the leaderboard determines the winners. But it’s not just about winning — it’s about pushing yourself, learning new skills, and connecting with the parkour community.
+                {% endblocktrans %}
+            </p>
+
+            <h2>{% trans "Contact" %}</h2>
+            <p>
+                {% blocktrans %}Got questions, feedback, or want to get involved?{% endblocktrans %}<br>
+                <a href="https://instagram.com/drag0m1r">@drag0m1r</a>
+            </p>
+        </section>
 
 
-    </div>
+<style>
+  .about-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: sans-serif;
+    line-height: 1.6;
+  }
+
+  .about-container h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .about-container h2 {
+    font-size: 1.3rem;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .about-container ul {
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .about-container li {
+    list-style-type: none;
+    margin-bottom: 0.5rem;
+  }
+
+  .about-container a {
+    color: #007bff;
+    text-decoration: none;
+  }
+
+  .about-container a:hover {
+    text-decoration: underline;
+  }
+
+  .highlight {
+    font-weight: bold;
+  }
+</style>
 
 {% endblock %}
 

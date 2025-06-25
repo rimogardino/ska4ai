@@ -61,7 +61,7 @@ def create_comment(request, challenge_type, challenge_id):
     return render(request, 'userinteraction/create_comment.html', context)
 
 
-def create_notification(request, notif_type, challenge, message=None):
+def create_notification(request, notif_type, challenge, message=""):
     """
     Creates a notification for the given notification type.
 
@@ -105,6 +105,7 @@ def get_notifications(request):
         'notifications': notifications,
         'read_notifications': read_notifications,
     }
+    print("get_notifications context", context)
     html = render(request, 'userinteraction/notifications.html', context)
     return HttpResponse(html)
 

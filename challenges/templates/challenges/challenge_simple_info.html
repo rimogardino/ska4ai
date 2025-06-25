@@ -92,6 +92,13 @@
                 </button>
             {% endif %}
 
+
+            <button class="share-button"
+                onclick="copyLink('{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% url 'challenges:challenge_detail' challenge_type=challenge.challenge_type challenge_id=challenge.id %}')"
+            >
+                {% include "images/icons8-share.svg" %}
+            </button>
+
             {% comment %} Maps redirect button {% endcomment %}
             <button class="action-bar-button google-maps-button"
                 {% comment %} The first option seems to work the best, opens googlemaps in both browser and app from firefox, but isn't perfect from chrome and safari {% endcomment %}
@@ -109,6 +116,8 @@
 </div>
 
 <script>
+const isMobile = window.matchMedia("(max-width: 767px)").matches;
+
 function cleanContentChallengeDiv(asyncContentDivId) {
     document.getElementById(asyncContentDivId).innerHTML = '';
 }
@@ -128,4 +137,45 @@ function loadIOSthubmnails(videoId) {
 }
 
 loadIOSthubmnails('challenge-visual-{{challenge.id}}');
+
+
+function copyLink(url) {
+  if (navigator.clipboard && window.isSecureContext) {
+    // Modern clipboard API
+    navigator.clipboard.writeText(url).then(() => {
+        if (!isMobile) {
+            alert('Link copied!');
+        }
+    }).catch(
+    (err) => {
+        fallbackCopyText(url);
+    });
+  } else {
+    // Fallback for mobile and older browsers
+    fallbackCopyText(url);
+  }
+}
+
+function fallbackCopyText(text) {
+  const tempInput = document.createElement('input');
+  tempInput.value = text;
+  document.body.appendChild(tempInput);
+  tempInput.style.position = 'absolute';
+  tempInput.style.left = '-9999px';
+  tempInput.setAttribute('readonly', '');
+  tempInput.select();
+  tempInput.setSelectionRange(0, 99999); // iOS
+
+  try {
+    document.execCommand('copy');
+    if (!isMobile) {
+        alert('Link copied!');
+    }
+  } catch (err) {
+    alert('Failed to copy link.');
+  }
+
+  document.body.removeChild(tempInput);
+}
+
 </script>

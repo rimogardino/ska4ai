@@ -45,10 +45,10 @@
     <div id="active-event" class="index-view">
         {% for event in active_event_list  %}
             <div id="active-event-{{ event.id }}"  class="event-buttons-wrapper">
-                <button id="event-info-{{ event.id }}" class="event-info-button" onclick="showEventInfo({{ event.id }})" >
+                <button id="event-info-{{ event.id }}" class="event-info-button clickable-size-highlight" onclick="showEventInfo({{ event.id }})" >
                     i
                 </button>
-                <div class="active-event-item" onClick="fetchLeaderboard({{ event.id }})">
+                <div class="active-event-item clickable-size-small-highlight" onClick="fetchLeaderboard({{ event.id }})">
                 {{ event.name }}
                 </div>
             </div>
@@ -66,7 +66,7 @@
                 </div>
             {% endfor%}
         {% endif %}
-            <button id="choose-event" class="" onclick="showEvents()">
+            <button id="choose-event" class="clickable-size-highlight" onclick="showEvents()">
                 <svg 
                 xmlns="http://www.w3.org/2000/svg" 
                 width="15" 
@@ -89,7 +89,7 @@
     <div class="map_container mobile-view index-view" id="map-container" style="">
         <div id="map"  hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'></div>
         {% if user.is_authenticated %}
-            <button class="floating-button" id="new-challenge" onclick="newChallenge(this)">+</button>
+            <button class="floating-button clickable-highlight" id="new-challenge" onclick="newChallenge(this)">+</button>
         {% endif %}
     </div>
 
@@ -106,7 +106,7 @@
 </div>
 </div>
 <div id="view-switcher">
-    <div id="map-switcher"  onclick="switchMap()">
+    <div id="map-switcher" class="clickable-highlight"  onclick="switchMap()">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polygon points="3 3, 10 1, 15 4, 21 3, 21 21, 15 19, 10 22, 3 21, 3 3"></polygon>
             <line x1="10" y1="22" x2="10" y2="4"></line>
@@ -114,7 +114,7 @@
           </svg>
           
     </div>
-    <div id="list-switcher"  onclick="switchList()">
+    <div id="list-switcher" class="clickable-highlight"  onclick="switchList()">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="5" y="6" width="15" height="2" rx="1" ry="1"></rect>
             <rect x="5" y="12" width="15" height="2" rx="1" ry="1"></rect>
@@ -122,7 +122,7 @@
           </svg>          
     </div>
     {% if perms.auth.can_view_moderation_panel and moderation_list %}
-        <div id="mod-switcher"  onclick="switchMod()">
+        <div id="mod-switcher" class="clickable-highlight"  onclick="switchMod()">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="8" r="4"></circle>
                 <path d="M6 18v-1a6 6 0 0 1 12 0v1"></path>

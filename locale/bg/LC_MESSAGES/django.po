@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-23 23:21+0300\n"
+"POT-Creation-Date: 2025-06-24 21:51+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -88,16 +88,19 @@ msgstr "Статус:"
 
 #: accounts/templates/accounts/myprofile.html:19
 #: accounts/templates/accounts/myprofile.html:54
+#: submissions/templates/submissions/submission_simple_info.html:38
 msgid "Approved"
 msgstr "Одобрен"
 
 #: accounts/templates/accounts/myprofile.html:21
 #: accounts/templates/accounts/myprofile.html:57
+#: submissions/templates/submissions/submission_simple_info.html:41
 msgid "Disapproved"
 msgstr "Отказан"
 
 #: accounts/templates/accounts/myprofile.html:23
 #: accounts/templates/accounts/myprofile.html:59
+#: submissions/templates/submissions/submission_simple_info.html:43
 msgid "Pending"
 msgstr "В очакване"
 
@@ -125,19 +128,19 @@ msgstr "Изпълнения:"
 msgid "No submissions are available."
 msgstr "Няма Изпълнения."
 
-#: challenges/forms.py:32 challenges/forms.py:73
+#: challenges/forms.py:32 challenges/forms.py:75
 msgid "Select files"
 msgstr "Изберете файлове"
 
-#: challenges/forms.py:35 challenges/forms.py:76
+#: challenges/forms.py:35 challenges/forms.py:78
 msgid "Enter a description..."
 msgstr "Въведете описание..."
 
-#: challenges/forms.py:68 challenges/forms.py:114
+#: challenges/forms.py:70 challenges/forms.py:118
 msgid "At least one file is required."
 msgstr "Изисква се поне един файл."
 
-#: challenges/forms.py:84
+#: challenges/forms.py:86
 msgid "Enter a spot name..."
 msgstr "Въведете име..."
 
@@ -153,11 +156,11 @@ msgstr "Изтрий предизвикателство."
 msgid "Detailed view."
 msgstr "Детайлен поглед."
 
-#: challenges/templates/challenges/challenge_simple_info.html:62
+#: challenges/templates/challenges/challenge_simple_info.html:63
 msgid "Likes"
 msgstr "Харесвания"
 
-#: challenges/templates/challenges/challenge_simple_info.html:64
+#: challenges/templates/challenges/challenge_simple_info.html:65
 #: home/templates/home/leaderboard.html:11
 msgid "Points"
 msgstr "Точки"
@@ -187,24 +190,6 @@ msgstr "Редактирай предизвикателство"
 #: challenges/templates/challenges/edit_challenge.html:262
 msgid "Save Changes"
 msgstr "Запази промените"
-
-#: challenges/views.py:179
-#, python-brace-format
-msgid ""
-"<div style='color: green; padding:2rem;'>{challenge_type} {challenge_id} has "
-"been approved</div>"
-msgstr ""
-"<div style='color: green; padding:2rem;'>{challenge_type} {challenge_id} е "
-"одобрено</div>"
-
-#: challenges/views.py:192
-#, python-brace-format
-msgid ""
-"<div style='color: red; padding:2rem;'>{challenge_type} {challenge_id} has "
-"been disapproved</div>"
-msgstr ""
-"<div style='color: red; padding:2rem;'>{challenge_type} {challenge_id} е "
-"отказано</div>"
 
 #: events/decorators.py:44
 #, fuzzy
@@ -256,6 +241,123 @@ msgstr "Правила:"
 #: events/templates/events/info.html:12
 msgid "Just be nice to each other and don't do anything illegal!"
 msgstr ""
+
+#: home/templates/home/about.html:7
+msgid "About Ska4ai"
+msgstr "Относно Ska4ai"
+
+#: home/templates/home/about.html:10
+msgid ""
+"\n"
+"                Ska4ai.com is a social parkour platform built for movement, "
+"creativity, and friendly competition. Whether you're just getting started or "
+"you've been training for years, Ska4ai gives you a place to share, "
+"challenge, and connect with others who love parkour.\n"
+"                "
+msgstr ""
+"\n"
+"                Ska4ai.com е социална платформа за паркур, създадена за движение, "
+"креативност и приятелска конкуренция. Без значение дали тепърва започваш или тренираш от години, "
+"Ska4ai ти дава място да споделяш, предизвикваш и се свързваш с други паркур маняци."
+
+
+#: home/templates/home/about.html:15
+msgid "What We Do"
+msgstr "Какво правим"
+
+#: home/templates/home/about.html:17
+msgid ""
+"🔥 Create challenges — a trick or line at a real-world spot, marked on the "
+"map and submitted with a video."
+msgstr ""
+"🔥 Създавай предизвикателства — трик или линия на реално място, отбелязано "
+"на картата и с прикачено видео."
+
+
+#: home/templates/home/about.html:18
+msgid ""
+"🏃‍♂️ Complete challenges — try others' challenges, record your attempt, and "
+"upload your video to earn points."
+msgstr ""
+"🏃‍♂️ Изпълнявай предизвикателства — пробвай тези на други потребители, "
+"заснеми опита си и качи видео, за да събираш точки."
+
+#: home/templates/home/about.html:19
+msgid ""
+"👍 Like challenges — show love to creative or difficult lines and influence "
+"their value."
+msgstr ""
+"👍 Харесвай предизвикателства — оцени креативните или трудни линии и повлияй на тяхната стойност."
+
+#: home/templates/home/about.html:22
+msgid "How the Points Work"
+msgstr "Как работят точките"
+
+#: home/templates/home/about.html:23
+msgid "Your total points come from:"
+msgstr "Общият ти брой точки идва от:"
+
+#: home/templates/home/about.html:25
+msgid "Your 5 most liked challenges (you created them)"
+msgstr "Твоите 5 най-харесвани и трудни предизвикателства (създадени от теб)"
+
+#: home/templates/home/about.html:26
+msgid "All approved completions (you completed others’ challenges)"
+msgstr "Всички одобрени изпълнения (на предизвикателства от други)"
+
+#: home/templates/home/about.html:30
+msgid "Each challenge earns points based on:"
+msgstr "Всяко предизвикателство носи точки въз основа на:"
+
+#: home/templates/home/about.html:31
+msgid "Number of likes"
+msgstr "Брой харесвания"
+
+#: home/templates/home/about.html:31
+msgid "Number of completions"
+msgstr "Брой изпълнения"
+
+#: home/templates/home/about.html:35
+msgid ""
+"\n"
+"                This means creative, original, and tough challenges score "
+"higher if they’re respected by the community.\n"
+"                "
+msgstr ""
+"\n"
+"                Това означава, че креативните, оригинални и трудни "
+"предизвикателства печелят повече точки, ако са оценени от общността.\n"
+"                "
+
+#: home/templates/home/about.html:40
+#, fuzzy
+#| msgid "Leaderboard"
+msgid "The Leaderboard"
+msgstr "Класация"
+
+#: home/templates/home/about.html:42
+msgid ""
+"\n"
+"                Points fuel the leaderboard — a live ranking of who’s "
+"crushing it this event. At the end of each event, the leaderboard determines "
+"the winners. But it’s not just about winning — it’s about pushing yourself, "
+"learning new skills, and connecting with the parkour community.\n"
+"                "
+msgstr ""
+"\n"
+"                Точките захранват класирането — живо подреждане на най-добрите за всяко събитие. "
+"В края на събитието класацията определя победителите. Но не става дума само за "
+"победа — важно е да се предизвикаш, да учиш нови умения и да се свързваш с "
+"паркур общността.\n"
+"                "
+
+#: home/templates/home/about.html:47
+msgid "Contact"
+msgstr "Контакти"
+
+#: home/templates/home/about.html:49
+msgid "Got questions, feedback, or want to get involved?"
+msgstr "Имаш въпроси, обратна връзка или искаш да се включиш?"
 
 #: home/templates/home/index.html:25 home/templates/home/index.html:57
 msgid "Old events:"
@@ -469,11 +571,11 @@ msgstr "Предизвикателство %(challenge_id)s е отказано"
 msgid "Your submission %(submission_id)s has been disapproved"
 msgstr "Изпълнение %(submission_id)s е отказано"
 
-#: userinteraction/templates/userinteraction/notifications.html:15
+#: userinteraction/templates/userinteraction/notifications.html:25
 msgid "Read"
 msgstr "Прочети"
 
-#: userinteraction/templates/userinteraction/notifications.html:20
+#: userinteraction/templates/userinteraction/notifications.html:30
 msgid "No new notifications."
 msgstr "Няма нови известия."
 
@@ -489,11 +591,27 @@ msgid ""
 msgstr ""
 "<span>{likes_count} Харесвания</span> <span>{challenge_points:n} Точки</span>"
 
-#: userinteraction/views.py:104
+#: userinteraction/views.py:118
 #, fuzzy
 #| msgid "notifications"
 msgid "Notification read"
 msgstr "Известието е прочетено"
+
+#, python-brace-format
+#~ msgid ""
+#~ "<div style='color: green; padding:2rem;'>{challenge_type} {challenge_id} "
+#~ "has been approved</div>"
+#~ msgstr ""
+#~ "<div style='color: green; padding:2rem;'>{challenge_type} {challenge_id} "
+#~ "е одобрено</div>"
+
+#, python-brace-format
+#~ msgid ""
+#~ "<div style='color: red; padding:2rem;'>{challenge_type} {challenge_id} "
+#~ "has been disapproved</div>"
+#~ msgstr ""
+#~ "<div style='color: red; padding:2rem;'>{challenge_type} {challenge_id} е "
+#~ "отказано</div>"
 
 #~ msgid "Challenge"
 #~ msgstr "Предизвикателство"

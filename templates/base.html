@@ -74,7 +74,7 @@
                     {% get_current_language as CURRENT_LANGUAGE %}
                     <input name="next" type="hidden" value="{{ request.path }}">
                     <input name="language" type="hidden" value="{% if CURRENT_LANGUAGE == 'en' %}bg{% else %}en{% endif %}">
-                    <button class="icon-button language-button" type="submit">
+                    <button class="language-button" type="submit">
                         {% if CURRENT_LANGUAGE == 'en' %}
                             {% include "images/bg.svg" %}
                         {% else %}
@@ -83,7 +83,7 @@
                     </button>
                 </form>
                   
-                <li><a href="{% url 'about' %}">{% translate "About" %}</a></li>
+                <div class="circle" onclick="location.href='{% url 'about' %}'">{% include "images/icons8-info.svg" %}</div>
             </ul>
           </nav> 
     </header>
