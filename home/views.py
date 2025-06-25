@@ -7,6 +7,7 @@ from challenges.models import Challenge, Spot, get_challenge_model_class
 from challenges.serializers import geojson_serialize
 from submissions.models import Submission
 from userinteraction.views import get_notifications, get_notiications_count
+from time import time
 import json
 from pathlib import Path
 
@@ -50,6 +51,7 @@ def index(request):
                "archived_events": archived_events,
                "event_list": event_list,
                "json_data": json_data,
+               'timestamp': int(time()),
                "mapbox_api_key": django_envs['MAPBOX_API_KEY']}
     return render(request, "home/index.html", context)
 

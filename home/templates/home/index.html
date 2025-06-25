@@ -136,7 +136,7 @@
 
 {% block css %}
     <link href="https://api.mapbox.com/mapbox-gl-js/v3.5.1/mapbox-gl.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{% static "ska4ai/css/mapbox.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "ska4ai/css/mapbox.css" %}?{{ timestamp }}" />
 
     <style >
         body {

@@ -11,7 +11,7 @@
 
     <!-- Bootstrap CSS -->
     {% comment %} <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> {% endcomment %}
-    <link rel="stylesheet" type="text/css" href="{% static "ska4ai/css/base.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "ska4ai/css/base.css" %}?{{ timestamp }}" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.5/dist/htmx.js" integrity="sha384-5DNWP7/6VfmFjDrEgZ0MwJiuIz0/juUdZwgMAqxCaHBd/BH8MF4yWxDv+mo/o9CG" crossorigin="anonymous"></script>
@@ -22,11 +22,6 @@
     {% block css %}
     <!-- Page specific css can go here -->
     {% endblock %}
-    <script>
-        var apiKey = 'the api key main';
-        console.log('API Key:', apiKey);
-      </script>
-
 </head>
 
 <body  hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
