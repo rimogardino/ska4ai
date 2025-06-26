@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-26 19:29+0300\n"
+"POT-Creation-Date: 2025-06-26 22:43+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -114,17 +114,17 @@ msgid "More info."
 msgstr "Още информация."
 
 #: accounts/templates/accounts/myprofile.html:41
-#: home/templates/home/list_view.html:29
+#: home/templates/home/list_view.html:33
 msgid "No challenges are available."
 msgstr "Няма предизвикателства."
 
 #: accounts/templates/accounts/myprofile.html:47
-#: challenges/templates/challenges/challenge_detail.html:27
+#: challenges/templates/challenges/challenge_detail.html:29
 msgid "Submissions:"
 msgstr "Изпълнения:"
 
 #: accounts/templates/accounts/myprofile.html:87
-#: challenges/templates/challenges/challenge_detail.html:38
+#: challenges/templates/challenges/challenge_detail.html:36
 msgid "No submissions are available."
 msgstr "Няма Изпълнения."
 
@@ -144,19 +144,15 @@ msgstr "Изисква се поне един файл."
 msgid "Enter a spot name..."
 msgstr "Въведете име..."
 
-#: challenges/templates/challenges/challenge_detail.html:15
+#: challenges/templates/challenges/challenge_detail.html:16
 msgid "Edit Challenge."
 msgstr "Редактирай предизвикателство."
 
-#: challenges/templates/challenges/challenge_detail.html:20
+#: challenges/templates/challenges/challenge_detail.html:21
 msgid "Delete challenge."
 msgstr "Изтрий предизвикателство."
 
-#: challenges/templates/challenges/challenge_detail.html:33
-msgid "Detailed view."
-msgstr "Детайлен поглед."
-
-#: challenges/templates/challenges/challenge_detail.html:46
+#: challenges/templates/challenges/challenge_detail.html:44
 msgid "Are you sure you want to delete the challenge?"
 msgstr "Сигурни ли сте, че искате да изтриете предизвикателството?"
 
@@ -170,12 +166,12 @@ msgid "Points"
 msgstr "Точки"
 
 #: challenges/templates/challenges/challenge_simple_info_moderation.html:13
-#: submissions/templates/submissions/submission_moderation.html:12
+#: submissions/templates/submissions/submission_moderation.html:13
 msgid "Approve!"
 msgstr "Одобри!"
 
 #: challenges/templates/challenges/challenge_simple_info_moderation.html:22
-#: submissions/templates/submissions/submission_moderation.html:21
+#: submissions/templates/submissions/submission_moderation.html:22
 msgid "Disapprove!"
 msgstr "Откажи!"
 
@@ -379,6 +375,14 @@ msgstr "Класация за"
 msgid "User"
 msgstr "Потребител"
 
+#: home/templates/home/list_view.html:8
+msgid "Sort by Date"
+msgstr "Сортирай по дата"
+
+#: home/templates/home/list_view.html:11
+msgid "Sort by Points"
+msgstr "Сортирай по точки"
+
 #: home/templates/home/mod_undo_button.html:11
 #: home/templates/home/mod_undo_submission_button.html:11
 msgid "Undo!"
@@ -392,11 +396,11 @@ msgstr "Няма предизвикателства за модериране."
 msgid "Submit!"
 msgstr "Изпълни!"
 
-#: submissions/templates/submissions/submission_and_main_challnge.html:5
+#: submissions/templates/submissions/submission_and_main_challnge.html:4
 msgid "Main Challange"
 msgstr "Главно предизвикателство"
 
-#: submissions/templates/submissions/submission_and_main_challnge.html:9
+#: submissions/templates/submissions/submission_and_main_challnge.html:8
 msgid "Submission"
 msgstr "Изпълнение"
 
@@ -591,11 +595,14 @@ msgid ""
 msgstr ""
 "<span>{likes_count} Харесвания</span> <span>{challenge_points:n} Точки</span>"
 
-#: userinteraction/views.py:119
+#: userinteraction/views.py:123
 #, fuzzy
 #| msgid "notifications"
 msgid "Notification read"
 msgstr "Известието е прочетено"
+
+#~ msgid "Detailed view."
+#~ msgstr "Детайлен поглед."
 
 #~ msgid "About"
 #~ msgstr "Относно"

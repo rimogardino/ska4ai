@@ -5,10 +5,10 @@
     <div class="challenges-container ev-chs-{{event.id}}" id="ev-chs-{{event.id}}">
         <div class="sort-controls">
         <button class="sort-button" onclick="toggleSort('ev-chs-{{ event.id }}', 'date')">
-            Sort by Date <span id="sort-date-dir">⬇</span>
+            {% translate "Sort by Date" %} <span id="sort-date-dir">⬇</span>
         </button>
         <button class="sort-button" onclick="toggleSort('ev-chs-{{ event.id }}', 'points')">
-            Sort by Points <span id="sort-points-dir">⬆</span>
+            {% translate "Sort by Points" %} <span id="sort-points-dir">⬆</span>
         </button>
         </div>
         {% if all_challenges %}
