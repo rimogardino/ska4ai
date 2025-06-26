@@ -793,6 +793,7 @@ a {
 .sort-controls {
   display: flex;
   gap: 12px;
+  max-height: 2rem;
   margin-bottom: 0.2rem;
   flex: fit-content;
   justify-content: center;
