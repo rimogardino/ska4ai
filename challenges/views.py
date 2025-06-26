@@ -1,9 +1,8 @@
 from django.http import HttpResponse
+from django.db.models import Q
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404, redirect, reverse
 from django.forms import modelformset_factory
-from django.utils.translation import gettext as _
-from django.template.loader import render_to_string
 from events.models import Event
 from events.decorators import require_active_event
 from .models import Visual, get_challenge_model_class
@@ -195,25 +194,19 @@ def disapprove_challenge(request, challenge_type, challenge_id):
     return HttpResponse(html)
 
 
-def _create_notification(request, challenge, approve=True):
-    notification = Notification(user=challenge.user)
-    notification.parent = challenge
-    notification.save()
-    notification_context = {"challenge": challenge, "notification_id": notification.pk}
-    template = 'userinteraction/notification_messages/approved_challenge.html'
-    if not approve:
-        template = 'userinteraction/notification_messages/disapproved_challenge.html'
-    notification.message = render_to_string(
-                                            template,
-                                            notification_context)
-    notification.save()
-
-
 @require_active_event
 def reset_challenge_state(request, challenge_type, challenge_id):
     challenge = get_challenge_model_class(challenge_type).objects.get(pk=challenge_id)
     challenge.reset_state()
-    Notification.objects.filter(user=challenge.user).order_by('-created_at').first().delete()
+    # The combination of user, parent_id and notif_type should be unique
+    # so you cannot delete some other newer notification
+    redundant_notification = Notification.objects.filter(
+                                                        user=challenge.user,
+                                                        parent_id=challenge.id
+                                                        ).filter(Q(notif_type=NotificationTypes.CHALLENGE_APPROVED) | Q(notif_type=NotificationTypes.CHALLENGE_DISAPPROVED)
+                                                                ).order_by('-created_at').first()
+    if redundant_notification:
+        redundant_notification.delete()
     context = _challenge_simple_info_context(request, challenge_type, challenge_id)
     return render(request, "challenges/challenge_simple_info_moderation.html",
                   context)
@@ -223,7 +216,10 @@ def delete_challenge(request, challenge_type, challenge_id):
     challenge = get_challenge_model_class(challenge_type).objects.get(pk=challenge_id)
     visuals = get_challenge_visuals(challenge, challenge_type)
     for visual in visuals:
-        visual.file.delete()
-        visual.delete()
+        try:
+            visual.file.delete()
+            visual.delete()
+        except PermissionError:
+            print("Could not delete visual", visual.file)
     challenge.delete()
     return redirect(reverse("index"))

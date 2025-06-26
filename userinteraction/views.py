@@ -82,6 +82,7 @@ def create_notification(request, notif_type, challenge, message=""):
     notification.notif_type = notif_type
     notification.save()
 
+
 def get_all_comments(request, challenge_type, challenge_id):
     challenge_model = get_challenge_model_class(challenge_type)
     challenge = challenge_model.objects.get(pk=challenge_id)
@@ -94,6 +95,7 @@ def get_all_comments(request, challenge_type, challenge_id):
         'form': form,
     }
     return render(request, 'userinteraction/get_all_comments.html', context)
+
 
 def get_notifications(request):
     notifications = None
@@ -109,9 +111,11 @@ def get_notifications(request):
     html = render(request, 'userinteraction/notifications.html', context)
     return HttpResponse(html)
 
+
 def get_notiications_count(request):
     count = Notification.objects.filter(user=request.user, viewed=False).count()
     return HttpResponse(count)
+
 
 def read_notification(request, notification_id):
     notification = Notification.objects.get(pk=notification_id)

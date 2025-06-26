@@ -6,6 +6,11 @@
 
 
 {% block content %}
+<div id="progress-container" style="display: none;">
+    {% translate "Uploading..." %}
+    <div id="progress-bar" style="width: 0%; height: 20px; background-color: blue;"></div>
+</div>
+
 <div class="center-container flex-column create-challenge-container" >
     {% if errors %}
         {% for error in errors %}
@@ -23,10 +28,6 @@
 
             <input class="blue-button" type="submit" value="Create!"/>
         </form>
-        <div id="progress-container" style="display: none;">
-            {% translate "Uploading..." %}
-            <div id="progress-bar" style="width: 0%; height: 20px; background-color: blue;"></div>
-        </div>
     
         <!-- Hidden iframe for form submission -->
         <iframe id="upload-target" name="upload-target" style="display: none;"></iframe>
@@ -67,13 +68,17 @@
     }
 
     #progress-container {
+        position: fixed;
+        top: 50vh;
+        left: 10vw;
         margin-top: 0.5rem;
-        width: 100%;
+        width: 80%;
         padding: 0.5rem;
         background: #ffffff;
         border-radius: 8px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         border: 1px solid #ddd;
+        z-index: 1000;
     }
     
     #progress-bar {
@@ -189,52 +194,73 @@
         document.getElementById('id_latitude').value = coordinates["lat"];
     });
 
-    // Progress bar for uploading
+
+    // Background upload and progress bar v2
     const form = document.getElementById("file-upload-form");
+    const fileInput = document.getElementById("id_files");
     const progressContainer = document.getElementById("progress-container");
     const progressBar = document.getElementById("progress-bar");
+    const overlay = document.getElementById("overlay");
+    overlay.onclick = null;
 
-    // Monitor file input changes to prepare progress bar
-    form.addEventListener("submit", function () {
-        progressContainer.style.display = "block";
+    let currentXHR = null;
 
-        // Get the total size of all files
-        const files = form.querySelector('input[type="file"]').files;
-        let totalSize = 0;
-        for (const file of files) {
-            totalSize += file.size;
+    // Automatically start upload on file select
+    fileInput.addEventListener("change", function () {
+        const files = fileInput.files;
+        if (!files.length) return;
+
+        // Cancel previous upload if still ongoing
+        if (currentXHR && currentXHR.readyState !== 4) {
+            currentXHR.abort();
         }
 
-        // Use the XMLHttpRequest upload progress to update the progress bar
-        const xhr = new XMLHttpRequest();
-        xhr.open("POST", form.action, true);
-        xhr.upload.addEventListener("progress", function (event) {
+        // Reset state
+        progressBar.style.width = "0%";
+
+        const formData = new FormData();
+        for (const file of files) {
+            formData.append("files", file); // adjust key as needed
+        }
+
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        currentXHR = new XMLHttpRequest();
+        currentXHR.open("POST", form.action, true); // Your temporary upload endpoint
+        currentXHR.setRequestHeader("X-CSRFToken", csrfToken);
+
+        currentXHR.upload.addEventListener("progress", function (event) {
             if (event.lengthComputable) {
-                const percentComplete = (event.loaded / totalSize) * 100;
+                const percentComplete = (event.loaded / event.total) * 100;
                 progressBar.style.width = percentComplete + "%";
             }
         });
 
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                // Optionally redirect or display a success message
-                console.log("Upload complete!");
+        currentXHR.onload = function () {
+            if (currentXHR.status === 200) {
+                // Expect response to be a JSON array of uploaded file names/IDs
+                console.log("Upload successful")
             } else {
                 alert("Upload failed.");
             }
         };
 
-        xhr.onerror = function () {
-            console.log("An error occurred.");
+        currentXHR.onerror = function () {
+            alert("An error occurred during upload.");
         };
 
-        // Send the form data
-        const formData = new FormData(form);
-        xhr.send(formData);
-
-        // Allow the form to proceed normally via the hidden iframe
-        return true;
+        currentXHR.send(formData);
     });
+
+    // On form submit
+    form.addEventListener("submit", function (event) {
+        if (currentXHR && currentXHR.readyState !== 4) {
+            event.preventDefault();
+            progressContainer.style.display = "block";
+            overlay.style.display = "block";
+        }
+    });
+
 </script>
     
     

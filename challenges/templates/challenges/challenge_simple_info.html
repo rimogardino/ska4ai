@@ -4,10 +4,10 @@
 <div class="popup-container submission-container">
     <div class="media-scroll-container">
         {% if visuals|length > 1 %}
-          <button class="scroll-button scroll-left" onclick="scrollMedia('left')">←</button>
-          <button class="scroll-button scroll-right" onclick="scrollMedia('right')">→</button>
+          <button class="scroll-button scroll-left" onclick="scrollMedia('{{challenge.challenge_type}}-{{challenge.id}}', 'left')">←</button>
+          <button class="scroll-button scroll-right" onclick="scrollMedia('{{challenge.challenge_type}}-{{challenge.id}}', 'right')">→</button>
         {% endif %}
-        <div class="media-container">
+        <div id="{{challenge.challenge_type}}-{{challenge.id}}" class="media-container">
             {% for visual in visuals %}
             <div class="media-wrapper">
                     {% if visual.file_type|slice:":5" == "video" %}
@@ -92,7 +92,7 @@
                 </button>
             {% endif %}
 
-
+            {% comment %} Share button that just copies the link {% endcomment %}
             <button class="share-button"
                 onclick="copyLink('{{ request.scheme }}://{{ request.META.HTTP_HOST }}{% url 'challenges:challenge_detail' challenge_type=challenge.challenge_type challenge_id=challenge.id %}')"
             >
@@ -116,7 +116,7 @@
 </div>
 
 <script>
-const isMobile = window.matchMedia("(max-width: 767px)").matches;
+var isMobile = window.matchMedia("(max-width: 767px)").matches;
 
 function cleanContentChallengeDiv(asyncContentDivId) {
     document.getElementById(asyncContentDivId).innerHTML = '';

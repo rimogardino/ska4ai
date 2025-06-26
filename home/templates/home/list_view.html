@@ -1,12 +1,21 @@
 {% load i18n %}
+{% load l10n %}
 {% if event_list %}
     {% for event in event_list  %}
     <div class="challenges-container ev-chs-{{event.id}}" id="ev-chs-{{event.id}}">
+        <div class="sort-controls">
+        <button class="sort-button" onclick="toggleSort('ev-chs-{{ event.id }}', 'date')">
+            Sort by Date <span id="sort-date-dir">⬇</span>
+        </button>
+        <button class="sort-button" onclick="toggleSort('ev-chs-{{ event.id }}', 'points')">
+            Sort by Points <span id="sort-points-dir">⬆</span>
+        </button>
+        </div>
         {% if all_challenges %}
             {% for challenge in all_challenges %}
                 {% if challenge.event == event %}
                     
-                    <div class="list-view-wrapper">
+                    <div class="list-view-wrapper" data-date="{{challenge.date|date:'c'}}" data-points="{% if challenge.challenge_type == 'CH' %}{{challenge.points}}{% else %}1{% endif %}">
                         <div class="list-view-challenge-container" id="list-view-challenge-{{challenge.id}}"
                         hx-trigger="intersect once click delay:0.1s"
                         hx-get="{% url 'challenges:challenge_simple_info' challenge_type=challenge.challenge_type challenge_id=challenge.id  %}"
@@ -33,3 +42,56 @@
 {% comment %} <div style="background-color: grey; padding: 5px; margin-bottom: 20px;">
     <a id="new-challenge-link" type="submit" style="color: white;" href="{% url 'challenges:create_challenge' 99 %}">Create new challenge</a>
 </div> {% endcomment %}
+
+<script>
+
+    const sortDirections = {
+        date: 'desc',
+        points: 'asc',
+    };
+
+    function toggleSort(containerId, field) {
+        // Toggle direction
+        const current = sortDirections[field];
+        const newDir = current === 'asc' ? 'desc' : 'asc';
+        sortDirections[field] = newDir;
+
+        // Call your sort function
+        sortItems(containerId, field, newDir);
+
+        // Update button indicator
+        document.getElementById(`sort-${field}-dir`).textContent = newDir === 'asc' ? '⬆' : '⬇';
+    }
+
+
+    function sortItems(container_id, keys, direction = 'asc') {
+        const container = document.getElementById(container_id);
+        const items = Array.from(container.querySelectorAll('.list-view-wrapper'));
+
+        const sortKeys = keys.split(',').map(k => k.trim());
+        const isAsc = direction === 'asc';
+
+        items.sort((a, b) => {
+            for (let key of sortKeys) {
+            let aVal = a.dataset[key];
+            let bVal = b.dataset[key];
+
+            // Try parsing as number or date
+            if (!isNaN(aVal) && !isNaN(bVal)) {
+                aVal = parseFloat(aVal);
+                bVal = parseFloat(bVal);
+            } else if (!isNaN(Date.parse(aVal)) && !isNaN(Date.parse(bVal))) {
+                aVal = new Date(aVal);
+                bVal = new Date(bVal);
+            }
+
+            if (aVal < bVal) return isAsc ? -1 : 1;
+            if (aVal > bVal) return isAsc ? 1 : -1;
+            }
+            return 0;
+        });
+
+        // Re-append sorted items
+        items.forEach(item => container.appendChild(item));
+    }
+</script>

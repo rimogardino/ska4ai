@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.http import HttpResponse
@@ -96,26 +97,19 @@ def disapprove_submission(request, submission_id):
     return HttpResponse(html)
 
 
-def _create_notification(request, submission, approve=True):
-    notification = Notification(user=submission.user)
-    notification.parent = submission.challenge
-    notification.save()
-    notification_context = _submission_simple_info_context(request, submission.pk)
-    notification_context['notification_id'] = notification.pk
-    template = 'userinteraction/notification_messages/approved_submission.html'
-    if not approve:
-        template = 'userinteraction/notification_messages/disapproved_submission.html'
-    notification.message = render_to_string(
-                                            template,
-                                            notification_context)
-    notification.save()
-
-
 @require_active_event
 def reset_submission_state(request, submission_id):
     submission = get_object_or_404(Submission, pk=submission_id)
     submission.reset_state()
-    Notification.objects.filter(user=submission.user).order_by('-created_at').first().delete()
+    # The combination of user, parent_id and notif_type should be unique
+    # so you cannot delete some other newer notification
+    redundant_notification = Notification.objects.filter(
+                            user=submission.user,
+                            parent_id=submission.id
+                            ).filter(Q(notif_type=NotificationTypes.SUBMISSION_APPROVED) | Q(notif_type=NotificationTypes.SUBMISSION_DISAPPROVED)
+                                     ).order_by('-created_at').first()
+    if redundant_notification:
+        redundant_notification.delete()
     context = _submission_simple_info_context(request, submission_id)
     return render(request, 'submissions/submission_moderation.html', 
                   context)

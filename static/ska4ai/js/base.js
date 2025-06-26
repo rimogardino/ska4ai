@@ -1,7 +1,5 @@
 // Challenge_simple_info
 
-console.log('base js API Key:', apiKey);
-
 function playPause(video) {
     var this_video_paused = video.paused;
     var all_videos = document.querySelectorAll('.video-player');
@@ -15,8 +13,8 @@ function playPause(video) {
     }
   }
 
-function scrollMedia(direction) {
-  const container = document.querySelector('.media-container');
+function scrollMedia(container_id, direction) {
+  const container = document.getElementById(container_id);
   const scrollAmount = 300; // Adjust this value to control scroll distance
   
   if (direction === 'left') {

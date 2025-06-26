@@ -13,13 +13,13 @@
             {% for challenge in all_challenges %}
                     <div class="list-view-wrapper submission-container">
                         <div class="personal-challenge-info">
-                            ID: {{ challenge.pk }}
-                            {% translate "Status:" %} {% if challenge.approved %} 
+                            <b>ID:</b> {{ challenge.pk }}&#160;
+                            {% translate "Status:" %}&#160;{% if challenge.approved %} 
                                         <span style="color: green">{% translate "Approved" %}</span>
                                     {% elif challenge.approved == False %}
                                         <span style="color: red">{% translate "Disapproved" %}</span>
                                     {% else %}
-                                        <span style="color: orage">{% translate "Pending" %}</span>
+                                        <span style="color: orange">{% translate "Pending" %}</span>
                                     {% endif %}
                         </div>
                         <div class="" id="list-view-challenge-{{challenge.id}}"
