@@ -1,13 +1,14 @@
 {% load i18n %}
-<div class="submission-container">
-    <h3>{{ event.name }}</h3>
+<div class="event-description">
+    <div class="event-title"><h3>{{ event.name }}</h3></div>
 
-    {{ event.description }}
+    {{ event.description|safe }}
 
-    <h3>{% translate "Rules:" %}</h3>
+</br></br>
+    <div class="event-title"><h3>{% translate "Rules:" %}</h3></div>
 
     {% if event.rules %}
-        {{ event.rules }}
+        {{ event.rules|safe }}
     {% else %}
         {% translate "Just be nice to each other and don't do anything illegal!" %}"
     {% endif %}

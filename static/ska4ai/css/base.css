@@ -814,6 +814,37 @@ background-color: #007BFF;
   background-color: #0056b3;
 }
 
+
+.event-description {
+  padding: 0.5rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(90deg, #ffffff, #dbeaee);
+
+  width: 100%;
+}
+
+.event-description a {
+  text-decoration: none;
+  color: rgb(161, 10, 125);
+  display: contents;
+}
+
+.event-description h3 {
+  color: rgb(51, 5, 40);
+}
+
+.event-description .event-title {
+  display: flex;
+  align-self: center;
+  padding: 0.2rem;
+  color: rgb(51, 5, 40);
+  width: 100%;
+  justify-content: center;
+
+}
+
 /* challange_detail */
 .submissions-container {
   background-color: #7ab0f74d;
