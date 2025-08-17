@@ -1175,6 +1175,12 @@ background-color: #007BFF;
   padding: 0.2rem;
 }
 
+.challenge-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: -5px 0 0 0;
+}
+
 
 /* 
     .info-grid {

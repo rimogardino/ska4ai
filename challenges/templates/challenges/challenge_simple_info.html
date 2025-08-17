@@ -2,6 +2,11 @@
 {% load l10n %}
 
 <div class="popup-container submission-container">
+    {% if challenge.name %}
+        <div class="description challenge-name">
+            <a href="{% url 'challenges:challenge_detail' challenge_type=challenge.challenge_type challenge_id=challenge.id %}">{{ challenge.name }}</a>
+        </div>
+    {% endif %}
     <div class="media-scroll-container">
         {% if visuals|length > 1 %}
           <button class="scroll-button scroll-left" onclick="scrollMedia('{{challenge.challenge_type}}-{{challenge.id}}', 'left')">←</button>

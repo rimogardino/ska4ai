@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-26 22:43+0300\n"
+"POT-Creation-Date: 2025-08-17 12:27+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -145,22 +145,22 @@ msgid "Enter a spot name..."
 msgstr "Въведете име..."
 
 #: challenges/templates/challenges/challenge_detail.html:16
-msgid "Edit Challenge."
-msgstr "Редактирай предизвикателство."
+msgid "Edit"
+msgstr "Редактирай"
 
 #: challenges/templates/challenges/challenge_detail.html:21
-msgid "Delete challenge."
-msgstr "Изтрий предизвикателство."
+msgid "Delete"
+msgstr "Изтрий"
 
 #: challenges/templates/challenges/challenge_detail.html:44
 msgid "Are you sure you want to delete the challenge?"
 msgstr "Сигурни ли сте, че искате да изтриете предизвикателството?"
 
-#: challenges/templates/challenges/challenge_simple_info.html:63
+#: challenges/templates/challenges/challenge_simple_info.html:68
 msgid "Likes"
 msgstr "Харесвания"
 
-#: challenges/templates/challenges/challenge_simple_info.html:65
+#: challenges/templates/challenges/challenge_simple_info.html:70
 #: home/templates/home/leaderboard.html:11
 msgid "Points"
 msgstr "Точки"
@@ -234,13 +234,13 @@ msgstr "Пловдив"
 msgid "Bulgaria"
 msgstr "България"
 
-#: events/templates/events/info.html:7
+#: events/templates/events/info.html:8
 msgid "Rules:"
 msgstr "Правила:"
 
-#: events/templates/events/info.html:12
+#: events/templates/events/info.html:13
 msgid "Just be nice to each other and don't do anything illegal!"
-msgstr ""
+msgstr "Бедете готини към останалите и не правете нелегални неща!"
 
 #: home/templates/home/about.html:7
 msgid "About Ska4ai"
@@ -600,6 +600,12 @@ msgstr ""
 #| msgid "notifications"
 msgid "Notification read"
 msgstr "Известието е прочетено"
+
+#~ msgid "Edit Challenge."
+#~ msgstr "Редактирай предизвикателство."
+
+#~ msgid "Delete challenge."
+#~ msgstr "Изтрий предизвикателство."
 
 #~ msgid "Detailed view."
 #~ msgstr "Детайлен поглед."

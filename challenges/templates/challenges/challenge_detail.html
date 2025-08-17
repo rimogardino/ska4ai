@@ -5,7 +5,7 @@
 
 {% block content %}
 <div class="container center-container" >
-    <div class="submission-container">
+    <div class="">
         {% include './challenge_simple_info.html' with challenge=challenge visuals=visuals likes_count=likes_count %}
 
 
@@ -13,12 +13,12 @@
             <div class="challenge-edit-delete-container" >
                 <button class="blue-button" type="submit" 
                     onclick="location.href='{% url 'challenges:edit_challenge' challenge_type=challenge.challenge_type challenge_id=challenge.id %}'">
-                    {% translate "Edit Challenge." %}
+                    {% translate "Edit" %}
                 </button>
 
                 <button class="red-button" type="submit" 
                     onclick="confirmDelete()">
-                    {% translate "Delete challenge." %}
+                    {% translate "Delete" %}
                 </button>
             </div>
         {% endif %}
