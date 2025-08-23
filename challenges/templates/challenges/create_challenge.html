@@ -6,10 +6,6 @@
 
 
 {% block content %}
-<div id="progress-container" style="display: none;">
-    {% translate "Uploading..." %}
-    <div id="progress-bar" style="width: 0%; height: 20px; background-color: blue;"></div>
-</div>
 
 <div class="center-container flex-column create-challenge-container" >
     {% if errors %}
@@ -17,7 +13,15 @@
             <p class="error" style="color: red; weight: bold; font-size: 20px;">{{error}}</p>
         {% endfor %}
     {% else %}
-        <form id="file-upload-form" action="" method="POST" enctype="multipart/form-data">
+        <div class="small-title-container">
+            {% translate "Creating for " %}{{ event_name }}
+        </div>
+        <form id="file-upload-form"
+         hx-encoding='multipart/form-data'
+         hx-post="{% url 'challenges:create_challenge' event_id=event_id %}"
+         hx-target="body"
+         hx-swap="innerHTML"
+         enctype="multipart/form-data">
             {% csrf_token %}
             {{form.as_p}}
 
@@ -27,6 +31,10 @@
             </div>
 
             <input class="blue-button" type="submit" value="Create!"/>
+            <div id="progress-container" style="display: none;">
+                {% translate "Uploading..." %}
+                <progress id='progress' value='0' max='100'></progress>
+            </div>
         </form>
     
         <!-- Hidden iframe for form submission -->
@@ -81,9 +89,8 @@
         z-index: 1000;
     }
     
-    #progress-bar {
-        height: 20px;
-        background-color: #4caf50;
+    #progress {
+        width: 100%;
         text-align: center;
         line-height: 20px;
         color: white;
@@ -146,7 +153,7 @@
     mapboxgl.accessToken = '{{ mapbox_api_key }}';
     const map = new mapboxgl.Map({
         container: 'map', // container ID
-        //style: 'mapbox://styles/mapbox/dark-v11',
+        style: 'mapbox://styles/rimogardino/cmefkkcmb00ip01sdgpo26anq',
         center: [23.321869, 42.697085], // starting position [lng, lat]. Note that lat must be set between -90 and 90
         //an array of numbers in [west, south, east, north] order.
         maxBounds: [23.2, 42.6, 23.45, 42.75],
@@ -195,7 +202,14 @@
     });
 
 
-    // Background upload and progress bar v2
+    // Background upload and progress bar v3
+    htmx.on('#file-upload-form', 'htmx:xhr:progress', function(evt) {
+        htmx.find('#progress-container').style.display = 'block';
+        overlay.style.display = "block";
+        htmx.find('#progress').setAttribute('value', evt.detail.loaded/evt.detail.total * 100);
+    });
+
+    {% comment %} // Background upload and progress bar v2
     const form = document.getElementById("file-upload-form");
     const fileInput = document.getElementById("id_files");
     const progressContainer = document.getElementById("progress-container");
@@ -259,7 +273,7 @@
             progressContainer.style.display = "block";
             overlay.style.display = "block";
         }
-    });
+    }); {% endcomment %}
 
 </script>
     

@@ -368,6 +368,31 @@ body {
 }
 
 
+.map-style-button {
+    /* Position */
+    position: absolute;
+    top: 8.5svh;
+    right: 18px;
+    z-index: 20;
+  
+    /* Size */
+    width: 0.9rem;
+    height: 0.9rem;
+  
+    /* Style */
+    cursor: pointer;
+    background: transparent;
+    border: none;
+
+  }
+
+.map-style-button svg {
+    width: 0.7rem;
+    height: 0.7rem;
+    scale: 2.5;
+    fill: white;
+    border-radius: 2px;
+}
 
 
 /* floating button */

@@ -88,6 +88,7 @@
 
     <div class="map_container mobile-view index-view" id="map-container" style="">
         <div id="map"  hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'></div>
+        <button id="map-style-button" class="map-style-button" id="new-challenge">{% include "images/street-map-svgrepo-com.svg" %}</button>
         {% if user.is_authenticated %}
             <button class="floating-button clickable-highlight" id="new-challenge" onclick="newChallenge(this)">+</button>
         {% endif %}
@@ -342,16 +343,34 @@ $ (document).ready(function(){
     $ (".active-event-item").eq(0).click();
     closePopup();
 
+    const mapStyleSatellite = 'mapbox://styles/rimogardino/cmefkkcmb00ip01sdgpo26anq';
+    const mapStyleStandard = 'mapbox://styles/mapbox/standard';
+
     mapboxgl.accessToken = '{{ mapbox_api_key }}';
     const map = new mapboxgl.Map({
         container: 'map', // container ID
-        //style: 'mapbox://styles/mapbox/dark-v11',
+        style: mapStyleSatellite,
         center: [23.321869, 42.997085], // starting position [lng, lat]. Note that lat must be set between -90 and 90
         //an array of numbers in [west, south, east, north] order.
         maxBounds: [23.2, 42.6, 23.45, 42.75],
         zoom: 10, // starting zoom
         antialias: false, // Disable antialiasing for performance
     });
+    console.log(map);
+
+    var mapStyleToggle = false;
+    function toggleMapStyle() {
+        if (mapStyleToggle) {
+            map.setStyle(mapStyleSatellite);
+            mapStyleToggle = false;
+        } else {
+            map.setStyle(mapStyleStandard);
+            mapStyleToggle = true;
+        }
+        
+    }
+    const mapStyleButton = document.getElementById("map-style-button");
+    mapStyleButton.addEventListener("click", toggleMapStyle);
 
     map.on('load', () => {
         //Remove exess landmark and icons
@@ -368,12 +387,6 @@ $ (document).ready(function(){
             showUserHeading: true
         }));
 
-        // Show ruler with scale on bottom left
-        {% comment %} const scale = new mapboxgl.ScaleControl({
-            maxWidth: 100,
-            unit: 'metric'
-        });
-        map.addControl(scale); {% endcomment %}
 
         // var json_data = document.getElementById('main-div').getAttribute('data-json');
         // const geojson = JSON.parse(json_data);

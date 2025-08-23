@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-17 12:27+0300\n"
+"POT-Creation-Date: 2025-08-23 14:06+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -175,13 +175,18 @@ msgstr "Одобри!"
 msgid "Disapprove!"
 msgstr "Откажи!"
 
-#: challenges/templates/challenges/create_challenge.html:10
-msgid "Uploading..."
-msgstr "Качва се..."
+#: challenges/templates/challenges/create_challenge.html:17
+msgid "Creating for "
+msgstr "Създаваш за "
 
-#: challenges/templates/challenges/create_challenge.html:25
+#: challenges/templates/challenges/create_challenge.html:29
 msgid "Select the spot where the challenge is:"
 msgstr "Избери място:"
+
+#: challenges/templates/challenges/create_challenge.html:35
+#: submissions/templates/submissions/create_submission.html:27
+msgid "Uploading..."
+msgstr "Качва се..."
 
 #: challenges/templates/challenges/edit_challenge.html:252
 msgid "Edit Challenge"
@@ -392,7 +397,7 @@ msgstr "Отмяна!"
 msgid "No challenges are available for moderation."
 msgstr "Няма предизвикателства за модериране."
 
-#: submissions/templates/submissions/create_submission.html:21
+#: submissions/templates/submissions/create_submission.html:25
 msgid "Submit!"
 msgstr "Изпълни!"
 

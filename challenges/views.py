@@ -55,7 +55,8 @@ def create_challenge(request, event_id=None, errors=None):
     else:
         form = form_class()
     context = {"form": form, 
-               "event_id": event_id, 
+               "event_id": event_id,
+               "event_name": event.name,
                "errors": errors, 
                "mapbox_api_key": django_envs['MAPBOX_API_KEY']}
     return render(request, "challenges/create_challenge.html", context)

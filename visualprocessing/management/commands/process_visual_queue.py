@@ -83,10 +83,11 @@ class Command(BaseCommand):
             if queue_item.file_type.startswith('video'):
                 try:
                     self.transcode_to_small_video(input_path, output_path_video)
+                    self.generate_video_thumbnail(output_path_video, output_path_image)
                 except ffmpeg.Error as e:
                     print(f"ffmpeg error: {e}")
-                    print('stdout:', e.stdout.decode('utf8'))
-                    print('stderr:', e.stderr.decode('utf8'))
+                    print('stdout:', str(e))
+                    print('stderr:', str(e))
                     continue
             else:
                 try:
@@ -97,9 +98,23 @@ class Command(BaseCommand):
             queue_item.delete()
             print(f"Done with: {queue_item.visual}")
 
+    def generate_video_thumbnail(self, video_path, thumbnail_path, time="00:00:01"):
+        """
+        Extract a thumbnail from a video using ffmpeg-python.
+        """
+        print(f"\n\nGenerating thumbnail for {video_path} to {thumbnail_path}")
+        (
+            ffmpeg
+            .input(str(video_path), ss="00:00:02")
+            .filter("scale", 400, -1)   # 400px wide, keep aspect ratio
+            .output(str(thumbnail_path), vframes=1, qscale=2)
+            .overwrite_output()
+            .run()
+        )
+        return thumbnail_path
+
     def transcode_to_small_video(self, input_path, output_path):
         """Reduse the resolution and bitrate of the video while keeping the aspect ratio"""
-        print("Calling ffmpeg")
         # Probe the input video to detect HDR metadata or resolution
         video_streams = ffmpeg.probe(input_path, select_streams="v")
         scaled_width = get_video_orientation_width(video_streams)

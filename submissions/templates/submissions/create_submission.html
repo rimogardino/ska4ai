@@ -9,20 +9,75 @@
         </div>
     {% else %}
         <form
-         hx-post="{% url 'submissions:create_submission' challenge_type=challenge.challenge_type challenge_id=challenge.id %}" hx-target="#async-content-{{challenge.id}}" hx-swap="innerHTML"
-          enctype="multipart/form-data"
+         id='submission-form'
+         hx-encoding='multipart/form-data'
+         hx-post="{% url 'submissions:create_submission' challenge_type=challenge.challenge_type challenge_id=challenge.id %}"
+         hx-target="#async-content-{{challenge.id}}"
+         hx-swap="innerHTML"
+         enctype="multipart/form-data"
         >
             {% csrf_token %}
             {% for field in form %}
-            <div class="fieldWrapper">
-                {{ field }}
-            </div>
-        {% endfor %}
+                <div class="fieldWrapper">
+                    {{ field }}
+                </div>
+            {% endfor %}
             <button class="stylish-button blue-button" type="submit" value="Create!">{% translate "Submit!" %}</button>
+            <div id="progress-container" style="display: none;">
+                {% translate "Uploading..." %}
+                <progress id='progress' value='0' max='100'></progress>
+            </div>
+            <div id="contained-overlay" class="overlay"></div>
         </form>
+
     {% endif %}
 </div>
 
+<style>
+    #contained-overlay {
+        position: fixed;
+        display: none;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        z-index: 999;
+    }
+
+
+    #progress-container {
+        position: fixed;
+        top: 50vh;
+        left: 10vw;
+        margin-top: 0.5rem;
+        width: 80%;
+        padding: 0.5rem;
+        background: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: 1px solid #ddd;
+        z-index: 1000;
+    }
+    
+    #progress {
+        width: 100%;
+        text-align: center;
+        line-height: 20px;
+        color: white;
+        transition: width 0.3s;
+    }
+
+</style>
+
+<script>
+    htmx.on('#submission-form', 'htmx:xhr:progress', function(evt) {
+        htmx.find('#progress-container').style.display = 'block';
+        htmx.find('#contained-overlay').style.display = 'block';
+        htmx.find('#progress').setAttribute('value', evt.detail.loaded/evt.detail.total * 100);
+    });
+</script>
 
 {% comment %} {% extends 'base.html' %}
 {% load i18n %}

@@ -588,6 +588,7 @@ a {
   cursor: pointer;
   border-radius: 4px;
   width: -moz-available;
+  width: -webkit-fill-available;
   transition: all 0.3s ease;
 }
 
@@ -630,7 +631,6 @@ a {
 .moderation-control button {
   flex-grow: 1;
 }
-
 
 /* map popup */
 .popup {
@@ -722,8 +722,6 @@ a {
   margin-bottom: -20px;
 }
 
-
-
 .close-button div {
   display: flex;
   align-items: center;
@@ -731,14 +729,10 @@ a {
   height: 30px;
 }
 
-
 .close-button svg {
   /* background-color: #357abd; */
   height: 30px;
 }
-
-
-
 
 /* challenges-list-view */
 .list-view-challenge-container {
@@ -814,7 +808,6 @@ background-color: #007BFF;
   background-color: #0056b3;
 }
 
-
 .event-description {
   padding: 0.5rem;
   flex-direction: column;
@@ -884,6 +877,11 @@ background-color: #007BFF;
     margin: 10px auto;
     padding: 0.3rem;
   }
+
+.small-title-container {
+    max-width: 800px;
+    margin: 4px auto;
+}
 
 .fieldWrapper {
   display: flex;

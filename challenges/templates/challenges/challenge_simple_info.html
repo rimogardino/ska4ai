@@ -17,8 +17,16 @@
             <div class="media-wrapper">
                     {% if visual.file_type|slice:":5" == "video" %}
                         <div class="video-wrapper">
-                        <video id="challenge-visual-{{challenge.id}}" class="video-player" name='challenge_video'
-                                playsinline webkit-playsinline muted loop onclick="playPause(this)">
+                        <video id="challenge-visual-{{challenge.id}}"
+                            class="video-player"
+                            name='challenge_video'
+                            preload="metadata"
+                            playsinline
+                            webkit-playsinline
+                            muted
+                            loop
+                            poster="{{ visual.processed_url|cut:'.mp4' }}.jpg"
+                            onclick="playPause(this)">
                             <source src="{{ visual.processed_url }}" type="video/mp4">
                             <source src="{{ visual.file.url }}" type="video/mp4">
                         </video>
@@ -134,14 +142,15 @@ function likeSvg(event, heartId) {
 }
 
 // Load thumbnails on IOS
-function loadIOSthubmnails(videoId) {
-    let video = document.getElementById(videoId);
-    if (video) {
-        video.load()
-    }
+// ugly hack to make it work without generating thumbnails...
+{% comment %} function loadIOSthubmnails(videoId) {
+    document.querySelectorAll("video").forEach(video => {
+        video.pause();
+    });
 }
 
-loadIOSthubmnails('challenge-visual-{{challenge.id}}');
+loadIOSthubmnails('challenge-visual-' + {{challenge.id}}); {% endcomment %}
+
 
 
 function copyLink(url) {
