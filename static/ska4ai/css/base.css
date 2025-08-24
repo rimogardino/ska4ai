@@ -908,16 +908,32 @@ background-color: #007BFF;
 }
 
 .comment {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
-  padding: 0.1rem;
-  margin-bottom: 0.2rem;
-  background: #dcebee38;
+  padding: 8px 8px;
+  margin-bottom: 4px;
+  background-color: #fafafa;
+  font-family: system-ui, sans-serif;
+  max-width: 600px;
+}
+
+.comment-username {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.comment-content {
+  font-size: 14px;
+  line-height: 1.4;
+  color: #444;
+  margin-bottom: 6px;
 }
 
 .comment-timestamp {
-  font-size: 0.5rem;
-  color: #666;
-  margin-left: 1rem;
+  font-size: 12px;
+  color: #888;
+  text-align: right;
 }
 
 /* challenge_simple_info */
